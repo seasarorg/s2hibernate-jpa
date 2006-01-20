@@ -17,7 +17,7 @@ public class EntityManagerFactoryTest extends S2TestCase {
 	 */
 	protected void setUp() throws Exception {
 		include("j2ee.dicon");
-		include("s2hibernate3.dicon");
+		include("s2hibernate-jpa.dicon");
 	}
 
 	public void testLookup() throws Exception {

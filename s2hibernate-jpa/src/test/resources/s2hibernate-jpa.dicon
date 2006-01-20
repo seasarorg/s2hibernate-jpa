@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN" 
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="s2hibernate-jpa">
+	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
+		@javax.persistence.Persistence@createEntityManagerFactory("em", #{})
+	</component>
+	<component class="javax.persistence.EntityManager">
+		entityManagerFactory.createEntityManager(@javax.persistence.PersistenceContextType@TRANSACTION)
+	</component>
+</components>

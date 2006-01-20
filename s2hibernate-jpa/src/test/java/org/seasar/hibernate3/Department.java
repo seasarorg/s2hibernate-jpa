@@ -3,7 +3,6 @@ package org.seasar.hibernate3;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -26,7 +25,7 @@ public class Department implements Serializable {
     public Department() {
     }
 
-    @Id (generate=GeneratorType.NONE)
+    @Id
     public int getDeptno() {
         return this.deptno;
     }

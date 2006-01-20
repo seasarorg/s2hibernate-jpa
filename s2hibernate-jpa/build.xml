@@ -1,29 +1,28 @@
-<project name="s2hibernate3" default="dist" basedir=".">
-	<property name="ver" value="EA1"/>
+<project name="s2hibernate-jpa" default="dist" basedir=".">
+	<property name="ver" value="EA2"/>
 
 	<target name="dist">
-		<zip zipfile="target/S2Hibernate3-${ver}.zip">
-			<zipfileset prefix="s2hibernate3" dir=".">
+		<zip zipfile="target/S2Hibernate-JPA-${ver}.zip">
+			<zipfileset prefix="s2hibernate-jpa" dir=".">
 				<exclude name="**/target/**"/>
 				<exclude name=".settings"/>
 				<exclude name=".settings/**"/>
 			</zipfileset>
-			<zipfileset prefix="s2hibernate3/lib" dir="target">
-				<include name="s2hibernate3-${ver}.jar"/>
+			<zipfileset prefix="s2hibernate-jpa/lib" dir="target">
+				<include name="s2hibernate-jpa-${ver}.jar"/>
 			</zipfileset>
-			<zipfileset prefix="s2hibernate3/resources" dir="src/test/resources">
-			    <include name="j2ee.dicon"/>
-				<include name="s2hibernate3.dicon"/>
+			<zipfileset prefix="s2hibernate-jpa/resources" dir="src/test/resources">
+				<include name="j2ee.dicon"/>
+				<include name="s2hibernate-jpa.dicon"/>
 				<include name="log4j.properties"/>
 			</zipfileset>
-			<zipfileset prefix="s2hibernate3/resources/META-INF" dir="src/test/resources/META-INF">
+			<zipfileset prefix="s2hibernate-jpa/resources/META-INF" dir="src/test/resources/META-INF">
 				<include name="persistence.xml"/>
 			</zipfileset>
-			<zipfileset prefix="s2hibernate3/doc" dir="../s2hibernate-www">
+			<zipfileset prefix="s2hibernate-jpa/doc" dir="../s2hibernate-www">
 			    <exclude name="**/download/**"/>
 				<exclude name=".project"/>
 		    </zipfileset>
 		</zip>
 	</target>
-
 </project>

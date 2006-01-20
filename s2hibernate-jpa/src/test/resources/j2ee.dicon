@@ -67,7 +67,7 @@
 			<!--
 			"jdbc:hsqldb:hsql://localhost:9001"
 			-->
-			"jdbc:hsqldb:file:" + @org.seasar.framework.util.EclipseUtil@getProjectRoot("s2hibernate3").getAbsolutePath() + "/target/test-classes/data/demo"
+			"jdbc:hsqldb:file:" + @org.seasar.framework.util.EclipseUtil@getProjectRoot("s2hibernate-jpa").getAbsolutePath() + "/target/test-classes/data/demo"
 		</property>
 		<property name="user">"sa"</property>
 		<property name="password">""</property>
