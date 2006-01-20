@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN" 
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="s2hibernate3">
+	<component name="entityManagerFactory" class="org.hibernate.ejb.HibernateEntityManagerFactory">
+		@javax.persistence.Persistence@createEntityManagerFactory("em")
+	</component>
+	<component class="org.hibernate.ejb.CurrentEntityManagerImpl">
+		<arg>entityManagerFactory.sessionFactory</arg>
+	</component>
+</components>

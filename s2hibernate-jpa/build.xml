@@ -1,0 +1,29 @@
+<project name="s2hibernate3" default="dist" basedir=".">
+	<property name="ver" value="EA1"/>
+
+	<target name="dist">
+		<zip zipfile="target/S2Hibernate3-${ver}.zip">
+			<zipfileset prefix="s2hibernate3" dir=".">
+				<exclude name="**/target/**"/>
+				<exclude name=".settings"/>
+				<exclude name=".settings/**"/>
+			</zipfileset>
+			<zipfileset prefix="s2hibernate3/lib" dir="target">
+				<include name="s2hibernate3-${ver}.jar"/>
+			</zipfileset>
+			<zipfileset prefix="s2hibernate3/resources" dir="src/test/resources">
+			    <include name="j2ee.dicon"/>
+				<include name="s2hibernate3.dicon"/>
+				<include name="log4j.properties"/>
+			</zipfileset>
+			<zipfileset prefix="s2hibernate3/resources/META-INF" dir="src/test/resources/META-INF">
+				<include name="persistence.xml"/>
+			</zipfileset>
+			<zipfileset prefix="s2hibernate3/doc" dir="../s2hibernate-www">
+			    <exclude name="**/download/**"/>
+				<exclude name=".project"/>
+		    </zipfileset>
+		</zip>
+	</target>
+
+</project>

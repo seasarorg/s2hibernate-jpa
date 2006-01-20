@@ -1,0 +1,6 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ejb</groupId>
+  <artifactId>ejb-persistence</artifactId>
+  <version>3.0pr</version>
+</project>
