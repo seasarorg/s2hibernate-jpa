@@ -5,7 +5,7 @@
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		@javax.persistence.Persistence@createEntityManagerFactory("em", #{})
 	</component>
-	<component class="javax.persistence.EntityManager">
+	<component class="javax.persistence.EntityManager" instance="prototype">
 		entityManagerFactory.entityManager
 	</component>
 </components>
