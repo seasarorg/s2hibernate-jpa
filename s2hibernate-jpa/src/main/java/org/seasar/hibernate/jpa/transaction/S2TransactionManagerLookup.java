@@ -1,4 +1,4 @@
-package org.seasar.hibernate3.transaction;
+package org.seasar.hibernate.jpa.transaction;
 
 import java.util.Properties;
 

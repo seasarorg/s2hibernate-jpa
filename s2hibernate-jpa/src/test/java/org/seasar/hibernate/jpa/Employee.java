@@ -1,4 +1,4 @@
-package org.seasar.hibernate3;
+package org.seasar.hibernate.jpa;
 
 import java.io.Serializable;
 import java.sql.Date;

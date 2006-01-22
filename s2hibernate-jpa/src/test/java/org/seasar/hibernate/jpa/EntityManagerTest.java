@@ -1,4 +1,4 @@
-package org.seasar.hibernate3;
+package org.seasar.hibernate.jpa;
 
 import javax.persistence.EntityManager;
 
