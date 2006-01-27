@@ -1,6 +1,0 @@
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>hibernate</groupId>
-  <artifactId>hibernate-annotations</artifactId>
-  <version>3.1beta7</version>
-</project>

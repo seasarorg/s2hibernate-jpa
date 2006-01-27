@@ -1,5 +1,5 @@
 <project name="s2hibernate-jpa" default="dist" basedir=".">
-	<property name="ver" value="EA2"/>
+	<property name="ver" value="EA3-SNAPSHOT"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2Hibernate-JPA-${ver}.zip">
@@ -20,9 +20,9 @@
 				<include name="persistence.xml"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/doc" dir="../s2hibernate-www">
-			    <exclude name="**/download/**"/>
+				<exclude name="**/download/**"/>
 				<exclude name=".project"/>
-		    </zipfileset>
+			</zipfileset>
 		</zip>
 	</target>
 </project>

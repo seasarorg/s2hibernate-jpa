@@ -1,3 +1,18 @@
+/*
+ * Copyright 2004-2006 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
 package org.seasar.hibernate.jpa;
 
 import java.io.Serializable;
@@ -22,12 +37,13 @@ public class Employee implements Serializable {
     private Float comm;
 
     private short deptno;
-    
+
     private Date tstamp;
-    
+
     private Department department;
 
-    public Employee(long empno, java.lang.String ename, java.lang.String job, Short mgr, java.util.Date hiredate, Float sal, Float comm, short deptno, Date tstamp) {
+    public Employee(long empno, java.lang.String ename, java.lang.String job, Short mgr,
+            java.util.Date hiredate, Float sal, Float comm, short deptno, Date tstamp) {
         this.empno = empno;
         this.ename = ename;
         this.job = job;
@@ -111,11 +127,11 @@ public class Employee implements Serializable {
     }
 
     public Department getDepartment() {
-    	return this.department;
+        return this.department;
     }
-    
+
     public void setDepartment(Department department) {
-    	this.department = department;
+        this.department = department;
     }
 
     public Date getTstamp() {
@@ -127,7 +143,8 @@ public class Employee implements Serializable {
     }
 
     public boolean equals(Object other) {
-        if ( !(other instanceof Employee) ) return false;
+        if (!(other instanceof Employee))
+            return false;
         Employee castOther = (Employee) other;
         return this.getEmpno() == castOther.getEmpno();
     }
