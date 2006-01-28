@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence>
 	<persistence-unit name="em" transaction-type="JTA">
-		<jta-data-source>j2ee.dataSource</jta-data-source>
+		<jta-data-source>jdbc/DataSource</jta-data-source>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 			<property name="hibernate.jndi.class" value="org.seasar.extension.j2ee.JndiContextFactory"/>
