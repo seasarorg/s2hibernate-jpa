@@ -1,6 +1,6 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>hibernate</groupId>
+  <groupId>org.hibernate</groupId>
   <artifactId>hibernate</artifactId>
-  <version>3.1.1</version>
+  <version>3.2.0.cr2</version>
 </project>

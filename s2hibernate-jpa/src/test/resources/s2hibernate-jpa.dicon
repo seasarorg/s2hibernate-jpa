@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN" 
 	"http://www.seasar.org/dtd/components23.dtd">
-<components namespace="s2hibernate-jpa">
+<components namespace="s2hibernateJPA">
+	<include path="j2ee.dicon"/>
+
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
-		@javax.persistence.Persistence@createEntityManagerFactory("em", #{})
+		@javax.persistence.Persistence@createEntityManagerFactory("S2HibernateJPA", #{})
+		<destroyMethod name="close"/>
 	</component>
-	<component class="javax.persistence.EntityManager" instance="prototype">
-		entityManagerFactory.entityManager
-	</component>
+
+	<component name="entityManager" instance="prototype"
+		class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"
+	/>
 </components>
