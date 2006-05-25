@@ -32,7 +32,7 @@ public class S2TransactionManagerLookup implements TransactionManagerLookup {
     }
 
     public String getUserTransactionName() {
-        return "j2ee.transactionManager";
+        return "jta.UserTransaction";
     }
 
 }

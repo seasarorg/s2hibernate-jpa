@@ -10,10 +10,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
     @PersistenceContext
     EntityManager em1;
 
-    @PersistenceContext(name = "entityManager")
+    @PersistenceContext(name = "entityManagerFactory")
     EntityManager em2;
 
-    @PersistenceContext(unitName = "entityManagerFactory")
+    @PersistenceContext(unitName = "S2HibernateJPA")
     EntityManager em3;
 
     public DepartmentDaoImpl() {

@@ -31,7 +31,7 @@ public class EntityManagerTest extends S2TestCase {
      * @see TestCase#setUp()
      */
     protected void setUp() throws Exception {
-        include("j2ee.dicon");
+        include("javaee5.dicon");
         include("s2hibernate-jpa.dicon");
     }
 
