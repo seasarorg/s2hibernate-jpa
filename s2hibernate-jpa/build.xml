@@ -1,20 +1,17 @@
 <project name="s2hibernate-jpa" default="dist" basedir=".">
-	<property name="ver" value="EA3-SNAPSHOT"/>
+	<property name="ver" value="1.0.0-beta-1"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2Hibernate-JPA-${ver}.zip">
 			<zipfileset prefix="s2hibernate-jpa" dir=".">
+				<exclude name="**/build/**"/>
 				<exclude name="**/target/**"/>
-				<exclude name=".settings"/>
-				<exclude name=".settings/**"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/lib" dir="target">
 				<include name="s2hibernate-jpa-${ver}.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/resources" dir="src/test/resources">
-				<include name="j2ee.dicon"/>
 				<include name="jdbc.dicon"/>
-				<include name="jta.dicon"/>
 				<include name="s2hibernate-jpa.dicon"/>
 				<include name="log4j.properties"/>
 			</zipfileset>

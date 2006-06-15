@@ -19,11 +19,11 @@ import org.hibernate.proxy.HibernateProxy;
 import org.seasar.framework.ejb.unit.ProxiedObjectResolver;
 
 public class HibernateProxiedObjectResolver implements ProxiedObjectResolver {
-	public Object unproxy(Object proxy) {
-		if (proxy instanceof HibernateProxy) {
-			return ((HibernateProxy) proxy).getHibernateLazyInitializer()
-					.getImplementation();
-		}
-		return proxy;
-	}
+    public Object unproxy(Object proxy) {
+        if (proxy instanceof HibernateProxy) {
+            return ((HibernateProxy) proxy).getHibernateLazyInitializer()
+                    .getImplementation();
+        }
+        return proxy;
+    }
 }

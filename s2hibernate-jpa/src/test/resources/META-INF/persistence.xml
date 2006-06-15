@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence>
-	<persistence-unit name="S2HibernateJPA" transaction-type="JTA">
+	<persistence-unit name="persistenceUnit" transaction-type="JTA">
 		<jta-data-source>jdbc/DataSource</jta-data-source>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>

@@ -21,35 +21,35 @@ import javax.persistence.Id;
 @Entity(name = "EMP2")
 public class Employee {
 
-	private int empno;
+    private int empno;
 
-	private String ename;
+    private String ename;
 
-	@Id
-	public int getEmpno() {
-		return empno;
-	}
+    @Id
+    public int getEmpno() {
+        return empno;
+    }
 
-	public void setEmpno(int empno) {
-		this.empno = empno;
-	}
+    public void setEmpno(int empno) {
+        this.empno = empno;
+    }
 
-	public String getEname() {
-		return ename;
-	}
+    public String getEname() {
+        return ename;
+    }
 
-	public void setEname(String ename) {
-		this.ename = ename;
-	}
+    public void setEname(String ename) {
+        this.ename = ename;
+    }
 
-	public boolean equals(Object other) {
-		if (!(other instanceof Employee))
-			return false;
-		Employee castOther = (Employee) other;
-		return this.getEmpno() == castOther.getEmpno();
-	}
+    public boolean equals(Object other) {
+        if (!(other instanceof Employee))
+            return false;
+        Employee castOther = (Employee) other;
+        return this.getEmpno() == castOther.getEmpno();
+    }
 
-	public int hashCode() {
-		return (int) this.getEmpno();
-	}
+    public int hashCode() {
+        return (int) this.getEmpno();
+    }
 }

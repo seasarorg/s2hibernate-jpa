@@ -25,10 +25,11 @@ import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
 public class S2TransactionManagerLookup implements TransactionManagerLookup {
 
-    public TransactionManager getTransactionManager(Properties props) throws HibernateException {
+    public TransactionManager getTransactionManager(Properties props)
+            throws HibernateException {
 
-        return (TransactionManager) SingletonS2ContainerFactory.getContainer().getComponent(
-                TransactionManager.class);
+        return (TransactionManager) SingletonS2ContainerFactory.getContainer()
+                .getComponent(TransactionManager.class);
     }
 
     public String getUserTransactionName() {

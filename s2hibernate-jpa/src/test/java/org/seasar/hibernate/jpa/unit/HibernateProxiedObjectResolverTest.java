@@ -22,20 +22,20 @@ import org.seasar.framework.unit.annotation.Rollback;
 
 public class HibernateProxiedObjectResolverTest extends S2EJB3TestCase {
 
-	private ProxiedObjectResolver proxiedObjectresolver;
+    private ProxiedObjectResolver proxiedObjectresolver;
 
-	public void testFieldBinding() {
-		assertNotNull(proxiedObjectresolver);
-	}
+    public void testFieldBinding() {
+        assertNotNull(proxiedObjectresolver);
+    }
 
-	@Rollback
-	public void testUnproxy() throws Exception {
-		HibernateProxiedObjectResolver resolver = new HibernateProxiedObjectResolver();
-		Employee emp = getEntityManager().getReference(Employee.class, 7369);
-		assertEquals(true, emp instanceof HibernateProxy);
-		Object unproxied = resolver.unproxy(emp);
-		assertEquals(false, unproxied instanceof HibernateProxy);
-		assertEquals(true, emp.equals(unproxied));
-	}
+    @Rollback
+    public void testUnproxy() throws Exception {
+        HibernateProxiedObjectResolver resolver = new HibernateProxiedObjectResolver();
+        Employee emp = getEntityManager().getReference(Employee.class, 7369);
+        assertEquals(true, emp instanceof HibernateProxy);
+        Object unproxied = resolver.unproxy(emp);
+        assertEquals(false, unproxied instanceof HibernateProxy);
+        assertEquals(true, emp.equals(unproxied));
+    }
 
 }

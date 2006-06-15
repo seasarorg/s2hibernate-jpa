@@ -5,7 +5,7 @@
 	<include path="javaee5.dicon"/>
 
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
-		jpa.persistenceUnitManager.getEntityManagerFactory("S2HibernateJPA")
+		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"/>

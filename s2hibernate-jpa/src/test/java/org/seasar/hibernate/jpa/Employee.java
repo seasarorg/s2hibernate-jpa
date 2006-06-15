@@ -42,8 +42,9 @@ public class Employee implements Serializable {
 
     private Department department;
 
-    public Employee(long empno, java.lang.String ename, java.lang.String job, Short mgr,
-            java.util.Date hiredate, Float sal, Float comm, short deptno, Date tstamp) {
+    public Employee(long empno, java.lang.String ename, java.lang.String job,
+            Short mgr, java.util.Date hiredate, Float sal, Float comm,
+            short deptno, Date tstamp) {
         this.empno = empno;
         this.ename = ename;
         this.job = job;
