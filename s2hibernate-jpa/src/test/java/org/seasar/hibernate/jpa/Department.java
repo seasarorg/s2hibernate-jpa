@@ -20,6 +20,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "dept")
@@ -65,10 +66,7 @@ public class Department implements Serializable {
         this.loc = loc;
     }
 
-    public int getVersionNo() {
-        return this.versionNo;
-    }
-
+    @Version
     public void setVersionNo(int versionNo) {
         this.versionNo = versionNo;
     }
