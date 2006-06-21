@@ -15,8 +15,6 @@
  */
 package org.seasar.hibernate.jpa.metadata;
 
-import javax.persistence.EntityManager;
-
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.jpa.EntityDescFactory;
@@ -29,8 +27,6 @@ import org.seasar.hibernate.jpa.Employee;
  */
 public class HibernateEntityDescProviderTest extends S2TestCase {
 
-    private EntityManager em;
-
     @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
@@ -38,14 +34,16 @@ public class HibernateEntityDescProviderTest extends S2TestCase {
     }
 
     public void testEntity() throws Exception {
-        EntityDesc entityDesc = EntityDescFactory.getEntityDesc(em,
-                Department.class);
+        EntityDesc entityDesc = EntityDescFactory
+                .getEntityDesc(Department.class);
+        assertNotNull(entityDesc);
+
+        entityDesc = EntityDescFactory.getEntityDesc(Employee.class);
         assertNotNull(entityDesc);
     }
 
     public void testNotEntity() throws Exception {
-        EntityDesc entityDesc = EntityDescFactory.getEntityDesc(em,
-                Employee.class);
+        EntityDesc entityDesc = EntityDescFactory.getEntityDesc(Object.class);
         assertNull(entityDesc);
     }
 

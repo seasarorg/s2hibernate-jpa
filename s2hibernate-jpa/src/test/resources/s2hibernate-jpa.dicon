@@ -12,7 +12,7 @@
 	
 	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider">
 		<initMethod>
-			@org.seasar.framework.jpa.EntityDescFactory@addProvider(entityManager.delegate.class, #self)
+			@org.seasar.framework.jpa.EntityDescFactory@addProvider(#self)
 		</initMethod>
 	</component>
 

@@ -18,10 +18,17 @@ package org.seasar.hibernate.jpa;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity(name = "Emp")
 public class Employee implements Serializable {
 
     private static final long serialVersionUID = -5411969211921106291L;
 
+    @Id
     private long empno;
 
     private String ename;
@@ -36,25 +43,11 @@ public class Employee implements Serializable {
 
     private Float comm;
 
-    private short deptno;
-
     private Date tstamp;
 
+    @ManyToOne
+    @JoinColumn(name = "deptno")
     private Department department;
-
-    public Employee(long empno, java.lang.String ename, java.lang.String job,
-            Short mgr, java.util.Date hiredate, Float sal, Float comm,
-            short deptno, Date tstamp) {
-        this.empno = empno;
-        this.ename = ename;
-        this.job = job;
-        this.mgr = mgr;
-        this.hiredate = hiredate;
-        this.sal = sal;
-        this.comm = comm;
-        this.deptno = deptno;
-        this.tstamp = tstamp;
-    }
 
     public Employee() {
     }
@@ -117,14 +110,6 @@ public class Employee implements Serializable {
 
     public void setComm(Float comm) {
         this.comm = comm;
-    }
-
-    public short getDeptno() {
-        return this.deptno;
-    }
-
-    public void setDeptno(short deptno) {
-        this.deptno = deptno;
     }
 
     public Department getDepartment() {

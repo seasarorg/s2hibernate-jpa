@@ -18,7 +18,7 @@ package org.seasar.hibernate.jpa.metadata;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.impl.SessionFactoryImpl;
 import org.hibernate.metadata.ClassMetadata;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.jpa.EntityDescProvider;
@@ -29,22 +29,26 @@ import org.seasar.framework.jpa.EntityDescProvider;
  */
 public class HibernateEntityDescProvider implements EntityDescProvider {
 
-    public Object getContextKey(final EntityManager em) {
+    protected SessionFactoryImpl sessionFactory;
+
+    public HibernateEntityDescProvider(final EntityManager em) {
         final Session session = Session.class.cast(em.getDelegate());
-        return session.getSessionFactory();
+        sessionFactory = SessionFactoryImpl.class.cast(session
+                .getSessionFactory());
     }
 
     /**
      * @see org.seasar.framework.jpa.EntityDescProvider#createEntityDesc(java.lang.Class)
      */
-    public EntityDesc createEntityDesc(final Class<?> entityClass,
-            final Object contextKey) {
-        final SessionFactory factory = SessionFactory.class.cast(contextKey);
-        final ClassMetadata metadata = factory.getClassMetadata(entityClass);
+    @SuppressWarnings("unchecked")
+    public <ENTITY> EntityDesc<ENTITY> createEntityDesc(
+            final Class<ENTITY> entityClass) {
+        final ClassMetadata metadata = sessionFactory
+                .getClassMetadata(entityClass);
         if (metadata == null) {
             return null;
         }
-        return new HibernateEntityDesc(entityClass, metadata);
+        return new HibernateEntityDesc(entityClass, sessionFactory);
     }
 
 }

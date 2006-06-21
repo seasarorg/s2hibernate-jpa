@@ -16,32 +16,36 @@
 package org.seasar.hibernate.jpa;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
-@Entity
-@Table(name = "dept")
+@Entity(name = "Dept")
 public class Department implements Serializable {
 
     private static final long serialVersionUID = -1031433105487668130L;
 
+    @Id
     private int deptno;
 
     private String dname;
 
     private String loc;
 
+    @Version
     private int versionNo;
 
     private boolean active;
 
+    @OneToMany(mappedBy = "department")
+    private Set<Employee> employees;
+
     public Department() {
     }
 
-    @Id
     public int getDeptno() {
         return this.deptno;
     }
@@ -66,7 +70,6 @@ public class Department implements Serializable {
         this.loc = loc;
     }
 
-    @Version
     public void setVersionNo(int versionNo) {
         this.versionNo = versionNo;
     }
@@ -77,6 +80,14 @@ public class Department implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
     }
 
     public boolean equals(Object other) {

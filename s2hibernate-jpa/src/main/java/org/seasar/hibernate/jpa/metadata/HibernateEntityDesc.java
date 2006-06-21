@@ -16,37 +16,50 @@
 package org.seasar.hibernate.jpa.metadata;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
+import org.hibernate.EntityMode;
+import org.hibernate.impl.SessionFactoryImpl;
 import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.persister.entity.EntityPersister;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.StringUtil;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
  * 
  * @author koichik
  */
-public class HibernateEntityDesc implements EntityDesc {
-    protected Class<?> entityClass;
+public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
+    protected static final Field IMPORTS_FIELD = ClassUtil.getDeclaredField(
+            SessionFactoryImpl.class, "imports");
+    static {
+        IMPORTS_FIELD.setAccessible(true);
+    }
+
+    protected Class<ENTITY> entityClass;
 
     protected BeanDesc beanDesc;
 
+    protected SessionFactoryImpl sessionFactory;
+
     protected ClassMetadata metadata;
+
+    protected EntityPersister persister;
 
     protected String name;
 
-    protected boolean fieldAccess;
-
-    public HibernateEntityDesc(final Class<?> entityClass,
-            final ClassMetadata metadata) {
+    public HibernateEntityDesc(final Class<ENTITY> entityClass,
+            final SessionFactoryImpl sessionFactory) {
         this.entityClass = entityClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(entityClass);
-        this.metadata = metadata;
+        this.sessionFactory = sessionFactory;
+        this.metadata = sessionFactory.getClassMetadata(entityClass);
+        this.persister = sessionFactory.getEntityPersister(entityClass
+                .getName());
         setup();
     }
 
@@ -54,45 +67,57 @@ public class HibernateEntityDesc implements EntityDesc {
         return name;
     }
 
-    public boolean isFieldAccess() {
-        return fieldAccess;
-    }
-
     public String getIdPropertyName() {
         return metadata.getIdentifierPropertyName();
+    }
+
+    public Class<?> getIdPropertyClass() {
+        return metadata.getIdentifierType().getReturnedClass();
     }
 
     public String[] getPropertyNames() {
         return metadata.getPropertyNames();
     }
 
+    public Class<?> getPropertyClass(final String propertyName) {
+        return metadata.getPropertyType(propertyName).getReturnedClass();
+
+    }
+
+    public boolean isAssociationProperty(final String propertyName) {
+        return metadata.getPropertyType(propertyName).isAssociationType();
+    }
+
+    public boolean isCollectionProperty(final String propertyName) {
+        return metadata.getPropertyType(propertyName).isCollectionType();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getPropertyValue(final ENTITY entity, final String propertyName) {
+        return (T) metadata.getPropertyValue(entity, propertyName,
+                EntityMode.POJO);
+    }
+
+    public void setPropertyValue(final ENTITY entity,
+            final String propertyName, Object value) {
+        metadata.setPropertyValue(entity, propertyName, value, EntityMode.POJO);
+    }
+
     protected void setup() {
         setupName();
-        setupFieldAccess();
     }
 
     protected void setupName() {
-        final Entity entity = entityClass.getAnnotation(Entity.class);
-        if (entity != null) {
-            final String name = entity.name();
-            if (!StringUtil.isEmpty(name)) {
-                this.name = name;
+        final String entityClassName = entityClass.getName();
+        final Map<String, String> imports = ReflectionUtil.getValue(
+                IMPORTS_FIELD, sessionFactory);
+        for (final Entry<String, String> entry : imports.entrySet()) {
+            if (entityClassName.equals(entry.getValue())) {
+                this.name = entry.getKey();
                 return;
             }
         }
 
-        this.name = StringUtil.decapitalize(ClassUtil
-                .getShortClassName(entityClass));
-    }
-
-    protected void setupFieldAccess() {
-        final String idName = metadata.getIdentifierPropertyName();
-        final Field field = beanDesc.getField(idName);
-        if (field != null) {
-            final Id id = field.getAnnotation(Id.class);
-            if (id != null) {
-                fieldAccess = true;
-            }
-        }
+        this.name = entityClassName;
     }
 }
