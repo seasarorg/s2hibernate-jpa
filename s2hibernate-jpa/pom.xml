@@ -8,7 +8,7 @@
   <artifactId>s2hibernate-jpa</artifactId>
   <packaging>jar</packaging>
   <name>S2Hibernate-JPA Project</name>
-  <version>1.0.0-beta-1</version>
+  <version>1.0.0-beta-2-SNAPSHOT</version>
   <description></description>
   <url>http://s2hibernate.seasar.org/</url>
   <issueManagement>
@@ -86,7 +86,7 @@
     <dependency>
       <groupId>org.seasar.container</groupId>
       <artifactId>s2-tiger</artifactId>
-      <version>2.4.0-beta-3</version>
+      <version>2.4.0-beta-4-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -105,94 +105,20 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>antlr</artifactId>
-      <version>2.7.6</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm</artifactId>
-      <version>1.5.3</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>asm</groupId>
-      <artifactId>asm-attrs</artifactId>
-      <version>1.5.3</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib</artifactId>
-      <version>2.1_3</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <version>2.1.1</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>xerces</groupId>
-      <artifactId>xercesImpl</artifactId>
-      <version>2.6.2</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>1.6.1</version>
-      <type>jar</type>
-      <exclusions>
-        <exclusion>
-          <groupId>stax</groupId>
-          <artifactId>stax-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>pull-parser</groupId>
-          <artifactId>pull-parser</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xpp3</groupId>
-          <artifactId>xpp3</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>jaxme</groupId>
-          <artifactId>jaxme-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>msv</groupId>
-          <artifactId>xsdlib</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>jaxen</groupId>
-          <artifactId>jaxen</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>msv</groupId>
-          <artifactId>relaxngDatatype</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-      <version>1.2</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>javax.persistence</groupId>
-      <artifactId>ejb3-persistence</artifactId>
-      <version>3.0</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
       <version>3.2.0.cr1</version>
       <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.persistence</groupId>
+          <artifactId>ejb</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -201,21 +127,9 @@
       <type>jar</type>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate</artifactId>
-      <version>3.2.0.cr2</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
       <groupId>jboss</groupId>
       <artifactId>jboss-archive-browsing</artifactId>
       <version>5.0.0alpha</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>lucene</groupId>
-      <artifactId>lucene</artifactId>
-      <version>1.4.3</version>
       <type>jar</type>
     </dependency>
     <dependency>
