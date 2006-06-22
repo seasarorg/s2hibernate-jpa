@@ -16,12 +16,14 @@
 package org.seasar.hibernate.jpa;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity(name = "Emp")
 public class Employee implements Serializable {
@@ -37,12 +39,14 @@ public class Employee implements Serializable {
 
     private Short mgr;
 
-    private java.util.Date hiredate;
+    @Temporal(TemporalType.DATE)
+    private Date hiredate;
 
     private Float sal;
 
     private Float comm;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date tstamp;
 
     @ManyToOne

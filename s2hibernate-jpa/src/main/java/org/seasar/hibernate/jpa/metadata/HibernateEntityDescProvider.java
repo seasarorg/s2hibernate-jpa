@@ -18,7 +18,7 @@ package org.seasar.hibernate.jpa.metadata;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
-import org.hibernate.impl.SessionFactoryImpl;
+import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.jpa.EntityDescProvider;
@@ -29,11 +29,11 @@ import org.seasar.framework.jpa.EntityDescProvider;
  */
 public class HibernateEntityDescProvider implements EntityDescProvider {
 
-    protected SessionFactoryImpl sessionFactory;
+    protected SessionFactoryImplementor sessionFactory;
 
     public HibernateEntityDescProvider(final EntityManager em) {
         final Session session = Session.class.cast(em.getDelegate());
-        sessionFactory = SessionFactoryImpl.class.cast(session
+        sessionFactory = SessionFactoryImplementor.class.cast(session
                 .getSessionFactory());
     }
 
