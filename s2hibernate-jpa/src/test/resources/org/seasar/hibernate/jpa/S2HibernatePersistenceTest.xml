@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+	xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_1_0.xsd"
+	version="1.0"
+>
+
+    <entity class="org.seasar.hibernate.jpa.sub.Employee2" metadata-complete="true">
+        <table name="EMP2">
+        </table>
+        <attributes>
+            <id name="empno"/>
+            <basic name="ename"/>
+        </attributes>
+    </entity>
+    
+</entity-mappings>

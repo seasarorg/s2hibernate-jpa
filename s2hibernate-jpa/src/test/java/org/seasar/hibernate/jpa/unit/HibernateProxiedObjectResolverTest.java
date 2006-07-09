@@ -19,6 +19,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.seasar.framework.ejb.unit.ProxiedObjectResolver;
 import org.seasar.framework.ejb.unit.S2EJB3TestCase;
 import org.seasar.framework.unit.annotation.Rollback;
+import org.seasar.hibernate.jpa.Employee;
 
 public class HibernateProxiedObjectResolverTest extends S2EJB3TestCase {
 
@@ -31,7 +32,7 @@ public class HibernateProxiedObjectResolverTest extends S2EJB3TestCase {
     @Rollback
     public void testUnproxy() throws Exception {
         HibernateProxiedObjectResolver resolver = new HibernateProxiedObjectResolver();
-        Employee emp = getEntityManager().getReference(Employee.class, 7369);
+        Employee emp = getEntityManager().getReference(Employee.class, 7369L);
         assertEquals(true, emp instanceof HibernateProxy);
         Object unproxied = resolver.unproxy(emp);
         assertEquals(false, unproxied instanceof HibernateProxy);

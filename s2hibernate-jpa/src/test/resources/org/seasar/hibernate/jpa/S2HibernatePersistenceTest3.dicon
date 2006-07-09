@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+
+	<component name="detector" class="org.seasar.hibernate.jpa.detector.AnnotatedClassDetector">
+		<initMethod name="addAnnotation">
+			<arg>@javax.persistence.Entity@class</arg>
+		</initMethod>
+		<initMethod name="addAnnotation">
+			<arg>@javax.persistence.Embeddable@class</arg>
+		</initMethod>
+		<initMethod name="addAnnotation">
+			<arg>@javax.persistence.MappedSuperclass@class</arg>
+		</initMethod>
+		<initMethod name="addPackageName">
+			<arg>"org.seasar.hibernate.jpa.sub"</arg>
+		</initMethod>
+		<initMethod name="addReferenceClass">
+			<arg>@org.seasar.hibernate.jpa.sub.Hoge@class</arg>
+		</initMethod>		
+	</component>
+	
+	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
+		<initMethod name="addClassDetector">
+			<arg>detector</arg>
+		</initMethod>
+	</component>
+
+</components>

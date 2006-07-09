@@ -13,43 +13,57 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit;
+package org.seasar.hibernate.jpa.sub;
+
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "EMP2")
-public class Employee {
+/**
+ * 
+ * @author taedium
+ */
+@Entity(name = "DEPT2")
+public class Department2 implements Serializable {
 
-    private int empno;
-
-    private String ename;
+    private static final long serialVersionUID = 268071147097676648L;
 
     @Id
-    public int getEmpno() {
-        return empno;
+    private int deptno;
+
+    private String dname;
+
+    public Department2() {
     }
 
-    public void setEmpno(int empno) {
-        this.empno = empno;
+    public int getDeptno() {
+        return deptno;
     }
 
-    public String getEname() {
-        return ename;
+    public void setDeptno(int deptno) {
+        this.deptno = deptno;
     }
 
-    public void setEname(String ename) {
-        this.ename = ename;
+    public String getDname() {
+        return dname;
     }
 
+    public void setDname(String dname) {
+        this.dname = dname;
+    }
+
+    @Override
     public boolean equals(Object other) {
-        if (!(other instanceof Employee))
+        if (!(other instanceof Department2))
             return false;
-        Employee castOther = (Employee) other;
-        return this.getEmpno() == castOther.getEmpno();
+        Department2 castOther = (Department2) other;
+        return this.getDeptno() == castOther.getDeptno();
     }
 
+    @Override
     public int hashCode() {
-        return (int) this.getEmpno();
+        return this.getDeptno();
     }
+
 }
