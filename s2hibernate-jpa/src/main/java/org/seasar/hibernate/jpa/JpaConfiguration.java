@@ -29,6 +29,6 @@ public interface JpaConfiguration {
 
     Set<String> getMappingFiles();
 
-    Set<String> getMappingFiles(String fileName);
+    Set<String> getMappingFiles(String unitName);
 
 }
