@@ -5,7 +5,7 @@
 
 	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
 		<initMethod name="addMappingFile">
-			<arg>"org/seasar/hibernate/jpa/S2HibernatePersistenceTest.xml"</arg>
+			<arg>"org/seasar/hibernate/jpa/mapping_hoge.xml"</arg>
 		</initMethod>
 	</component>
 

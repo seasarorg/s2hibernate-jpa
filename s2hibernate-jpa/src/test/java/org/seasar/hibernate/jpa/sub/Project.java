@@ -13,15 +13,25 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.detector.sub;
+package org.seasar.hibernate.jpa.sub;
 
-import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
 /**
  * 
  * @author taedium
  */
-@MappedSuperclass
-public class Foo {
+public class Project implements Serializable {
 
+    private static final long serialVersionUID = 1604129561935711656L;
+
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

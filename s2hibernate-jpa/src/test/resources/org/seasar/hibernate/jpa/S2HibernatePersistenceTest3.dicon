@@ -3,7 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 
-	<component name="detector" class="org.seasar.hibernate.jpa.detector.AnnotatedClassDetector">
+	<component name="detector" class="org.seasar.framework.autodetector.tiger.AnnotatedClassAutoDetector">
 		<initMethod name="addAnnotation">
 			<arg>@javax.persistence.Entity@class</arg>
 		</initMethod>
@@ -17,12 +17,12 @@
 			<arg>"org.seasar.hibernate.jpa.sub"</arg>
 		</initMethod>
 		<initMethod name="addReferenceClass">
-			<arg>@org.seasar.hibernate.jpa.sub.Hoge@class</arg>
+			<arg>@org.seasar.hibernate.jpa.Employee@class</arg>
 		</initMethod>		
 	</component>
 	
 	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
-		<initMethod name="addClassDetector">
+		<initMethod name="addClassAutoDetector">
 			<arg>detector</arg>
 		</initMethod>
 	</component>

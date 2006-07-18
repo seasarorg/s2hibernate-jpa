@@ -15,10 +15,29 @@
  */
 package org.seasar.hibernate.jpa.sub;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * 
  * @author taedium
  */
-public class Hoge {
+@Entity
+public class Customer implements Serializable {
+
+    private static final long serialVersionUID = 3989816948419859269L;
+
+    @Id
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
 }

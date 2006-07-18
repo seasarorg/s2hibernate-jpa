@@ -92,10 +92,10 @@ public class S2HibernatePersistence implements
             final String unitName, final Map map,
             final Ejb3Configuration hibernateCfg) {
 
-        final JpaConfiguration jpaCfg = getJpaConfiguration();
-        if (jpaCfg != null) {
-            addMappingFiles(unitName, hibernateCfg, jpaCfg);
-            addAnnotatedClasses(unitName, hibernateCfg, jpaCfg);
+        final S2HibernateConfiguration s2HibernateCfg = getS2HibernateConfiguration();
+        if (s2HibernateCfg != null) {
+            addMappingFiles(unitName, hibernateCfg, s2HibernateCfg);
+            addAnnotatedClasses(unitName, hibernateCfg, s2HibernateCfg);
         }
 
         map.put(HibernatePersistence.PROVIDER, HibernatePersistence.class
@@ -103,37 +103,39 @@ public class S2HibernatePersistence implements
         return hibernateCfg.createEntityManagerFactory(unitName, map);
     }
 
-    protected JpaConfiguration getJpaConfiguration() {
+    protected S2HibernateConfiguration getS2HibernateConfiguration() {
         if (SingletonS2ContainerFactory.hasContainer()) {
             final S2Container container = SingletonS2ContainerFactory
                     .getContainer();
-            if (container.hasComponentDef(JpaConfiguration.class)) {
+            if (container.hasComponentDef(S2HibernateConfiguration.class)) {
                 final Object cfg = container
-                        .getComponent(JpaConfiguration.class);
-                return JpaConfiguration.class.cast(cfg);
+                        .getComponent(S2HibernateConfiguration.class);
+                return S2HibernateConfiguration.class.cast(cfg);
             }
         }
         return null;
     }
 
     protected void addMappingFiles(final String unitName,
-            final Ejb3Configuration hibernateCfg, final JpaConfiguration jpaCfg) {
+            final Ejb3Configuration hibernateCfg,
+            final S2HibernateConfiguration s2HibernateCfg) {
 
-        for (final String file : jpaCfg.getMappingFiles()) {
+        for (final String file : s2HibernateCfg.getMappingFiles()) {
             hibernateCfg.addResource(file);
         }
-        for (final String file : jpaCfg.getMappingFiles(unitName)) {
+        for (final String file : s2HibernateCfg.getMappingFiles(unitName)) {
             hibernateCfg.addResource(file);
         }
     }
 
     protected void addAnnotatedClasses(final String unitName,
-            final Ejb3Configuration hibernateCfg, final JpaConfiguration jpaCfg) {
+            final Ejb3Configuration hibernateCfg,
+            final S2HibernateConfiguration s2HibernateCfg) {
 
-        for (final Class<?> clazz : jpaCfg.getAnnotatedClasses()) {
+        for (final Class<?> clazz : s2HibernateCfg.getAnnotatedClasses()) {
             hibernateCfg.addAnnotatedClass(clazz);
         }
-        for (final Class<?> clazz : jpaCfg.getAnnotatedClasses(unitName)) {
+        for (final Class<?> clazz : s2HibernateCfg.getAnnotatedClasses(unitName)) {
             hibernateCfg.addAnnotatedClass(clazz);
         }
     }

@@ -20,6 +20,8 @@ import javax.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.seasar.extension.unit.S2TestCase;
+import org.seasar.hibernate.jpa.sub.Address;
+import org.seasar.hibernate.jpa.sub.Customer;
 import org.seasar.hibernate.jpa.sub.Department2;
 import org.seasar.hibernate.jpa.sub.Employee2;
 
@@ -33,8 +35,16 @@ public class S2HibernatePersistenceTest extends S2TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        include("j2ee.dicon");
+        include("javaee5.dicon");
         include("s2hibernate-jpa.dicon");
+    }
+
+    public void testReadPersistenceXmlFile() throws Exception {
+        final Session session = Session.class.cast(em.getDelegate());
+        final SessionFactory sf = session.getSessionFactory();
+        assertEquals(2, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Employee.class));
+        assertNotNull(sf.getClassMetadata(Department.class));
     }
 
     public void setUpAddMappingFile() throws Exception {
@@ -44,8 +54,10 @@ public class S2HibernatePersistenceTest extends S2TestCase {
     public void testAddMappingFile() throws Exception {
         final Session session = Session.class.cast(em.getDelegate());
         final SessionFactory sf = session.getSessionFactory();
+        assertEquals(3, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Employee.class));
+        assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Employee2.class));
-        assertNull(sf.getClassMetadata(Department2.class));
     }
 
     public void setUpAddAnnotatedClass() throws Exception {
@@ -55,18 +67,37 @@ public class S2HibernatePersistenceTest extends S2TestCase {
     public void testAddAnnotatedClass() throws Exception {
         final Session session = Session.class.cast(em.getDelegate());
         final SessionFactory sf = session.getSessionFactory();
-        assertNull(sf.getClassMetadata(Employee2.class));
+        assertEquals(3, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Employee.class));
+        assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Department2.class));
     }
 
-    public void setUpClassDetector() throws Exception {
+    public void setUpAddClassAutoDetector() throws Exception {
         include("S2HibernatePersistenceTest3.dicon");
     }
 
-    public void testClassDetector() throws Exception {
+    public void testAddClassAutoDetector() throws Exception {
         final Session session = Session.class.cast(em.getDelegate());
         final SessionFactory sf = session.getSessionFactory();
-        assertNull(sf.getClassMetadata(Employee2.class));
+        assertEquals(4, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Employee.class));
+        assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Department2.class));
+        assertNotNull(sf.getClassMetadata(Customer.class));
+    }
+
+    public void setUpAddResourcePathAutoDetector() throws Exception {
+        include("S2HibernatePersistenceTest4.dicon");
+    }
+
+    public void testAddResourcePathAutoDetector() throws Exception {
+        final Session session = Session.class.cast(em.getDelegate());
+        final SessionFactory sf = session.getSessionFactory();
+        assertEquals(4, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Employee.class));
+        assertNotNull(sf.getClassMetadata(Department.class));
+        assertNotNull(sf.getClassMetadata(Employee2.class));
+        assertNotNull(sf.getClassMetadata(Address.class));
     }
 }

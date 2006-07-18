@@ -13,15 +13,26 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.detector;
+package org.seasar.hibernate.jpa.sub;
 
-import javax.persistence.Entity;
+import java.io.Serializable;
 
 /**
  * 
  * @author taedium
  */
-@Entity
-public class Hoge {
+public class Address implements Serializable {
+
+    private static final long serialVersionUID = 6528248251581774579L;
+
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
 }

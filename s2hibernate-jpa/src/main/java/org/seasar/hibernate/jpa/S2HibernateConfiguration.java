@@ -19,23 +19,53 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
+import org.seasar.framework.autodetector.ClassAutoDetector;
+import org.seasar.framework.autodetector.ResourcePathAutoDetector;
 import org.seasar.framework.container.annotation.tiger.Component;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.util.tiger.CollectionsUtil;
-import org.seasar.hibernate.jpa.detector.ClassDetector;
 
 /**
  * 
  * @author taedium
  */
 @Component
-public class S2HibernateConfiguration implements JpaConfiguration {
+public class S2HibernateConfiguration {
 
-    protected Map<String, Set<String>> mappingFiles = CollectionsUtil
+    private Map<String, Set<String>> mappingFiles = CollectionsUtil
             .newHashMap();
 
-    protected Map<String, Set<Class<?>>> annotatedClasses = CollectionsUtil
+    private Map<String, Set<Class<?>>> annotatedClasses = CollectionsUtil
             .newHashMap();
+
+    private Map<String, ClassAutoDetector> classAutoDetectors = CollectionsUtil
+            .newHashMap();
+
+    private Map<String, ResourcePathAutoDetector> resourcePathAutoDetectors = CollectionsUtil
+            .newHashMap();
+
+    @InitMethod
+    public void initialize() {
+        for (final Entry<String, ClassAutoDetector> entry : classAutoDetectors
+                .entrySet()) {
+            final String unitName = entry.getKey();
+            final ClassAutoDetector detector = entry.getValue();
+            for (final Class clazz : detector.detect()) {
+                addAnnotatedClass(unitName, clazz);
+            }
+        }
+
+        for (final Entry<String, ResourcePathAutoDetector> entry : resourcePathAutoDetectors
+                .entrySet()) {
+            final String unitName = entry.getKey();
+            final ResourcePathAutoDetector detector = entry.getValue();
+            for (final String path : detector.detect()) {
+                addMappingFile(unitName, path);
+            }
+        }
+    }
 
     public void addMappingFile(final String fileName) {
         addMappingFile(null, fileName);
@@ -48,23 +78,11 @@ public class S2HibernateConfiguration implements JpaConfiguration {
         mappingFiles.get(unitName).add(fileName);
     }
 
-    public Set<String> getMappingFiles() {
-        return getMappingFiles(null);
-    }
-
-    public Set<String> getMappingFiles(final String unitName) {
-        if (mappingFiles.containsKey(unitName)) {
-            return mappingFiles.get(unitName);
-        }
-        return Collections.emptySet();
-    }
-
     public void addAnnotatedClass(final Class<?> clazz) {
         addAnnotatedClass(null, clazz);
     }
 
     public void addAnnotatedClass(final String unitName, final Class<?> clazz) {
-
         if (!annotatedClasses.containsKey(unitName)) {
             annotatedClasses.put(unitName, new HashSet<Class<?>>());
         }
@@ -83,6 +101,39 @@ public class S2HibernateConfiguration implements JpaConfiguration {
         }
     }
 
+    public void addClassAutoDetector(final ClassAutoDetector detector) {
+        addClassAutoDetector(null, detector);
+    }
+
+    public void addClassAutoDetector(final String unitName,
+            final ClassAutoDetector detector) {
+
+        classAutoDetectors.put(unitName, detector);
+    }
+
+    public void addResourcePathAutoDetector(
+            final ResourcePathAutoDetector detector) {
+
+        addResourcePathAutoDetector(null, detector);
+    }
+
+    public void addResourcePathAutoDetector(final String unitName,
+            final ResourcePathAutoDetector detector) {
+
+        resourcePathAutoDetectors.put(unitName, detector);
+    }
+
+    public Set<String> getMappingFiles() {
+        return getMappingFiles(null);
+    }
+
+    public Set<String> getMappingFiles(final String unitName) {
+        if (mappingFiles.containsKey(unitName)) {
+            return mappingFiles.get(unitName);
+        }
+        return Collections.emptySet();
+    }
+
     public Set<Class<?>> getAnnotatedClasses() {
         return getAnnotatedClasses(null);
     }
@@ -93,15 +144,4 @@ public class S2HibernateConfiguration implements JpaConfiguration {
         }
         return Collections.emptySet();
     }
-
-    public void addClassDetector(final ClassDetector classDetector) {
-        addClassDetector(null, classDetector);
-    }
-
-    public void addClassDetector(final String unitName,
-            final ClassDetector classDetector) {
-
-        addAnnotatedClasses(unitName, classDetector.detect());
-    }
-
 }

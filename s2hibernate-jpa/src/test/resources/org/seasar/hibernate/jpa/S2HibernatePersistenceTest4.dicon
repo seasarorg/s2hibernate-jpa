@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+
+	<component name="detector" class="org.seasar.framework.autodetector.NamedResourcePathAutoDetector">
+		<initMethod name="addDirectoryName">
+			<arg>"org/seasar/hibernate/jpa"</arg>
+		</initMethod>
+		<initMethod name="addReferenceClass">
+			<arg>@org.seasar.hibernate.jpa.Employee@class</arg>
+		</initMethod>
+		<initMethod name="addResourceNamePattern">
+			<arg>"org/seasar/hibernate/jpa/mapping.*"</arg>
+		</initMethod>				
+		<initMethod name="addIgnoreResourceNamePattern">
+			<arg>"org/seasar/hibernate/jpa/mapping_bar.*"</arg>
+		</initMethod>				
+	</component>
+	
+	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
+		<initMethod name="addResourcePathAutoDetector">
+			<arg>detector</arg>
+		</initMethod>
+	</component>
+
+</components>
