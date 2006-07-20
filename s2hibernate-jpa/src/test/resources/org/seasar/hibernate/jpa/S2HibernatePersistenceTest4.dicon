@@ -3,7 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 
-	<component name="detector" class="org.seasar.framework.autodetector.NamedResourcePathAutoDetector">
+	<component name="detector" class="org.seasar.framework.autodetector.impl.ResourceAutoDetectorImpl">
 		<initMethod name="addDirectoryName">
 			<arg>"org/seasar/hibernate/jpa"</arg>
 		</initMethod>
@@ -19,7 +19,7 @@
 	</component>
 	
 	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
-		<initMethod name="addResourcePathAutoDetector">
+		<initMethod name="addResourceAutoDetector">
 			<arg>detector</arg>
 		</initMethod>
 	</component>

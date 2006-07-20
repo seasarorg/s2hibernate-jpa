@@ -3,7 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 
-	<component name="detector" class="org.seasar.framework.autodetector.tiger.AnnotatedClassAutoDetector">
+	<component name="detector" class="org.seasar.framework.autodetector.impl.AnnotatedClassAutoDetector">
 		<initMethod name="addAnnotation">
 			<arg>@javax.persistence.Entity@class</arg>
 		</initMethod>

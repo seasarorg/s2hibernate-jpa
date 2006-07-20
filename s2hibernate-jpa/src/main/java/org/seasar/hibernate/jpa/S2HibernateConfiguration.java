@@ -15,14 +15,15 @@
  */
 package org.seasar.hibernate.jpa;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
 import org.seasar.framework.autodetector.ClassAutoDetector;
-import org.seasar.framework.autodetector.ResourcePathAutoDetector;
+import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.annotation.tiger.Component;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.util.tiger.CollectionsUtil;
@@ -34,16 +35,19 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 @Component
 public class S2HibernateConfiguration {
 
-    private Map<String, Set<String>> mappingFiles = CollectionsUtil
+    private Map<String, List<String>> mappingFiles = CollectionsUtil
             .newHashMap();
 
-    private Map<String, Set<Class<?>>> annotatedClasses = CollectionsUtil
+    private Map<String, List<InputStream>> mappingFileStreams = CollectionsUtil
+            .newHashMap();
+
+    private Map<String, List<Class<?>>> annotatedClasses = CollectionsUtil
             .newHashMap();
 
     private Map<String, ClassAutoDetector> classAutoDetectors = CollectionsUtil
             .newHashMap();
 
-    private Map<String, ResourcePathAutoDetector> resourcePathAutoDetectors = CollectionsUtil
+    private Map<String, ResourceAutoDetector> resourceAutoDetectors = CollectionsUtil
             .newHashMap();
 
     @InitMethod
@@ -57,12 +61,13 @@ public class S2HibernateConfiguration {
             }
         }
 
-        for (final Entry<String, ResourcePathAutoDetector> entry : resourcePathAutoDetectors
+        for (final Entry<String, ResourceAutoDetector> entry : resourceAutoDetectors
                 .entrySet()) {
             final String unitName = entry.getKey();
-            final ResourcePathAutoDetector detector = entry.getValue();
-            for (final String path : detector.detect()) {
-                addMappingFile(unitName, path);
+            final ResourceAutoDetector detector = entry.getValue();
+            for (final ResourceAutoDetector.Entry resourceEntry : detector
+                    .detect()) {
+                addMappingFileStream(unitName, resourceEntry.getInputStream());
             }
         }
     }
@@ -73,9 +78,20 @@ public class S2HibernateConfiguration {
 
     public void addMappingFile(final String unitName, final String fileName) {
         if (!mappingFiles.containsKey(unitName)) {
-            mappingFiles.put(unitName, new HashSet<String>());
+            mappingFiles.put(unitName, new ArrayList<String>());
         }
         mappingFiles.get(unitName).add(fileName);
+    }
+
+    public void addMappingFileStream(final InputStream is) {
+        addMappingFileStream(null, is);
+    }
+
+    public void addMappingFileStream(final String unitName, final InputStream is) {
+        if (!mappingFileStreams.containsKey(unitName)) {
+            mappingFileStreams.put(unitName, new ArrayList<InputStream>());
+        }
+        mappingFileStreams.get(unitName).add(is);
     }
 
     public void addAnnotatedClass(final Class<?> clazz) {
@@ -84,7 +100,7 @@ public class S2HibernateConfiguration {
 
     public void addAnnotatedClass(final String unitName, final Class<?> clazz) {
         if (!annotatedClasses.containsKey(unitName)) {
-            annotatedClasses.put(unitName, new HashSet<Class<?>>());
+            annotatedClasses.put(unitName, new ArrayList<Class<?>>());
         }
         annotatedClasses.get(unitName).add(clazz);
     }
@@ -111,37 +127,47 @@ public class S2HibernateConfiguration {
         classAutoDetectors.put(unitName, detector);
     }
 
-    public void addResourcePathAutoDetector(
-            final ResourcePathAutoDetector detector) {
+    public void addResourceAutoDetector(final ResourceAutoDetector detector) {
 
-        addResourcePathAutoDetector(null, detector);
+        addResourceAutoDetector(null, detector);
     }
 
-    public void addResourcePathAutoDetector(final String unitName,
-            final ResourcePathAutoDetector detector) {
+    public void addResourceAutoDetector(final String unitName,
+            final ResourceAutoDetector detector) {
 
-        resourcePathAutoDetectors.put(unitName, detector);
+        resourceAutoDetectors.put(unitName, detector);
     }
 
-    public Set<String> getMappingFiles() {
+    public List<String> getMappingFiles() {
         return getMappingFiles(null);
     }
 
-    public Set<String> getMappingFiles(final String unitName) {
+    public List<String> getMappingFiles(final String unitName) {
         if (mappingFiles.containsKey(unitName)) {
             return mappingFiles.get(unitName);
         }
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 
-    public Set<Class<?>> getAnnotatedClasses() {
+    public List<InputStream> getMappingFileStreams() {
+        return getMappingFileStreams(null);
+    }
+
+    public List<InputStream> getMappingFileStreams(final String unitName) {
+        if (mappingFileStreams.containsKey(unitName)) {
+            return mappingFileStreams.get(unitName);
+        }
+        return Collections.emptyList();
+    }
+
+    public List<Class<?>> getAnnotatedClasses() {
         return getAnnotatedClasses(null);
     }
 
-    public Set<Class<?>> getAnnotatedClasses(final String unitName) {
+    public List<Class<?>> getAnnotatedClasses(final String unitName) {
         if (annotatedClasses.containsKey(unitName)) {
             return annotatedClasses.get(unitName);
         }
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 }

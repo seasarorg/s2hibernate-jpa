@@ -15,6 +15,7 @@
  */
 package org.seasar.hibernate.jpa;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -95,6 +96,7 @@ public class S2HibernatePersistence implements
         final S2HibernateConfiguration s2HibernateCfg = getS2HibernateConfiguration();
         if (s2HibernateCfg != null) {
             addMappingFiles(unitName, hibernateCfg, s2HibernateCfg);
+            addMappingFileStreams(unitName, hibernateCfg, s2HibernateCfg);
             addAnnotatedClasses(unitName, hibernateCfg, s2HibernateCfg);
         }
 
@@ -120,11 +122,24 @@ public class S2HibernatePersistence implements
             final Ejb3Configuration hibernateCfg,
             final S2HibernateConfiguration s2HibernateCfg) {
 
-        for (final String file : s2HibernateCfg.getMappingFiles()) {
-            hibernateCfg.addResource(file);
+        for (final String fileName : s2HibernateCfg.getMappingFiles()) {
+            hibernateCfg.addResource(fileName);
         }
         for (final String file : s2HibernateCfg.getMappingFiles(unitName)) {
             hibernateCfg.addResource(file);
+        }
+    }
+
+    protected void addMappingFileStreams(final String unitName,
+            final Ejb3Configuration hibernateCfg,
+            final S2HibernateConfiguration s2HibernateCfg) {
+
+        for (final InputStream is : s2HibernateCfg.getMappingFileStreams()) {
+            hibernateCfg.addInputStream(is);
+        }
+        for (final InputStream is : s2HibernateCfg
+                .getMappingFileStreams(unitName)) {
+            hibernateCfg.addInputStream(is);
         }
     }
 
@@ -135,7 +150,8 @@ public class S2HibernatePersistence implements
         for (final Class<?> clazz : s2HibernateCfg.getAnnotatedClasses()) {
             hibernateCfg.addAnnotatedClass(clazz);
         }
-        for (final Class<?> clazz : s2HibernateCfg.getAnnotatedClasses(unitName)) {
+        for (final Class<?> clazz : s2HibernateCfg
+                .getAnnotatedClasses(unitName)) {
             hibernateCfg.addAnnotatedClass(clazz);
         }
     }
