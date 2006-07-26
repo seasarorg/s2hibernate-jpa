@@ -21,7 +21,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.hibernate.jpa.sub.Address;
-import org.seasar.hibernate.jpa.sub.Customer;
 import org.seasar.hibernate.jpa.sub.Department2;
 import org.seasar.hibernate.jpa.sub.Employee2;
 
@@ -73,25 +72,11 @@ public class S2HibernatePersistenceTest extends S2TestCase {
         assertNotNull(sf.getClassMetadata(Department2.class));
     }
 
-    public void setUpAddClassAutoDetector() throws Exception {
+    public void setUpAddResourceAutoDetector() throws Exception {
         include("S2HibernatePersistenceTest3.dicon");
     }
 
-    public void testAddClassAutoDetector() throws Exception {
-        final Session session = Session.class.cast(em.getDelegate());
-        final SessionFactory sf = session.getSessionFactory();
-        assertEquals(4, sf.getAllClassMetadata().size());
-        assertNotNull(sf.getClassMetadata(Employee.class));
-        assertNotNull(sf.getClassMetadata(Department.class));
-        assertNotNull(sf.getClassMetadata(Department2.class));
-        assertNotNull(sf.getClassMetadata(Customer.class));
-    }
-
-    public void setUpAddResourcePathAutoDetector() throws Exception {
-        include("S2HibernatePersistenceTest4.dicon");
-    }
-
-    public void testAddResourcePathAutoDetector() throws Exception {
+    public void testAddResourceAutoDetector() throws Exception {
         final Session session = Session.class.cast(em.getDelegate());
         final SessionFactory sf = session.getSessionFactory();
         assertEquals(4, sf.getAllClassMetadata().size());

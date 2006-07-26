@@ -15,7 +15,6 @@
  */
 package org.seasar.hibernate.jpa;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -31,6 +30,8 @@ import org.hibernate.ejb.Ejb3Configuration;
 import org.hibernate.ejb.HibernatePersistence;
 import org.hibernate.ejb.packaging.PersistenceMetadata;
 import org.hibernate.ejb.packaging.PersistenceXmlLoader;
+import org.seasar.framework.autodetector.ResourceAutoDetector;
+import org.seasar.framework.autodetector.ResourceAutoDetector.Entry;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
@@ -44,30 +45,32 @@ public class S2HibernatePersistence implements
     private static final String IMPLEMENTATION_NAME = S2HibernatePersistence.class
             .getName();
 
+    private static final String PERSISTENCE_FILE_PATH = "META-INF/persistence.xml";
+
     @SuppressWarnings("unchecked")
     public EntityManagerFactory createEntityManagerFactory(String unitName,
             Map map) {
-
-        final Ejb3Configuration hibernateCfg = new Ejb3Configuration();
 
         try {
             map = map == null ? new HashMap() : new HashMap(map);
             final ClassLoader loader = Thread.currentThread()
                     .getContextClassLoader();
             final Enumeration<URL> xmls = loader
-                    .getResources("META-INF/persistence.xml");
+                    .getResources(PERSISTENCE_FILE_PATH);
 
             while (xmls.hasMoreElements()) {
                 final URL url = xmls.nextElement();
+                final Ejb3Configuration hibernateCfg = new Ejb3Configuration();
                 final AnnotationConfiguration annCfg = hibernateCfg
                         .getHibernateConfiguration();
                 final List<PersistenceMetadata> metadataFiles = PersistenceXmlLoader
                         .deploy(url, map, annCfg.getEntityResolver());
                 for (PersistenceMetadata metadata : metadataFiles) {
                     if (IMPLEMENTATION_NAME.equalsIgnoreCase(metadata
-                            .getProvider())) {
+                            .getProvider())
+                            && metadata.getName().equals(unitName)) {
                         return createEntityManagerFactory(unitName, map,
-                                hibernateCfg);
+                                hibernateCfg, url);
                     }
                 }
             }
@@ -91,12 +94,12 @@ public class S2HibernatePersistence implements
     @SuppressWarnings("unchecked")
     protected EntityManagerFactory createEntityManagerFactory(
             final String unitName, final Map map,
-            final Ejb3Configuration hibernateCfg) {
+            final Ejb3Configuration hibernateCfg, final URL url) {
 
         final S2HibernateConfiguration s2HibernateCfg = getS2HibernateConfiguration();
         if (s2HibernateCfg != null) {
             addMappingFiles(unitName, hibernateCfg, s2HibernateCfg);
-            addMappingFileStreams(unitName, hibernateCfg, s2HibernateCfg);
+            addMappingFilesAsStream(unitName, hibernateCfg, s2HibernateCfg, url);
             addAnnotatedClasses(unitName, hibernateCfg, s2HibernateCfg);
         }
 
@@ -130,17 +133,28 @@ public class S2HibernatePersistence implements
         }
     }
 
-    protected void addMappingFileStreams(final String unitName,
+    protected void addMappingFilesAsStream(final String unitName,
             final Ejb3Configuration hibernateCfg,
-            final S2HibernateConfiguration s2HibernateCfg) {
+            final S2HibernateConfiguration s2HibernateCfg, final URL url) {
 
-        for (final InputStream is : s2HibernateCfg.getMappingFileStreams()) {
-            hibernateCfg.addInputStream(is);
+        final ResourceAutoDetector detector = s2HibernateCfg
+                .getRsourceAutoDetector();
+        if (detector != null) {
+            for (final Entry entry : detector
+                    .detect(PERSISTENCE_FILE_PATH, url)) {
+                hibernateCfg.addInputStream(entry.getInputStream());
+            }
         }
-        for (final InputStream is : s2HibernateCfg
-                .getMappingFileStreams(unitName)) {
-            hibernateCfg.addInputStream(is);
+
+        final ResourceAutoDetector specifiedDetector = s2HibernateCfg
+                .getRsourceAutoDetector(unitName);
+        if (specifiedDetector != null) {
+            for (final Entry entry : specifiedDetector.detect(
+                    PERSISTENCE_FILE_PATH, url)) {
+                hibernateCfg.addInputStream(entry.getInputStream());
+            }
         }
+
     }
 
     protected void addAnnotatedClasses(final String unitName,

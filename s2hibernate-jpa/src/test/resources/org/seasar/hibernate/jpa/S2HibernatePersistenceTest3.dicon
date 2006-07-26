@@ -3,26 +3,20 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 
-	<component name="detector" class="org.seasar.framework.autodetector.impl.AnnotatedClassAutoDetector">
-		<initMethod name="addAnnotation">
-			<arg>@javax.persistence.Entity@class</arg>
+	<component name="detector" class="org.seasar.framework.autodetector.impl.ResourceAutoDetectorImpl">
+		<initMethod name="addDirectoryName">
+			<arg>"org/seasar/hibernate/jpa"</arg>
 		</initMethod>
-		<initMethod name="addAnnotation">
-			<arg>@javax.persistence.Embeddable@class</arg>
-		</initMethod>
-		<initMethod name="addAnnotation">
-			<arg>@javax.persistence.MappedSuperclass@class</arg>
-		</initMethod>
-		<initMethod name="addPackageName">
-			<arg>"org.seasar.hibernate.jpa.sub"</arg>
-		</initMethod>
-		<initMethod name="addReferenceClass">
-			<arg>@org.seasar.hibernate.jpa.Employee@class</arg>
-		</initMethod>		
+		<initMethod name="addResourceNamePattern">
+			<arg>"org/seasar/hibernate/jpa/mapping.*"</arg>
+		</initMethod>				
+		<initMethod name="addIgnoreResourceNamePattern">
+			<arg>"org/seasar/hibernate/jpa/mapping_bar.*"</arg>
+		</initMethod>				
 	</component>
 	
 	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
-		<initMethod name="addClassAutoDetector">
+		<initMethod name="addResourceAutoDetector">
 			<arg>detector</arg>
 		</initMethod>
 	</component>

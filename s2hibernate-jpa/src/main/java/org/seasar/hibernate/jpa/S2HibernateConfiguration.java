@@ -15,17 +15,13 @@
  */
 package org.seasar.hibernate.jpa;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
 import org.seasar.framework.container.annotation.tiger.Component;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
@@ -38,39 +34,11 @@ public class S2HibernateConfiguration {
     private Map<String, List<String>> mappingFiles = CollectionsUtil
             .newHashMap();
 
-    private Map<String, List<InputStream>> mappingFileStreams = CollectionsUtil
-            .newHashMap();
-
     private Map<String, List<Class<?>>> annotatedClasses = CollectionsUtil
-            .newHashMap();
-
-    private Map<String, ClassAutoDetector> classAutoDetectors = CollectionsUtil
             .newHashMap();
 
     private Map<String, ResourceAutoDetector> resourceAutoDetectors = CollectionsUtil
             .newHashMap();
-
-    @InitMethod
-    public void initialize() {
-        for (final Entry<String, ClassAutoDetector> entry : classAutoDetectors
-                .entrySet()) {
-            final String unitName = entry.getKey();
-            final ClassAutoDetector detector = entry.getValue();
-            for (final Class clazz : detector.detect()) {
-                addAnnotatedClass(unitName, clazz);
-            }
-        }
-
-        for (final Entry<String, ResourceAutoDetector> entry : resourceAutoDetectors
-                .entrySet()) {
-            final String unitName = entry.getKey();
-            final ResourceAutoDetector detector = entry.getValue();
-            for (final ResourceAutoDetector.Entry resourceEntry : detector
-                    .detect()) {
-                addMappingFileStream(unitName, resourceEntry.getInputStream());
-            }
-        }
-    }
 
     public void addMappingFile(final String fileName) {
         addMappingFile(null, fileName);
@@ -81,17 +49,6 @@ public class S2HibernateConfiguration {
             mappingFiles.put(unitName, new ArrayList<String>());
         }
         mappingFiles.get(unitName).add(fileName);
-    }
-
-    public void addMappingFileStream(final InputStream is) {
-        addMappingFileStream(null, is);
-    }
-
-    public void addMappingFileStream(final String unitName, final InputStream is) {
-        if (!mappingFileStreams.containsKey(unitName)) {
-            mappingFileStreams.put(unitName, new ArrayList<InputStream>());
-        }
-        mappingFileStreams.get(unitName).add(is);
     }
 
     public void addAnnotatedClass(final Class<?> clazz) {
@@ -117,16 +74,6 @@ public class S2HibernateConfiguration {
         }
     }
 
-    public void addClassAutoDetector(final ClassAutoDetector detector) {
-        addClassAutoDetector(null, detector);
-    }
-
-    public void addClassAutoDetector(final String unitName,
-            final ClassAutoDetector detector) {
-
-        classAutoDetectors.put(unitName, detector);
-    }
-
     public void addResourceAutoDetector(final ResourceAutoDetector detector) {
 
         addResourceAutoDetector(null, detector);
@@ -149,17 +96,6 @@ public class S2HibernateConfiguration {
         return Collections.emptyList();
     }
 
-    public List<InputStream> getMappingFileStreams() {
-        return getMappingFileStreams(null);
-    }
-
-    public List<InputStream> getMappingFileStreams(final String unitName) {
-        if (mappingFileStreams.containsKey(unitName)) {
-            return mappingFileStreams.get(unitName);
-        }
-        return Collections.emptyList();
-    }
-
     public List<Class<?>> getAnnotatedClasses() {
         return getAnnotatedClasses(null);
     }
@@ -169,5 +105,13 @@ public class S2HibernateConfiguration {
             return annotatedClasses.get(unitName);
         }
         return Collections.emptyList();
+    }
+
+    public ResourceAutoDetector getRsourceAutoDetector() {
+        return getRsourceAutoDetector(null);
+    }
+
+    public ResourceAutoDetector getRsourceAutoDetector(final String unitName) {
+        return resourceAutoDetectors.get(unitName);
     }
 }
