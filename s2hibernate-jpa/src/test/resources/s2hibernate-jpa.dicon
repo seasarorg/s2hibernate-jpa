@@ -19,5 +19,14 @@
 		</destroyMethod>
 	</component>
 
+	<component class="org.seasar.hibernate.jpa.unit.HibernateEntityReaderProvider">
+		<initMethod>
+			@org.seasar.framework.jpa.unit.EntityReaderFactory@addProvider(#self)
+		</initMethod>
+		<destroyMethod>
+			@org.seasar.framework.jpa.unit.EntityReaderFactory@removeProvider(#self)
+		</destroyMethod>
+	</component>
+	
 	<component class="org.seasar.hibernate.jpa.unit.HibernateProxiedObjectResolver"/>
 </components>

@@ -98,6 +98,14 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
         return attributeDescs;
     }
 
+    public SessionFactoryImplementor getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public EntityPersister getPersister() {
+        return persister;
+    }
+
     protected String resolveEntityName() {
         final String entityClassName = entityClass.getName();
         final Map<String, String> imports = ReflectionUtil.getValue(
