@@ -16,33 +16,27 @@
 package org.seasar.hibernate.jpa.unit.singletable;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class Store implements Serializable {
 
     @Id
     private Integer id;
 
     private String name;
 
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    @ManyToMany
+    private Collection<KnownClient> knownClients = new HashSet<KnownClient>();
 
     public Integer getId() {
         return id;
@@ -58,6 +52,14 @@ public class Employee implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Collection<KnownClient> getKnownClients() {
+        return knownClients;
+    }
+
+    public void setKnownClients(Collection<KnownClient> knownClients) {
+        this.knownClients = knownClients;
     }
 
 }

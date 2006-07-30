@@ -15,6 +15,8 @@
  */
 package org.seasar.hibernate.jpa.unit;
 
+import javax.persistence.EntityManager;
+
 import org.hibernate.persister.entity.UnionSubclassEntityPersister;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.framework.jpa.unit.EntityReader;
@@ -27,7 +29,7 @@ import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 public class UnionSubclassEntityReader implements EntityReader {
 
     public UnionSubclassEntityReader(final Object entity,
-            final HibernateEntityDesc<?> entityDesc,
+            final EntityManager em, final HibernateEntityDesc<?> entityDesc,
             final UnionSubclassEntityPersister persister) {
     }
 

@@ -24,43 +24,42 @@ import javax.persistence.Embeddable;
  * @author taedium
  */
 @Embeddable
-public class CompanyPk implements Serializable {
+public class ParentPk implements Serializable {
 
-    private Integer companyCode;
+    private String firstName;
 
-    private String name;
+    private String lastName;
 
-    public Integer getCompanyCode() {
-        return companyCode;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setCompanyCode(Integer companyCode) {
-        this.companyCode = companyCode;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getName() {
-        return name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof CompanyPk))
+        if (!(other instanceof ParentPk))
             return false;
-        CompanyPk castOther = CompanyPk.class.cast(other);
-        return getCompanyCode().equals(castOther.getCompanyCode())
-                && getName().equals(castOther.getName());
+        ParentPk castOther = ParentPk.class.cast(other);
+        return getFirstName().equals(castOther.getFirstName())
+                && getLastName().equals(castOther.getLastName());
     }
 
     @Override
     public int hashCode() {
         int result;
-        result = getCompanyCode().hashCode();
-        result = 29 * result + getName().hashCode();
+        result = getFirstName().hashCode();
+        result = 29 * result + getLastName().hashCode();
         return result;
     }
-
 }

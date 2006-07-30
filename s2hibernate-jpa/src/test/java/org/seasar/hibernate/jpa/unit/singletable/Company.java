@@ -15,6 +15,8 @@
  */
 package org.seasar.hibernate.jpa.unit.singletable;
 
+import java.io.Serializable;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
@@ -23,7 +25,7 @@ import javax.persistence.Entity;
  * @author taedium
  */
 @Entity
-public class Company {
+public class Company implements Serializable {
 
     @EmbeddedId
     private CompanyPk id;

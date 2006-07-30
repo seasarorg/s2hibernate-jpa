@@ -65,7 +65,12 @@ public class HibernateAttributeDesc implements AttributeDesc {
         this.id = id;
         this.version = version;
 
-        final Type hibernateType = metadata.getPropertyType(name);
+        Type hibernateType = null;
+        if (id) {
+            hibernateType = metadata.getIdentifierType();
+        } else {
+            hibernateType = metadata.getPropertyType(name);
+        }
         type = hibernateType.getReturnedClass();
         sqlType = getSqlType(hibernateType);
         if (type == Date.class || type == Calendar.class) {

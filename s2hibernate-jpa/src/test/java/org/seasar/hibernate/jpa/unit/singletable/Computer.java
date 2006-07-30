@@ -19,30 +19,25 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class Computer implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
-
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    @OneToOne
+    @JoinColumns( {
+            @JoinColumn(name = "serialbrand", referencedColumnName = "brand"),
+            @JoinColumn(name = "serialmodel", referencedColumnName = "model") })
+    private SerialNumber serialNumber;
 
     public Integer getId() {
         return id;
@@ -52,12 +47,12 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public SerialNumber getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSerialNumber(SerialNumber serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
 }

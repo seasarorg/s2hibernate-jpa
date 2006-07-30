@@ -18,31 +18,17 @@ package org.seasar.hibernate.jpa.unit.singletable;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class Ticket implements Serializable {
 
-    @Id
     private Integer id;
 
-    private String name;
-
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    private String number;
 
     public Integer getId() {
         return id;
@@ -52,12 +38,12 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNumber() {
+        return number;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
 }

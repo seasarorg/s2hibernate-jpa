@@ -19,38 +19,21 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.IdClass;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+@IdClass(ProjectPk.class)
+public class Project implements Serializable {
 
     @Id
-    private Integer id;
+    private Integer projectCode;
 
+    @Id
     private String name;
-
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -58,6 +41,14 @@ public class Employee implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(Integer projectCode) {
+        this.projectCode = projectCode;
     }
 
 }

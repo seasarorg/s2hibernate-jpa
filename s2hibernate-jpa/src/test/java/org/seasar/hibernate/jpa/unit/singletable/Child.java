@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 
 /**
@@ -26,23 +28,16 @@ import javax.persistence.ManyToOne;
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class Child implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
-
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    @ManyToOne()
+    @JoinColumns( {
+            @JoinColumn(name = "parentLastName", referencedColumnName = "lastName"),
+            @JoinColumn(name = "parentFirstName", referencedColumnName = "firstName") })
+    public Parent parent;
 
     public Integer getId() {
         return id;
@@ -52,12 +47,11 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
-
 }

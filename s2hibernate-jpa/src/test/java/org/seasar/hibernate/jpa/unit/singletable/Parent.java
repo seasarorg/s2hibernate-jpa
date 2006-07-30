@@ -19,45 +19,31 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
-
+public class Parent implements Serializable {
     @Id
-    private Integer id;
+    private ParentPk id;
 
-    private String name;
+    private int age;
 
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
+    public int getAge() {
+        return age;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public Integer getId() {
+    public ParentPk getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(ParentPk id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }

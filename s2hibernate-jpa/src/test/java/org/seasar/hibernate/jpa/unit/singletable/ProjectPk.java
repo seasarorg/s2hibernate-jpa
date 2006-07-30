@@ -17,26 +17,15 @@ package org.seasar.hibernate.jpa.unit.singletable;
 
 import java.io.Serializable;
 
-import javax.persistence.Embeddable;
-
 /**
  * 
  * @author taedium
  */
-@Embeddable
-public class CompanyPk implements Serializable {
+public class ProjectPk implements Serializable {
 
-    private Integer companyCode;
+    private Integer projectCode;
 
     private String name;
-
-    public Integer getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(Integer companyCode) {
-        this.companyCode = companyCode;
-    }
 
     public String getName() {
         return name;
@@ -46,21 +35,28 @@ public class CompanyPk implements Serializable {
         this.name = name;
     }
 
+    public Integer getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(Integer projectCode) {
+        this.projectCode = projectCode;
+    }
+
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof CompanyPk))
+        if (!(other instanceof ProjectPk))
             return false;
-        CompanyPk castOther = CompanyPk.class.cast(other);
-        return getCompanyCode().equals(castOther.getCompanyCode())
+        ProjectPk castOther = ProjectPk.class.cast(other);
+        return getProjectCode().equals(castOther.getProjectCode())
                 && getName().equals(castOther.getName());
     }
 
     @Override
     public int hashCode() {
         int result;
-        result = getCompanyCode().hashCode();
+        result = getProjectCode().hashCode();
         result = 29 * result + getName().hashCode();
         return result;
     }
-
 }

@@ -19,30 +19,21 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
-@Entity
-public class Employee implements Serializable {
+@Entity(name = "Orders")
+public class Order implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
+    private String orderNo;
 
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    // @OneToMany(mappedBy = "order")
+    // private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
 
     public Integer getId() {
         return id;
@@ -52,12 +43,12 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
 }

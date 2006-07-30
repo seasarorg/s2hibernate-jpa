@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
@@ -26,23 +27,14 @@ import javax.persistence.ManyToOne;
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class OrderLine implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
-
     @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    @JoinColumn(name = "orderNo", referencedColumnName = "orderNo", unique = true)
+    private Order order;
 
     public Integer getId() {
         return id;
@@ -52,12 +44,12 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
 }

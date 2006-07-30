@@ -17,14 +17,18 @@ package org.seasar.hibernate.jpa.unit;
 
 import java.io.Serializable;
 import java.sql.Types;
-import java.util.Map.Entry;
+
+import javax.persistence.EntityManager;
 
 import org.hibernate.EntityMode;
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.engine.SessionImplementor;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.hibernate.type.ComponentType;
-import org.hibernate.type.ManyToOneType;
+import org.hibernate.type.EmbeddedComponentType;
+import org.hibernate.type.EntityType;
+import org.hibernate.type.OneToOneType;
 import org.hibernate.type.Type;
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
@@ -33,8 +37,6 @@ import org.seasar.extension.dataset.impl.DataSetImpl;
 import org.seasar.extension.dataset.states.RowStates;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
-import org.seasar.framework.util.ArrayMap;
-import org.seasar.framework.util.CaseInsensitiveMap;
 import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
@@ -43,20 +45,21 @@ import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
  */
 public class SingleTableEntityReader implements EntityReader {
 
+    final private EntityManager em;
+
     final private SingleTableEntityPersister persister;
 
     final private SessionFactoryImplementor sessionFactory;
 
-    final private EntityMode entityMode;
-
     private DataSet dataSet = new DataSetImpl();
 
-    public SingleTableEntityReader(final Object entity,
+    public SingleTableEntityReader(final Object entity, final EntityManager em,
             final HibernateEntityDesc<?> entityDesc,
             final SingleTableEntityPersister persister) {
+
+        this.em = em;
         this.persister = persister;
         this.sessionFactory = entityDesc.getSessionFactory();
-        this.entityMode = sessionFactory.getSettings().getDefaultEntityMode();
         setupColumns();
         setupRow(entity);
     }
@@ -70,9 +73,9 @@ public class SingleTableEntityReader implements EntityReader {
     }
 
     protected void setupIdColumns() {
-        final Type type = persister.getIdentifierType();
+        final Type idType = persister.getIdentifierType();
         final DataTable table = read().getTable(persister.getTableName());
-        final int[] sqlTypes = type.sqlTypes(sessionFactory);
+        final int[] sqlTypes = idType.sqlTypes(sessionFactory);
         final String[] columnNames = persister.getIdentifierColumnNames();
         for (int i = 0; i < columnNames.length; i++) {
             final String columnName = columnNames[i];
@@ -80,6 +83,9 @@ public class SingleTableEntityReader implements EntityReader {
             if (sqlTypes != null && sqlTypes.length > i) {
                 sqlType = sqlTypes[i];
             }
+
+            assert !table.hasColumn(columnName) : columnName.toString() + " "
+                    + idType.getName();
             table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
         }
     }
@@ -89,24 +95,30 @@ public class SingleTableEntityReader implements EntityReader {
         for (int i = 0; i < propNames.length; i++) {
             final String propName = propNames[i];
             final String tableName = persister.getPropertyTableName(propName);
-            final Type propertyType = persister.getPropertyType(propName);
-            final int[] sqlTypes = propertyType.sqlTypes(sessionFactory);
+            final Type propType = persister.getPropertyType(propName);
+            final int[] sqlTypes = propType.sqlTypes(sessionFactory);
             final DataTable table = dataSet.getTable(tableName);
             final String[] columnNames = persister
                     .getPropertyColumnNames(propName);
 
+            if (!isReadablePropertyType(propType)) {
+                continue;
+            }
+
             for (int j = 0; j < columnNames.length; j++) {
                 final String columnName = columnNames[j];
-                int sqlType = Types.OTHER;
-                if (sqlTypes != null && sqlTypes.length > j) {
-                    sqlType = sqlTypes[j];
+                if (sqlTypes == null || sqlTypes.length - 1 < j) {
+                    break;
                 }
-                table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
+                assert !table.hasColumn(columnName) : columnName.toString()
+                        + " " + propType.toString();
+                table.addColumn(columnName, ColumnTypes
+                        .getColumnType(sqlTypes[j]));
             }
         }
     }
 
-    protected void setupRow(Object entity) {
+    protected void setupRow(final Object entity) {
         for (int i = 0; i < dataSet.getTableSize(); i++) {
             final DataTable table = dataSet.getTable(i);
             final DataRow row = table.addRow();
@@ -120,41 +132,10 @@ public class SingleTableEntityReader implements EntityReader {
         }
     }
 
-    protected void setupIdRow(Object entity, DataRow row) {
-        final Serializable id = persister.getIdentifier(entity, entityMode);
+    protected void setupIdRow(final Object entity, final DataRow row) {
+        final Serializable id = persister
+                .getIdentifier(entity, getEntityMode());
         final Type idType = persister.getIdentifierType();
-        final ArrayMap idColumnValues = getIdColumnValues(id, idType);
-        for (int i = 0; i < idColumnValues.size(); i++) {
-            final Entry entry = idColumnValues.getEntry(i);
-            final String columnName = String.class.cast(entry.getKey());
-            final Object value = entry.getValue();
-            row.setValue(columnName, value);
-        }
-    }
-
-    protected void setupPropertyRow(Object entity, DataTable table, DataRow row) {
-        final String[] propNames = persister.getPropertyNames();
-        for (int i = 0; i < propNames.length; i++) {
-            final String propName = propNames[i];
-            final String tableName = persister.getPropertyTableName(propName);
-            if (!tableName.equals(table.getTableName())) {
-                return;
-            }
-            final String[] columnNames = persister
-                    .getPropertyColumnNames(propName);
-
-            for (int j = 0; j < columnNames.length; j++) {
-                final String columnName = columnNames[j];
-                final Type propType = persister.getPropertyType(propName);
-                final Object value = persister.getPropertyValue(entity, i,
-                        entityMode);
-                row.setValue(columnName, convert(propType, value, j));
-            }
-        }
-    }
-
-    protected ArrayMap getIdColumnValues(Serializable id, Type idType) {
-        final ArrayMap columnValues = new CaseInsensitiveMap();
 
         if (idType.isComponentType()) {
             final ComponentType componentType = ComponentType.class
@@ -162,38 +143,93 @@ public class SingleTableEntityReader implements EntityReader {
             final String[] columnNames = persister.getIdentifierColumnNames();
             for (int i = 0; i < columnNames.length; i++) {
                 final String columnName = columnNames[i];
-                // TODO
                 final Object value = componentType.getPropertyValue(id, i,
-                        entityMode);
-                columnValues.put(columnName, value);
+                        getEntityMode());
+                row.setValue(columnName, value);
             }
         } else {
             final String columnName = persister.getIdentifierColumnNames()[0];
-            columnValues.put(columnName, id);
+            row.setValue(columnName, id);
         }
-
-        return columnValues;
     }
 
-    protected Object convert(Type hibernateType, Object value, int index) {
+    protected void setupPropertyRow(final Object entity, final DataTable table,
+            final DataRow row) {
+
+        final String[] propNames = persister.getPropertyNames();
+        for (int i = 0; i < propNames.length; i++) {
+            final String propName = propNames[i];
+            final String tableName = persister.getPropertyTableName(propName);
+            final Type propType = persister.getPropertyType(propName);
+            final Object value = persister.getPropertyValue(entity, propName,
+                    getEntityMode());
+            final String[] columnNames = persister
+                    .getPropertyColumnNames(propName);
+
+            if (!tableName.equals(table.getTableName())) {
+                continue;
+            }
+            if (!isReadablePropertyType(propType)) {
+                continue;
+            }
+
+            for (int j = 0; j < columnNames.length; j++) {
+                final String columnName = columnNames[j];
+                row.setValue(columnName, convert(propType, value, j));
+            }
+        }
+    }
+
+    protected Object convert(final Type hibernateType, final Object value,
+            final int index) {
+
         if (value == null) {
             return null;
         }
-        if (ManyToOneType.class.isInstance(hibernateType)) {
-            final ManyToOneType manyToOneType = ManyToOneType.class
-                    .cast(hibernateType);
-            if (manyToOneType.isReferenceToPrimaryKey()) {
-                final String entityName = manyToOneType
-                        .getAssociatedEntityName();
-                final EntityPersister ep = sessionFactory
-                        .getEntityPersister(entityName);
-                final Serializable id = ep.getIdentifier(value, entityMode);
+
+        if (hibernateType.isEntityType()) {
+            final EntityType entityType = EntityType.class.cast(hibernateType);
+            final String entityName = entityType.getAssociatedEntityName();
+            final EntityPersister ep = sessionFactory
+                    .getEntityPersister(entityName);
+
+            if (entityType.isReferenceToPrimaryKey()) {
+                final Serializable id = ep
+                        .getIdentifier(value, getEntityMode());
                 final Type idType = ep.getIdentifierType();
-                final ArrayMap idColumnValues = getIdColumnValues(id, idType);
-                return idColumnValues.get(index);
+                if (idType instanceof ComponentType) {
+                    ComponentType componentType = ComponentType.class
+                            .cast(idType);
+                    return componentType.getPropertyValue(id, index,
+                            getSession());
+                }
+                return id;
             }
+            return ep.getPropertyValue(value, index, getEntityMode());
         }
         return value;
+    }
+
+    protected boolean isReadablePropertyType(final Type propType) {
+        if (propType.isCollectionType()) {
+            return false;
+        }
+        if (propType instanceof EmbeddedComponentType) {
+            return false;
+        }
+        if (propType instanceof OneToOneType) {
+            OneToOneType oneToOneType = OneToOneType.class.cast(propType);
+            return oneToOneType.isReferenceToPrimaryKey();
+        }
+        return true;
+    }
+
+    protected SessionImplementor getSession() {
+        return SessionImplementor.class.cast(em.getDelegate());
+    }
+
+    protected EntityMode getEntityMode() {
+        return getSession().getEntityMode();
     }
 
     public DataSet read() {

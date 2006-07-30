@@ -15,20 +15,28 @@
  */
 package org.seasar.hibernate.jpa.unit.singletable;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Department {
+public class Department implements Serializable {
 
     @Id
     private int id;
 
     private String name;
+
+    @OneToMany(mappedBy = "department")
+    private Collection<Employee> employees = new HashSet<Employee>();
 
     public int getId() {
         return id;
@@ -45,4 +53,13 @@ public class Department {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Collection<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Collection<Employee> employees) {
+        this.employees = employees;
+    }
+
 }

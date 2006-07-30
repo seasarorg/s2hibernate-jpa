@@ -15,6 +15,8 @@
  */
 package org.seasar.hibernate.jpa.unit.singletable;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -23,7 +25,7 @@ import javax.persistence.Id;
  * @author taedium
  */
 @Entity
-public class Simple {
+public class Simple implements Serializable {
 
     @Id
     private Integer id;

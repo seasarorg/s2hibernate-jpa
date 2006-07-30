@@ -19,30 +19,17 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
-
+public class Party implements Serializable {
     @Id
     private Integer id;
 
-    private String name;
-
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    private String partyName;
 
     public Integer getId() {
         return id;
@@ -53,11 +40,11 @@ public class Employee implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return partyName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.partyName = name;
     }
 
 }

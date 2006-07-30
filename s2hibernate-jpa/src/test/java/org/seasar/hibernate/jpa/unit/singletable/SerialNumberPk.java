@@ -24,43 +24,42 @@ import javax.persistence.Embeddable;
  * @author taedium
  */
 @Embeddable
-public class CompanyPk implements Serializable {
+public class SerialNumberPk implements Serializable {
 
-    private Integer companyCode;
+    private String brand;
 
-    private String name;
+    private String model;
 
-    public Integer getCompanyCode() {
-        return companyCode;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setCompanyCode(Integer companyCode) {
-        this.companyCode = companyCode;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public String getName() {
-        return name;
+    public String getModel() {
+        return model;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setModel(String model) {
+        this.model = model;
     }
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof CompanyPk))
+        if (!(other instanceof SerialNumberPk))
             return false;
-        CompanyPk castOther = CompanyPk.class.cast(other);
-        return getCompanyCode().equals(castOther.getCompanyCode())
-                && getName().equals(castOther.getName());
+        SerialNumberPk castOther = SerialNumberPk.class.cast(other);
+        return getBrand().equals(castOther.getBrand())
+                && getModel().equals(castOther.getModel());
     }
 
     @Override
     public int hashCode() {
         int result;
-        result = getCompanyCode().hashCode();
-        result = 29 * result + getName().hashCode();
+        result = getBrand().hashCode();
+        result = 29 * result + getModel().hashCode();
         return result;
     }
-
 }

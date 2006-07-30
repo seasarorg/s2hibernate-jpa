@@ -19,29 +19,31 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class PartyAffiliate implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
+    private String affiliateName;
 
-    @ManyToOne
-    private Department department;
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Party party;
 
-    public Department getDepartment() {
-        return department;
+    public String getAffiliateName() {
+        return affiliateName;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setAffiliateName(String affiliateName) {
+        this.affiliateName = affiliateName;
     }
 
     public Integer getId() {
@@ -52,12 +54,11 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Party getParty() {
+        return party;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParty(Party party) {
+        this.party = party;
     }
-
 }

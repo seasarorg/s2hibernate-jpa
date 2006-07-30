@@ -15,6 +15,8 @@
  */
 package org.seasar.hibernate.jpa.unit;
 
+import javax.persistence.EntityManager;
+
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
 import org.hibernate.persister.entity.SingleTableEntityPersister;
@@ -30,6 +32,12 @@ import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
  * @author taedium
  */
 public class HibernateEntityReaderProvider implements EntityReaderProvider {
+
+    private EntityManager em;
+
+    public HibernateEntityReaderProvider(final EntityManager em) {
+        this.em = em;
+    }
 
     public EntityReader createEntityReader(final Object entity) {
         final EntityDesc entityDesc = EntityDescFactory.getEntityDesc(entity
@@ -50,20 +58,20 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
             final HibernateEntityDesc<?> entityDesc,
             final EntityPersister persister) {
 
-        if (SingleTableEntityPersister.class.isInstance(persister)) {
+        if (persister instanceof SingleTableEntityPersister) {
             final SingleTableEntityPersister p = SingleTableEntityPersister.class
                     .cast(persister);
-            return new SingleTableEntityReader(entity, entityDesc, p);
+            return new SingleTableEntityReader(entity, em, entityDesc, p);
 
-        } else if (JoinedSubclassEntityPersister.class.isInstance(persister)) {
+        } else if (persister instanceof JoinedSubclassEntityPersister) {
             final JoinedSubclassEntityPersister p = JoinedSubclassEntityPersister.class
                     .cast(persister);
-            return new JoinedSubclassEntityReader(entity, entityDesc, p);
+            return new JoinedSubclassEntityReader(entity, em, entityDesc, p);
 
-        } else if (UnionSubclassEntityPersister.class.isInstance(persister)) {
+        } else if (persister instanceof UnionSubclassEntityPersister) {
             final UnionSubclassEntityPersister p = UnionSubclassEntityPersister.class
                     .cast(persister);
-            return new UnionSubclassEntityReader(entity, entityDesc, p);
+            return new UnionSubclassEntityReader(entity, em, entityDesc, p);
         }
 
         return null;
