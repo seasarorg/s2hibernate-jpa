@@ -13,27 +13,36 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.onetomany;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.OneToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-@IdClass(ProjectPk.class)
-public class Project implements Serializable {
+public class Customer implements Serializable {
 
     @Id
-    private Integer projectCode;
+    private Integer id;
 
-    @Id
     private String name;
+
+    @OneToOne
+    private Passport passport;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -43,12 +52,12 @@ public class Project implements Serializable {
         this.name = name;
     }
 
-    public Integer getProjectCode() {
-        return projectCode;
+    public Passport getPassport() {
+        return passport;
     }
 
-    public void setProjectCode(Integer projectCode) {
-        this.projectCode = projectCode;
+    public void setPassport(Passport passport) {
+        this.passport = passport;
     }
 
 }

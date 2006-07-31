@@ -13,38 +13,19 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.id;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 /**
  * 
  * @author taedium
  */
-@Entity
-public class Store implements Serializable {
+public class ProjectPk implements Serializable {
 
-    @Id
-    private Integer id;
+    private Integer projectCode;
 
     private String name;
-
-    @ManyToMany
-    private Collection<KnownClient> knownClients = new HashSet<KnownClient>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -54,12 +35,28 @@ public class Store implements Serializable {
         this.name = name;
     }
 
-    public Collection<KnownClient> getKnownClients() {
-        return knownClients;
+    public Integer getProjectCode() {
+        return projectCode;
     }
 
-    public void setKnownClients(Collection<KnownClient> knownClients) {
-        this.knownClients = knownClients;
+    public void setProjectCode(Integer projectCode) {
+        this.projectCode = projectCode;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof ProjectPk))
+            return false;
+        ProjectPk castOther = ProjectPk.class.cast(other);
+        return getProjectCode().equals(castOther.getProjectCode())
+                && getName().equals(castOther.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        result = getProjectCode().hashCode();
+        result = 29 * result + getName().hashCode();
+        return result;
+    }
 }

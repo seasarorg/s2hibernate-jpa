@@ -13,27 +13,43 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit;
+package org.seasar.hibernate.jpa.unit.manytoone;
 
-import javax.persistence.EntityManager;
+import java.io.Serializable;
 
-import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
-import org.seasar.extension.dataset.DataSet;
-import org.seasar.framework.jpa.unit.EntityReader;
-import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
-public class JoinedSubclassEntityReader implements EntityReader {
+@Entity
+public class OrderLine implements Serializable {
 
-    public JoinedSubclassEntityReader(final Object entity,
-            final EntityManager em, final HibernateEntityDesc<?> entityDesc,
-            final JoinedSubclassEntityPersister persister) {
+    @Id
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "orderNo", referencedColumnName = "orderNo", unique = true)
+    private Order order;
+
+    public Integer getId() {
+        return id;
     }
 
-    public DataSet read() {
-        return null;
+    public void setId(Integer id) {
+        this.id = id;
     }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
 }

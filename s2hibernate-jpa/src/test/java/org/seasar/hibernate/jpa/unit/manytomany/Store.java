@@ -13,28 +13,30 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.manytomany;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Passport implements Serializable {
+public class Store implements Serializable {
 
     @Id
     private Integer id;
 
-    private String number;
+    private String name;
 
-    @OneToOne(mappedBy = "passport")
-    private Customer owner;
+    @ManyToMany
+    private Collection<KnownClient> knownClients = new HashSet<KnownClient>();
 
     public Integer getId() {
         return id;
@@ -44,20 +46,20 @@ public class Passport implements Serializable {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getName() {
+        return name;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Customer getOwner() {
-        return owner;
+    public Collection<KnownClient> getKnownClients() {
+        return knownClients;
     }
 
-    public void setOwner(Customer owner) {
-        this.owner = owner;
+    public void setKnownClients(Collection<KnownClient> knownClients) {
+        this.knownClients = knownClients;
     }
 
 }

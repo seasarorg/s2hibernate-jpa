@@ -13,53 +13,45 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.manytoone;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Department implements Serializable {
+public class Child implements Serializable {
 
     @Id
-    private int id;
+    private Integer id;
 
-    private String name;
+    @ManyToOne()
+    @JoinColumns( {
+            @JoinColumn(name = "parentLastName", referencedColumnName = "lastName"),
+            @JoinColumn(name = "parentFirstName", referencedColumnName = "firstName") })
+    public Parent parent;
 
-    @OneToMany(mappedBy = "department")
-    private Collection<Employee> employees = new HashSet<Employee>();
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
-
-    public Collection<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Collection<Employee> employees) {
-        this.employees = employees;
-    }
-
 }

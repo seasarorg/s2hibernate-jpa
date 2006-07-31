@@ -13,27 +13,31 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.onetomany;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
 
 /**
  * 
  * @author taedium
  */
-@Entity(name = "Orders")
-public class Order implements Serializable {
+@Entity
+public class Computer implements Serializable {
 
     @Id
     private Integer id;
 
-    private String orderNo;
-
-    // @OneToMany(mappedBy = "order")
-    // private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
+    @OneToOne
+    @JoinColumns( {
+            @JoinColumn(name = "serialbrand", referencedColumnName = "brand"),
+            @JoinColumn(name = "serialmodel", referencedColumnName = "model") })
+    private SerialNumber serialNumber;
 
     public Integer getId() {
         return id;
@@ -43,12 +47,12 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public SerialNumber getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setSerialNumber(SerialNumber serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
 }

@@ -13,31 +13,28 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.onetomany;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Child implements Serializable {
+public class Passport implements Serializable {
 
     @Id
     private Integer id;
 
-    @ManyToOne()
-    @JoinColumns( {
-            @JoinColumn(name = "parentLastName", referencedColumnName = "lastName"),
-            @JoinColumn(name = "parentFirstName", referencedColumnName = "firstName") })
-    public Parent parent;
+    private String number;
+
+    @OneToOne(mappedBy = "passport")
+    private Customer owner;
 
     public Integer getId() {
         return id;
@@ -47,11 +44,20 @@ public class Child implements Serializable {
         this.id = id;
     }
 
-    public Parent getParent() {
-        return parent;
+    public String getNumber() {
+        return number;
     }
 
-    public void setParent(Parent parent) {
-        this.parent = parent;
+    public void setNumber(String number) {
+        this.number = number;
     }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Customer owner) {
+        this.owner = owner;
+    }
+
 }

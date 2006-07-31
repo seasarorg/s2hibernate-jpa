@@ -13,53 +13,37 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.manytoone;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class KnownClient implements Serializable {
-
+public class Parent implements Serializable {
     @Id
-    private Integer id;
+    private ParentPk id;
 
-    private String name;
+    private int age;
 
-    @ManyToMany(mappedBy = "knownClients")
-    private Collection<Store> stores = new HashSet<Store>();
+    public int getAge() {
+        return age;
+    }
 
-    public Integer getId() {
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public ParentPk getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(ParentPk id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Collection<Store> getStores() {
-        return stores;
-    }
-
-    public void setStores(Collection<Store> stores) {
-        this.stores = stores;
-    }
-
 }

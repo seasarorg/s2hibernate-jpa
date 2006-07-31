@@ -21,10 +21,9 @@ import java.sql.Types;
 import javax.persistence.EntityManager;
 
 import org.hibernate.EntityMode;
-import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.engine.SessionImplementor;
+import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.EntityPersister;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.hibernate.type.ComponentType;
 import org.hibernate.type.EmbeddedComponentType;
 import org.hibernate.type.EntityType;
@@ -37,36 +36,33 @@ import org.seasar.extension.dataset.impl.DataSetImpl;
 import org.seasar.extension.dataset.states.RowStates;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
-import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
  * 
  * @author taedium
  */
-public class SingleTableEntityReader implements EntityReader {
+public abstract class AbstractEntityReader implements EntityReader {
 
     final private EntityManager em;
 
-    final private SingleTableEntityPersister persister;
-
-    final private SessionFactoryImplementor sessionFactory;
+    final private AbstractEntityPersister persister;
 
     private DataSet dataSet = new DataSetImpl();
 
-    public SingleTableEntityReader(final Object entity, final EntityManager em,
-            final HibernateEntityDesc<?> entityDesc,
-            final SingleTableEntityPersister persister) {
+    public AbstractEntityReader(final EntityManager em,
+            final AbstractEntityPersister persister) {
 
         this.em = em;
         this.persister = persister;
-        this.sessionFactory = entityDesc.getSessionFactory();
-        setupColumns();
-        setupRow(entity);
     }
 
+    protected abstract int getTableSpan();
+
+    protected abstract String getSubclassTableName(int index);
+
     protected void setupColumns() {
-        for (int i = 0; i < persister.getSubclassTableSpan(); i++) {
-            dataSet.addTable(persister.getSubclassTableName(i));
+        for (int i = 0; i < getTableSpan(); i++) {
+            dataSet.addTable(getSubclassTableName(i));
         }
         setupIdColumns();
         setupPropertyColumns();
@@ -75,7 +71,7 @@ public class SingleTableEntityReader implements EntityReader {
     protected void setupIdColumns() {
         final Type idType = persister.getIdentifierType();
         final DataTable table = read().getTable(persister.getTableName());
-        final int[] sqlTypes = idType.sqlTypes(sessionFactory);
+        final int[] sqlTypes = idType.sqlTypes(getSession().getFactory());
         final String[] columnNames = persister.getIdentifierColumnNames();
         for (int i = 0; i < columnNames.length; i++) {
             final String columnName = columnNames[i];
@@ -96,7 +92,7 @@ public class SingleTableEntityReader implements EntityReader {
             final String propName = propNames[i];
             final String tableName = persister.getPropertyTableName(propName);
             final Type propType = persister.getPropertyType(propName);
-            final int[] sqlTypes = propType.sqlTypes(sessionFactory);
+            final int[] sqlTypes = propType.sqlTypes(getSession().getFactory());
             final DataTable table = dataSet.getTable(tableName);
             final String[] columnNames = persister
                     .getPropertyColumnNames(propName);
@@ -190,8 +186,8 @@ public class SingleTableEntityReader implements EntityReader {
         if (hibernateType.isEntityType()) {
             final EntityType entityType = EntityType.class.cast(hibernateType);
             final String entityName = entityType.getAssociatedEntityName();
-            final EntityPersister ep = sessionFactory
-                    .getEntityPersister(entityName);
+            final EntityPersister ep = getSession().getEntityPersister(
+                    entityName, value);
 
             if (entityType.isReferenceToPrimaryKey()) {
                 final Serializable id = ep

@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.manytoone;
 
 import java.io.Serializable;
 
@@ -24,13 +24,16 @@ import javax.persistence.Id;
  * 
  * @author taedium
  */
-@Entity
-public class Simple implements Serializable {
+@Entity(name = "Orders")
+public class Order implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
+    private String orderNo;
+
+    // @OneToMany(mappedBy = "order")
+    // private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
 
     public Integer getId() {
         return id;
@@ -40,11 +43,12 @@ public class Simple implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
+
 }

@@ -13,37 +13,52 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.onetomany;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Parent implements Serializable {
+public class PartyAffiliate implements Serializable {
+
     @Id
-    private ParentPk id;
+    private Integer id;
 
-    private int age;
+    private String affiliateName;
 
-    public int getAge() {
-        return age;
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Party party;
+
+    public String getAffiliateName() {
+        return affiliateName;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setAffiliateName(String affiliateName) {
+        this.affiliateName = affiliateName;
     }
 
-    public ParentPk getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(ParentPk id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public void setParty(Party party) {
+        this.party = party;
     }
 }

@@ -13,31 +13,30 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.singletable;
+package org.seasar.hibernate.jpa.unit.manytomany;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToMany;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Computer implements Serializable {
+public class KnownClient implements Serializable {
 
     @Id
     private Integer id;
 
-    @OneToOne
-    @JoinColumns( {
-            @JoinColumn(name = "serialbrand", referencedColumnName = "brand"),
-            @JoinColumn(name = "serialmodel", referencedColumnName = "model") })
-    private SerialNumber serialNumber;
+    private String name;
+
+    @ManyToMany(mappedBy = "knownClients")
+    private Collection<Store> stores = new HashSet<Store>();
 
     public Integer getId() {
         return id;
@@ -47,12 +46,20 @@ public class Computer implements Serializable {
         this.id = id;
     }
 
-    public SerialNumber getSerialNumber() {
-        return serialNumber;
+    public String getName() {
+        return name;
     }
 
-    public void setSerialNumber(SerialNumber serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Collection<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(Collection<Store> stores) {
+        this.stores = stores;
     }
 
 }
