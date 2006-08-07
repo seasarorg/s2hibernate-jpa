@@ -20,7 +20,6 @@
 	<classpathentry exported="true" sourcepath="lib/hibernate-annotations-3.2.0.cr1-sources.jar" kind="lib" path="lib/hibernate-annotations-3.2.0.cr1.jar"/>
 	<classpathentry exported="true" sourcepath="lib/hibernate-entitymanager-3.2.0.cr1-sources.jar" kind="lib" path="lib/hibernate-entitymanager-3.2.0.cr1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jboss-archive-browsing-5.0.0alpha.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/lucene-1.4.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
