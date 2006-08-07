@@ -20,17 +20,18 @@ import java.math.BigDecimal;
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
-import org.seasar.hibernate.jpa.unit.EntityReaderTestCase;
+import org.seasar.hibernate.jpa.unit.HibernateEntityReaderTestCase;
 
 /**
  * 
  * @author taedium
  */
-public class ManyToManyTest extends EntityReaderTestCase {
+public class ManyToManyTest extends HibernateEntityReaderTestCase {
 
-    public void setUpManyToManyOwningSide() throws Exception {
-        cfg.addAnnotatedClasses(KnownClient.class, Store.class);
-        register(cfg);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        addAnnotatedClasses(KnownClient.class, Store.class);
     }
 
     public void testManyToManyOwningSide() throws Exception {
@@ -46,20 +47,15 @@ public class ManyToManyTest extends EntityReaderTestCase {
 
         DataSet dataSet = read(Store.class, 20);
         assertEquals(1, dataSet.getTableSize());
-        assertTrue(dataSet.hasTable("Store"));
 
         DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "Store");
         assertEquals(2, table.getColumnSize());
         assertEquals(1, table.getRowSize());
 
         DataRow row = table.getRow(0);
         assertEquals(new BigDecimal(20), row.getValue("id"));
         assertEquals("foo", row.getValue("name"));
-    }
-
-    public void setUpManyToManyInverseSide() throws Exception {
-        cfg.addAnnotatedClasses(KnownClient.class, Store.class);
-        register(cfg);
     }
 
     public void testManyToManyInverseSide() throws Exception {
@@ -75,9 +71,9 @@ public class ManyToManyTest extends EntityReaderTestCase {
 
         DataSet dataSet = read(KnownClient.class, 10);
         assertEquals(1, dataSet.getTableSize());
-        assertTrue(dataSet.hasTable("KnownClient"));
 
         DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "KnownClient");
         assertEquals(2, table.getColumnSize());
         assertEquals(1, table.getRowSize());
 

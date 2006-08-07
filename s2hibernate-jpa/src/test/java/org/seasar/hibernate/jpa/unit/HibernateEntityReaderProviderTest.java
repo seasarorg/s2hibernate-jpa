@@ -15,6 +15,9 @@
  */
 package org.seasar.hibernate.jpa.unit;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
@@ -46,4 +49,26 @@ public class HibernateEntityReaderProviderTest extends S2TestCase {
                 .getEntityReader(new Object());
         assertNull(entityReader);
     }
+
+    public void testNull() throws Exception {
+        EntityReader entityReader = EntityReaderFactory.getEntityReader(null);
+        assertNull(entityReader);
+    }
+
+    public void testCollection() throws Exception {
+        Collection<Department> entities = new ArrayList<Department>();
+        entities.add(new Department());
+        entities.add(new Department());
+        EntityReader entityReader = EntityReaderFactory
+                .getEntityReader(entities);
+        assertNotNull(entityReader);
+    }
+
+    public void testEmptyCollection() throws Exception {
+        Collection<Department> entities = new ArrayList<Department>();
+        EntityReader entityReader = EntityReaderFactory
+                .getEntityReader(entities);
+        assertNull(entityReader);
+    }
+
 }

@@ -20,17 +20,19 @@ import java.math.BigDecimal;
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
-import org.seasar.hibernate.jpa.unit.EntityReaderTestCase;
+import org.seasar.hibernate.jpa.unit.HibernateEntityReaderTestCase;
 
 /**
  * 
  * @author taedium
  */
-public class ManyToOneTest extends EntityReaderTestCase {
+public class ManyToOneTest extends HibernateEntityReaderTestCase {
 
-    public void setUpManyToOneOwningSide() throws Exception {
-        cfg.addAnnotatedClasses(Employee.class, Department.class);
-        register(cfg);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        addAnnotatedClasses(Employee.class, Department.class, Parent.class,
+                Child.class, Order.class, OrderLine.class);
     }
 
     public void testManyToOneOwningSide() throws Exception {
@@ -46,9 +48,9 @@ public class ManyToOneTest extends EntityReaderTestCase {
 
         DataSet dataSet = read(Employee.class, 1);
         assertEquals(1, dataSet.getTableSize());
-        assertTrue(dataSet.hasTable("Employee"));
 
         DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "Employee");
         assertEquals(3, table.getColumnSize());
         assertEquals(1, table.getRowSize());
 
@@ -56,11 +58,6 @@ public class ManyToOneTest extends EntityReaderTestCase {
         assertEquals(new BigDecimal(1), row.getValue("id"));
         assertEquals("foo", row.getValue("name"));
         assertEquals(new BigDecimal(10), row.getValue("department_id"));
-    }
-
-    public void setUpManyToOneInverseSide() throws Exception {
-        cfg.addAnnotatedClasses(Employee.class, Department.class);
-        register(cfg);
     }
 
     public void testManyToOneInverseSide() throws Exception {
@@ -76,20 +73,15 @@ public class ManyToOneTest extends EntityReaderTestCase {
 
         DataSet dataSet = read(Department.class, 10);
         assertEquals(1, dataSet.getTableSize());
-        assertTrue(dataSet.hasTable("Department"));
 
         DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "Department");
         assertEquals(2, table.getColumnSize());
         assertEquals(1, table.getRowSize());
 
         DataRow row = table.getRow(0);
         assertEquals(new BigDecimal(10), row.getValue("id"));
         assertEquals("hoge", row.getValue("name"));
-    }
-
-    public void setUpManyToOneCompositeFk() throws Exception {
-        cfg.addAnnotatedClasses(Parent.class, Child.class);
-        register(cfg);
     }
 
     public void testManyToOneCompositeFk() throws Exception {
@@ -106,9 +98,9 @@ public class ManyToOneTest extends EntityReaderTestCase {
 
         DataSet dataSet = read(Child.class, 10);
         assertEquals(1, dataSet.getTableSize());
-        assertTrue(dataSet.hasTable("Child"));
 
         DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "Child");
         assertEquals(3, table.getColumnSize());
         assertEquals(1, table.getRowSize());
 
@@ -116,11 +108,6 @@ public class ManyToOneTest extends EntityReaderTestCase {
         assertEquals(new BigDecimal(10), row.getValue("id"));
         assertEquals("hoge", row.getValue("parentFirstName"));
         assertEquals("foo", row.getValue("parentLastName"));
-    }
-
-    public void setUpManyToOneNonPk() throws Exception {
-        cfg.addAnnotatedClasses(Order.class, OrderLine.class);
-        register(cfg);
     }
 
     public void testManyToOneNonPk() throws Exception {
@@ -134,9 +121,9 @@ public class ManyToOneTest extends EntityReaderTestCase {
 
         DataSet dataSet = read(OrderLine.class, 20);
         assertEquals(1, dataSet.getTableSize());
-        assertTrue(dataSet.hasTable("OrderLine"));
 
         DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "OrderLine");
         assertEquals(2, table.getColumnSize());
         assertEquals(1, table.getRowSize());
 

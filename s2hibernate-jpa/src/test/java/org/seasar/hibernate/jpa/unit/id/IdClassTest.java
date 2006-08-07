@@ -20,17 +20,33 @@ import java.math.BigDecimal;
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
-import org.seasar.hibernate.jpa.unit.EntityReaderTestCase;
+import org.seasar.hibernate.jpa.unit.HibernateEntityReaderTestCase;
 
 /**
  * 
  * @author taedium
  */
-public class IdClassTest extends EntityReaderTestCase {
+public class IdClassTest extends HibernateEntityReaderTestCase {
 
-    public void setUpIdClass() throws Exception {
-        cfg.addAnnotatedClasses(Project.class);
-        register(cfg);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        addAnnotatedClasses(Project.class, Tree.class, FirTree.class,
+                Footballer.class, GoalKeeper.class, Tower.class);
+    }
+
+    public void testIdInMappedSuperclass() throws Exception {
+        FirTree tree = new FirTree();
+        tree.setId(10);
+        persist(tree);
+        DataSet dataSet = read(FirTree.class, 10);
+        assertEquals(1, dataSet.getTableSize());
+        assertTrue(dataSet.hasTable("FirTree"));
+        DataTable table = dataSet.getTable(0);
+        assertEquals(1, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(10), row.getValue("id"));
     }
 
     public void testIdClass() throws Exception {
@@ -54,5 +70,52 @@ public class IdClassTest extends EntityReaderTestCase {
         DataRow row = table.getRow(0);
         assertEquals(new BigDecimal(999), row.getValue("projectCode"));
         assertEquals("hoge", row.getValue("name"));
+    }
+
+    public void testIdClassInInheritance() throws Exception {
+        FootballerPk pk = new FootballerPk();
+        pk.setFirstName("hoge");
+        pk.setLastName("foo");
+        GoalKeeper goalKeeper = new GoalKeeper();
+        goalKeeper.setFirstName(pk.getFirstName());
+        goalKeeper.setLastName(pk.getLastName());
+        goalKeeper.setClub("bar");
+        persist(goalKeeper);
+
+        DataSet dataSet = read(GoalKeeper.class, pk);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Footballer", table.getTableName());
+        assertEquals(4, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals("hoge", row.getValue("firstName"));
+        assertEquals("foo", row.getValue("lastName"));
+        assertEquals("bar", row.getValue("club"));
+        assertEquals("GoalKeeper", row.getValue("DTYPE"));
+    }
+
+    public void testIdClassInMappedSuperclass() throws Exception {
+        Location pk = new Location();
+        pk.setLongitude(50.5);
+        pk.setLatitude(40.8);
+        Tower tower = new Tower();
+        tower.setLongitude(pk.getLongitude());
+        tower.setLatitude(pk.getLatitude());
+        persist(tower);
+
+        DataSet dataSet = read(Tower.class, pk);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Tower", table.getTableName());
+        assertEquals(2, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(50.5d), row.getValue("longitude"));
+        assertEquals(new BigDecimal(40.8d), row.getValue("latitude"));
     }
 }

@@ -15,12 +15,12 @@
  */
 package org.seasar.hibernate.jpa.unit;
 
+import java.util.Collection;
+
 import javax.persistence.EntityManager;
 
+import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.EntityPersister;
-import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
-import org.hibernate.persister.entity.UnionSubclassEntityPersister;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.jpa.EntityDescFactory;
 import org.seasar.framework.jpa.unit.EntityReader;
@@ -40,39 +40,49 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
     }
 
     public EntityReader createEntityReader(final Object entity) {
-        final EntityDesc entityDesc = EntityDescFactory.getEntityDesc(entity
-                .getClass());
-        if (entityDesc == null
-                || !HibernateEntityDesc.class.isInstance(entityDesc)) {
+        if (entity == null) {
             return null;
         }
+        final AbstractEntityPersister persister = getAbstractEntityPersister(entity
+                .getClass());
+        if (persister == null) {
+            return null;
+        }
+        return new HibernateEntityReader(entity, em, persister);
+    }
 
+    public EntityReader createEntityReader(final Collection<?> entities) {
+        if (entities == null) {
+            return null;
+        }
+        Class<?> entityClass = null;
+        for (final Object entity : entities) {
+            if (entity != null) {
+                entityClass = entity.getClass();
+                break;
+            }
+        }
+        if (entityClass == null) {
+            return null;
+        }
+        final AbstractEntityPersister persister = getAbstractEntityPersister(entityClass);
+        if (persister == null) {
+            return null;
+        }
+        return new HibernateEntityCollectionReader(entities, em, persister);
+    }
+
+    protected AbstractEntityPersister getAbstractEntityPersister(
+            final Class<?> entityClass) {
+        final EntityDesc entityDesc = EntityDescFactory
+                .getEntityDesc(entityClass);
+        if (entityDesc == null || !(entityDesc instanceof HibernateEntityDesc)) {
+            return null;
+        }
         final HibernateEntityDesc<?> hibernateEntityDesc = HibernateEntityDesc.class
                 .cast(entityDesc);
         final EntityPersister persister = hibernateEntityDesc.getPersister();
-
-        return createEntityReader(entity, persister);
+        return AbstractEntityPersister.class.cast(persister);
     }
 
-    protected EntityReader createEntityReader(final Object entity,
-            final EntityPersister persister) {
-
-        if (persister instanceof SingleTableEntityPersister) {
-            final SingleTableEntityPersister p = SingleTableEntityPersister.class
-                    .cast(persister);
-            return new SingleTableEntityReader(entity, em, p);
-
-        } else if (persister instanceof JoinedSubclassEntityPersister) {
-            final JoinedSubclassEntityPersister p = JoinedSubclassEntityPersister.class
-                    .cast(persister);
-            return new JoinedSubclassEntityReader(entity, em, p);
-
-        } else if (persister instanceof UnionSubclassEntityPersister) {
-            final UnionSubclassEntityPersister p = UnionSubclassEntityPersister.class
-                    .cast(persister);
-            return new UnionSubclassEntityReader(entity, em, p);
-        }
-
-        return null;
-    }
 }
