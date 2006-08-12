@@ -139,7 +139,73 @@ public class ManyToOneCollectionTest extends
         }
     }
 
-    public void test() throws Exception {
+    public void testCrossJoinResultList() throws Exception {
+        utx.begin();
+        {
+            Department department = new Department();
+            department.setId(10);
+            department.setName("hoge");
+            Employee employee = new Employee();
+            employee.setId(1);
+            employee.setName("foo");
+            employee.setDepartment(department);
+            department.getEmployees().add(employee);
+            em.persist(department);
+            em.persist(employee);
+        }
+        {
+            Department department = new Department();
+            department.setId(20);
+            department.setName("hoge2");
+            Employee employee = new Employee();
+            employee.setId(2);
+            employee.setName("foo2");
+            employee.setDepartment(department);
+            department.getEmployees().add(employee);
+            em.persist(department);
+            em.persist(employee);
+        }
+        utx.commit();
 
+        DataSet dataSet = read("select e, d from Employee e, Department d order by e.id");
+        assertEquals(2, dataSet.getTableSize());
+        {
+            DataTable table = dataSet.getTable("Employee");
+            assertEquals(3, table.getColumnSize());
+            assertEquals(4, table.getRowSize());
+            DataRow row = table.getRow(0);
+            assertEquals(new BigDecimal(1), row.getValue("id"));
+            assertEquals("foo", row.getValue("name"));
+            assertEquals(new BigDecimal(10), row.getValue("department_id"));
+            DataRow row2 = table.getRow(1);
+            assertEquals(new BigDecimal(1), row2.getValue("id"));
+            assertEquals("foo", row2.getValue("name"));
+            assertEquals(new BigDecimal(10), row2.getValue("department_id"));
+            DataRow row3 = table.getRow(2);
+            assertEquals(new BigDecimal(2), row3.getValue("id"));
+            assertEquals("foo2", row3.getValue("name"));
+            assertEquals(new BigDecimal(20), row3.getValue("department_id"));
+            DataRow row4 = table.getRow(3);
+            assertEquals(new BigDecimal(2), row4.getValue("id"));
+            assertEquals("foo2", row4.getValue("name"));
+            assertEquals(new BigDecimal(20), row4.getValue("department_id"));
+        }
+        {
+            DataTable table = dataSet.getTable("Department");
+            assertEquals(2, table.getColumnSize());
+            assertEquals(4, table.getRowSize());
+            DataRow row = table.getRow(0);
+            assertEquals(new BigDecimal(10), row.getValue("id"));
+            assertEquals("hoge", row.getValue("name"));
+            DataRow row2 = table.getRow(1);
+            assertEquals(new BigDecimal(20), row2.getValue("id"));
+            assertEquals("hoge2", row2.getValue("name"));
+            DataRow row3 = table.getRow(2);
+            assertEquals(new BigDecimal(10), row3.getValue("id"));
+            assertEquals("hoge", row3.getValue("name"));
+            DataRow row4 = table.getRow(3);
+            assertEquals(new BigDecimal(20), row4.getValue("id"));
+            assertEquals("hoge2", row4.getValue("name"));
+        }
     }
 }

@@ -32,6 +32,7 @@ public abstract class HibernateEntityCollectionReaderTestCase extends
         utx.begin();
         List<?> entities = em.createQuery(jpql).getResultList();
         EntityReader reader = EntityReaderFactory.getEntityReader(entities);
+        assertNotNull(reader);
         utx.commit();
         return reader.read();
     }

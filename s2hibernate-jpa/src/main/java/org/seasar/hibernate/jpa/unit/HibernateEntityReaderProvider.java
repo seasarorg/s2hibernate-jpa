@@ -53,12 +53,18 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
     }
 
     public EntityReader createEntityReader(final Collection<?> entities) {
-        if (entities == null || entities.isEmpty()) {
+        if (entities == null) {
             return null;
         }
+
+        final Collection<Object> newEntities = flatten(entities);
+        if (newEntities.isEmpty()) {
+            return null;
+        }
+
         final Map<Class<?>, AbstractEntityPersister> persisters = CollectionsUtil
                 .newHashMap();
-        for (final Object entity : entities) {
+        for (final Object entity : newEntities) {
             final Class<?> entityClass = entity.getClass();
             if (persisters.containsKey(entityClass)) {
                 continue;
@@ -70,7 +76,22 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
             }
             persisters.put(entityClass, persiter);
         }
-        return new HibernateEntityCollectionReader(em, entities, persisters);
+        return new HibernateEntityCollectionReader(em, newEntities, persisters);
+    }
+
+    protected Collection<Object> flatten(final Collection<?> entities) {
+        Collection<Object> newEntities = CollectionsUtil.newArrayList(entities
+                .size());
+        for (final Object element : entities) {
+            if (element instanceof Object[]) {
+                for (final Object nested : Object[].class.cast(element)) {
+                    newEntities.add(nested);
+                }
+            } else {
+                newEntities.add(element);
+            }
+        }
+        return newEntities;
     }
 
     protected AbstractEntityPersister getPersister(final Class<?> entityClass) {
