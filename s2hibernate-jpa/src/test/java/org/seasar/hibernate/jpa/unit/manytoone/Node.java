@@ -13,38 +13,34 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit;
+package org.seasar.hibernate.jpa.unit.manytoone;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
+import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Department implements Serializable {
+public class Node implements Serializable {
 
     @Id
-    private int id;
+    private Integer id;
 
     private String name;
 
-    @OneToMany(mappedBy = "department")
-    @OrderBy
-    private List<Employee> employees = new ArrayList<Employee>();
+    @ManyToOne
+    private Node parent;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -56,12 +52,11 @@ public class Department implements Serializable {
         this.name = name;
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    public Node getParent() {
+        return parent;
     }
 
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
+    public void setParent(Node parent) {
+        this.parent = parent;
     }
-
 }

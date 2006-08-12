@@ -31,7 +31,8 @@ public class IndexedCollectionTest extends HibernateEntityReaderTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         addAnnotatedClasses(Software.class, Version.class, Drawer.class,
-                Wardrobe.class);
+                Wardrobe.class, Atmosphere.class, Gas.class, Painter.class,
+                Painting.class);
     }
 
     public void testIndexColumnOwningSide() throws Exception {
@@ -54,7 +55,7 @@ public class IndexedCollectionTest extends HibernateEntityReaderTestCase {
         assertEquals(new BigDecimal(20), row.getValue("id"));
     }
 
-    public void testIndexColumnCollectionSide() throws Exception {
+    public void testIndexColumnCollectionedSide() throws Exception {
         Drawer drawer = new Drawer();
         drawer.setId(10);
         Wardrobe wardrobe = new Wardrobe();
@@ -120,7 +121,99 @@ public class IndexedCollectionTest extends HibernateEntityReaderTestCase {
         assertEquals("hoge", row.getValue("name"));
     }
 
-    public void testMapKeyAndIdClass() throws Exception {
+    public void testMapKeyAndIdClassMapHoldingSide() throws Exception {
+        Painting painting = new Painting();
+        painting.setName("hoge");
+        painting.setPainter("foo");
+        painting.setSizeX(30);
+        painting.setSizeY(80);
+        Painter painter = new Painter();
+        painter.setId(10);
+        painter.getPaintings().put("hoge", painting);
+        persist(painter, painting);
+
+        DataSet dataSet = read(Painter.class, 10);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Painter", table.getTableName());
+        assertEquals(1, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(10), row.getValue("id"));
     }
 
+    public void testMapKeyAndIdClassMappedSide() throws Exception {
+        Painting painting = new Painting();
+        painting.setName("hoge");
+        painting.setPainter("foo");
+        painting.setSizeX(30);
+        painting.setSizeY(80);
+        Painter painter = new Painter();
+        painter.setId(10);
+        painter.getPaintings().put("hoge", painting);
+        persist(painter, painting);
+
+        PaintingPk pk = new PaintingPk();
+        pk.setName("hoge");
+        pk.setPainter("foo");
+        DataSet dataSet = read(Painting.class, pk);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Painting", table.getTableName());
+        assertEquals(4, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals("hoge", row.getValue("name"));
+        assertEquals("foo", row.getValue("painter"));
+        assertEquals(new BigDecimal(30), row.getValue("sizex"));
+        assertEquals(new BigDecimal(80), row.getValue("sizey"));
+
+    }
+
+    public void testRealMapKeyMapHolidingSide() throws Exception {
+        Gas gas = new Gas();
+        gas.setId(10);
+        gas.setName("oxygen");
+        Atmosphere atmosphere = new Atmosphere();
+        atmosphere.setId(10);
+        atmosphere.getGasses().put("100%", gas);
+        persist(gas, atmosphere);
+
+        DataSet dataSet = read(Atmosphere.class, 10);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Atmosphere", table.getTableName());
+        assertEquals(1, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(10), row.getValue("id"));
+    }
+
+    public void testRealMapKeyMappedSide() throws Exception {
+        Gas gas = new Gas();
+        gas.setId(10);
+        gas.setName("oxygen");
+        Atmosphere atmosphere = new Atmosphere();
+        atmosphere.setId(10);
+        atmosphere.getGasses().put("100%", gas);
+        persist(gas, atmosphere);
+
+        DataSet dataSet = read(Gas.class, 10);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Gas", table.getTableName());
+        assertEquals(2, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(10), row.getValue("id"));
+        assertEquals("oxygen", row.getValue("name"));
+    }
 }

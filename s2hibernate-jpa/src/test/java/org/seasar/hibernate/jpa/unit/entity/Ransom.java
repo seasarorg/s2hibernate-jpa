@@ -13,30 +13,38 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.manytoone;
+package org.seasar.hibernate.jpa.unit.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
 
 /**
  * 
  * @author taedium
  */
-@Entity(name = "Orders")
-public class Order implements Serializable {
+@Entity
+public class Ransom implements Serializable {
 
     @Id
     private Integer id;
 
-    private String orderNo;
+    @Type(type = "org.seasar.hibernate.jpa.unit.entity.ManetaryAmountUserType")
+    @Columns(columns = { @Column(name = "amount"), @Column(name = "currency") })
+    private ManetaryAmount amount;
 
-    @OneToMany(mappedBy = "order")
-    private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
+    public ManetaryAmount getAmount() {
+        return amount;
+    }
+
+    public void setAmount(ManetaryAmount amount) {
+        this.amount = amount;
+    }
 
     public Integer getId() {
         return id;
@@ -44,14 +52,6 @@ public class Order implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
 }

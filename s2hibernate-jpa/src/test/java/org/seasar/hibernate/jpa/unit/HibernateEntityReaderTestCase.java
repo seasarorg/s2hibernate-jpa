@@ -63,7 +63,6 @@ public abstract class HibernateEntityReaderTestCase extends S2TestCase {
         T entity = em.find(entityClass, id);
         assertNotNull(entity);
         EntityReader reader = EntityReaderFactory.getEntityReader(entity);
-        System.out.println(reader.getClass().getName());
         utx.commit();
         return reader.read();
     }

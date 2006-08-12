@@ -32,7 +32,7 @@ public class ManyToOneTest extends HibernateEntityReaderTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         addAnnotatedClasses(Employee.class, Department.class, Parent.class,
-                Child.class, Order.class, OrderLine.class);
+                Child.class, Order.class, OrderLine.class, Node.class);
     }
 
     public void testManyToOneOwningSide() throws Exception {
@@ -58,30 +58,6 @@ public class ManyToOneTest extends HibernateEntityReaderTestCase {
         assertEquals(new BigDecimal(1), row.getValue("id"));
         assertEquals("foo", row.getValue("name"));
         assertEquals(new BigDecimal(10), row.getValue("department_id"));
-    }
-
-    public void testManyToOneInverseSide() throws Exception {
-        Department department = new Department();
-        department.setId(10);
-        department.setName("hoge");
-        Employee employee = new Employee();
-        employee.setId(1);
-        employee.setName("foo");
-        employee.setDepartment(department);
-        department.getEmployees().add(employee);
-        persist(department, employee);
-
-        DataSet dataSet = read(Department.class, 10);
-        assertEquals(1, dataSet.getTableSize());
-
-        DataTable table = dataSet.getTable(0);
-        assertEqualsIgnoreCase(table.getTableName(), "Department");
-        assertEquals(2, table.getColumnSize());
-        assertEquals(1, table.getRowSize());
-
-        DataRow row = table.getRow(0);
-        assertEquals(new BigDecimal(10), row.getValue("id"));
-        assertEquals("hoge", row.getValue("name"));
     }
 
     public void testManyToOneCompositeFk() throws Exception {
@@ -130,5 +106,29 @@ public class ManyToOneTest extends HibernateEntityReaderTestCase {
         DataRow row = table.getRow(0);
         assertEquals(new BigDecimal(20), row.getValue("id"));
         assertEquals("hoge", row.getValue("orderNo"));
+    }
+
+    public void testSelf() throws Exception {
+        Node parent = new Node();
+        parent.setId(10);
+        parent.setName("parent");
+        Node child = new Node();
+        child.setId(20);
+        child.setName("child");
+        child.setParent(parent);
+        persist(parent, child);
+
+        DataSet dataSet = read(Node.class, 20);
+        assertEquals(1, dataSet.getTableSize());
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase(table.getTableName(), "Node");
+        assertEquals(3, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(20), row.getValue("id"));
+        assertEquals("child", row.getValue("name"));
+        assertEquals(new BigDecimal(10), row.getValue("parent_id"));
     }
 }

@@ -13,42 +13,29 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit;
+package org.seasar.hibernate.jpa.unit.manytoone;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
 
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
-import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
-import org.seasar.hibernate.jpa.S2HibernateConfiguration;
+import org.seasar.hibernate.jpa.unit.HibernateEntityCollectionReaderTestCase;
 
 /**
  * 
  * @author taedium
  */
-public class HibernateEntityCollectionReaderTest extends S2TestCase {
-
-    private S2HibernateConfiguration cfg = new S2HibernateConfiguration();
-
-    private EntityManager em;
-
-    private UserTransaction utx;
+public class ManyToOneCollectionTest extends
+        HibernateEntityCollectionReaderTestCase {
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("s2hibernate-jpa.dicon");
-        cfg.addAnnotatedClass(Department.class);
-        cfg.addAnnotatedClass(Employee.class);
-        register(cfg);
+        addAnnotatedClasses(Department.class, Employee.class);
     }
 
     public void testManyToOneOwningSide() throws Exception {
@@ -128,15 +115,10 @@ public class HibernateEntityCollectionReaderTest extends S2TestCase {
             department.getEmployees().add(employee);
             em.persist(department);
             em.persist(employee);
-            utx.commit();
         }
-        utx.begin();
-
-        List<Department> departments = em.createQuery(
-                "select d from Department d order by id").getResultList();
-        EntityReader reader = EntityReaderFactory.getEntityReader(departments);
-        DataSet dataSet = reader.read();
         utx.commit();
+
+        DataSet dataSet = read("select d from Department d order by id");
 
         assertEquals(1, dataSet.getTableSize());
 
@@ -155,5 +137,9 @@ public class HibernateEntityCollectionReaderTest extends S2TestCase {
             assertEquals(new BigDecimal(20), row.getValue("id"));
             assertEquals("hoge2", row.getValue("name"));
         }
+    }
+
+    public void test() throws Exception {
+
     }
 }

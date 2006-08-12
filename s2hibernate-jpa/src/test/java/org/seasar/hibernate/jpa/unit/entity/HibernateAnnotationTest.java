@@ -15,10 +15,63 @@
  */
 package org.seasar.hibernate.jpa.unit.entity;
 
+import java.math.BigDecimal;
+import java.util.Currency;
+
+import org.seasar.extension.dataset.DataRow;
+import org.seasar.extension.dataset.DataSet;
+import org.seasar.extension.dataset.DataTable;
+import org.seasar.hibernate.jpa.unit.HibernateEntityReaderTestCase;
+
 /**
  * 
  * @author taedium
  */
-public class HibernateAnnotationTest {
-    // TODO
+public class HibernateAnnotationTest extends HibernateEntityReaderTestCase {
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        addAnnotatedClasses(Flight.class, Ransom.class);
+    }
+
+    public void testFormula() throws Exception {
+        Flight flight = new Flight();
+        flight.setId(10);
+        flight.setMaxAltitude(100);
+        persist(flight);
+
+        DataSet dataSet = read(Flight.class, 10);
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Flight", table.getTableName());
+        assertEquals(2, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(10), row.getValue("id"));
+        assertEquals(new BigDecimal(100), row.getValue("maxAltitude"));
+    }
+
+    public void testCompositeType() throws Exception {
+        ManetaryAmount amount = new ManetaryAmount(new BigDecimal(1000000),
+                Currency.getInstance("JPY"));
+        Ransom ransom = new Ransom();
+        ransom.setId(10);
+        ransom.setAmount(amount);
+        persist(ransom);
+
+        DataSet dataSet = read(Ransom.class, 10);
+
+        DataTable table = dataSet.getTable(0);
+        assertEqualsIgnoreCase("Ransom", table.getTableName());
+        assertEquals(3, table.getColumnSize());
+        assertEquals(1, table.getRowSize());
+
+        DataRow row = table.getRow(0);
+        assertEquals(new BigDecimal(10), row.getValue("id"));
+        assertEquals(new BigDecimal(1000000), row.getValue("amount"));
+        assertEquals("JPY", row.getValue("currency"));
+    }
+
 }

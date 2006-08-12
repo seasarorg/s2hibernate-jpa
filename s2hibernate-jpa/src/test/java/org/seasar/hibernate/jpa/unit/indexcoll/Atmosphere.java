@@ -13,30 +13,40 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.manytoone;
+package org.seasar.hibernate.jpa.unit.indexcoll;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+
+import org.hibernate.annotations.MapKey;
 
 /**
  * 
  * @author taedium
  */
-@Entity(name = "Orders")
-public class Order implements Serializable {
+@Entity
+public class Atmosphere implements Serializable{
 
     @Id
     private Integer id;
 
-    private String orderNo;
+    @ManyToMany
+    @MapKey(columns = { @Column(name = "gas_name") })
+    private Map<String, Gas> gasses = new HashMap<String, Gas>();
 
-    @OneToMany(mappedBy = "order")
-    private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
+    public Map<String, Gas> getGasses() {
+        return gasses;
+    }
+
+    public void setGasses(Map<String, Gas> gasses) {
+        this.gasses = gasses;
+    }
 
     public Integer getId() {
         return id;
@@ -44,14 +54,6 @@ public class Order implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
 }

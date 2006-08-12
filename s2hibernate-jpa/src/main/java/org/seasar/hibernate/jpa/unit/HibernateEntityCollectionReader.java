@@ -16,6 +16,7 @@
 package org.seasar.hibernate.jpa.unit;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -27,13 +28,28 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
  */
 public class HibernateEntityCollectionReader extends HibernateEntityReader {
 
-    public HibernateEntityCollectionReader(final Collection<?> entities,
-            final EntityManager em, final AbstractEntityPersister persister) {
+    protected Map<Class<?>, AbstractEntityPersister> persisters;
 
-        super(em, persister);
-        setupColumns();
-        for (Object entity : entities) {
+    protected Class<?> processingClass;
+
+    public HibernateEntityCollectionReader(final EntityManager em,
+            final Collection<?> entities,
+            final Map<Class<?>, AbstractEntityPersister> persisters) {
+
+        super(em);
+        this.persisters = persisters;
+
+        for (final Object entity : entities) {
+            processingClass = entity.getClass();
+            setupColumns();
             setupRow(entity);
         }
+        processingClass = null;
     }
+
+    @Override
+    protected AbstractEntityPersister getPersister() {
+        return persisters.get(processingClass);
+    }
+
 }

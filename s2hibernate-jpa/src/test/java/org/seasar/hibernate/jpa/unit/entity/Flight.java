@@ -13,36 +13,29 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit;
+package org.seasar.hibernate.jpa.unit.entity;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Formula;
 
 /**
  * 
  * @author taedium
  */
 @Entity
-public class Employee implements Serializable {
+public class Flight implements Serializable {
 
     @Id
     private Integer id;
 
-    private String name;
+    @Formula("maxAltitude * 1000")
+    long maxAltitudeInMilimeter;
 
-    @ManyToOne
-    private Department department;
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+    long maxAltitude;
 
     public Integer getId() {
         return id;
@@ -52,12 +45,19 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public long getMaxAltitude() {
+        return maxAltitude;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMaxAltitude(long maxAltitude) {
+        this.maxAltitude = maxAltitude;
     }
 
+    public long getMaxAltitudeInMilimeter() {
+        return maxAltitudeInMilimeter;
+    }
+
+    public void setMaxAltitudeInMilimeter(long maxAltitudeInMilimeter) {
+        this.maxAltitudeInMilimeter = maxAltitudeInMilimeter;
+    }
 }

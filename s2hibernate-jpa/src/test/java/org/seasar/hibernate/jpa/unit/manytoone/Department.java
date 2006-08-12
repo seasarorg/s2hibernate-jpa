@@ -22,6 +22,7 @@ import java.util.HashSet;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 /**
  * 
@@ -36,6 +37,7 @@ public class Department implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "department")
+    @OrderBy
     private Collection<Employee> employees = new HashSet<Employee>();
 
     public int getId() {

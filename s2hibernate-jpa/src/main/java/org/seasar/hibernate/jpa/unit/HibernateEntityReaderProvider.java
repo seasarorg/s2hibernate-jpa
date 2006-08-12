@@ -16,6 +16,7 @@
 package org.seasar.hibernate.jpa.unit;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -25,6 +26,7 @@ import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.jpa.EntityDescFactory;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderProvider;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
@@ -43,37 +45,35 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
         if (entity == null) {
             return null;
         }
-        final AbstractEntityPersister persister = getAbstractEntityPersister(entity
-                .getClass());
-        if (persister == null) {
+        final AbstractEntityPersister persiter = getPersister(entity.getClass());
+        if (persiter == null) {
             return null;
         }
-        return new HibernateEntityReader(entity, em, persister);
+        return new HibernateEntityReader(em, entity, persiter);
     }
 
     public EntityReader createEntityReader(final Collection<?> entities) {
-        if (entities == null) {
+        if (entities == null || entities.isEmpty()) {
             return null;
         }
-        Class<?> entityClass = null;
+        final Map<Class<?>, AbstractEntityPersister> persisters = CollectionsUtil
+                .newHashMap();
         for (final Object entity : entities) {
-            if (entity != null) {
-                entityClass = entity.getClass();
-                break;
+            final Class<?> entityClass = entity.getClass();
+            if (persisters.containsKey(entityClass)) {
+                continue;
             }
+            final AbstractEntityPersister persiter = getPersister(entity
+                    .getClass());
+            if (persiter == null) {
+                return null;
+            }
+            persisters.put(entityClass, persiter);
         }
-        if (entityClass == null) {
-            return null;
-        }
-        final AbstractEntityPersister persister = getAbstractEntityPersister(entityClass);
-        if (persister == null) {
-            return null;
-        }
-        return new HibernateEntityCollectionReader(entities, em, persister);
+        return new HibernateEntityCollectionReader(em, entities, persisters);
     }
 
-    protected AbstractEntityPersister getAbstractEntityPersister(
-            final Class<?> entityClass) {
+    protected AbstractEntityPersister getPersister(final Class<?> entityClass) {
         final EntityDesc entityDesc = EntityDescFactory
                 .getEntityDesc(entityClass);
         if (entityDesc == null || !(entityDesc instanceof HibernateEntityDesc)) {
@@ -84,5 +84,4 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
         final EntityPersister persister = hibernateEntityDesc.getPersister();
         return AbstractEntityPersister.class.cast(persister);
     }
-
 }

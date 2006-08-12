@@ -13,45 +13,41 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.manytoone;
+package org.seasar.hibernate.jpa.unit.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import java.math.BigDecimal;
+import java.util.Currency;
 
 /**
  * 
  * @author taedium
  */
-@Entity(name = "Orders")
-public class Order implements Serializable {
+public class ManetaryAmount implements Serializable {
 
-    @Id
-    private Integer id;
+    private BigDecimal amount;
 
-    private String orderNo;
+    private Currency currency;
 
-    @OneToMany(mappedBy = "order")
-    private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
-
-    public Integer getId() {
-        return id;
+    public ManetaryAmount(BigDecimal amount, Currency currency) {
+        this.amount = amount;
+        this.currency = currency;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
 }

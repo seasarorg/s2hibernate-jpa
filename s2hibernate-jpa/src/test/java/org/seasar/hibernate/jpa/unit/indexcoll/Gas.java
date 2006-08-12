@@ -13,30 +13,23 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.unit.manytoone;
+package org.seasar.hibernate.jpa.unit.indexcoll;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 /**
  * 
  * @author taedium
  */
-@Entity(name = "Orders")
-public class Order implements Serializable {
-
+@Entity
+public class Gas implements Serializable {
     @Id
     private Integer id;
 
-    private String orderNo;
-
-    @OneToMany(mappedBy = "order")
-    private Collection<OrderLine> orderLines = new HashSet<OrderLine>();
+    private String name;
 
     public Integer getId() {
         return id;
@@ -46,12 +39,11 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getName() {
+        return name;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setName(String name) {
+        this.name = name;
     }
-
 }

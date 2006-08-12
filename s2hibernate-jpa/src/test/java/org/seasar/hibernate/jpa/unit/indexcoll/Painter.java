@@ -16,8 +16,14 @@
 package org.seasar.hibernate.jpa.unit.indexcoll;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 
 /**
  * 
@@ -25,5 +31,29 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Painter implements Serializable {
+
+    @Id
+    private Integer id;
+
+    @OneToMany
+    @MapKey(name = "name")
+    @JoinColumn
+    private Map<String, Painting> paintings = new HashMap<String, Painting>();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Map<String, Painting> getPaintings() {
+        return paintings;
+    }
+
+    public void setPaintings(Map<String, Painting> paintings) {
+        this.paintings = paintings;
+    }
 
 }
