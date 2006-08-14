@@ -18,9 +18,7 @@ package org.seasar.hibernate.jpa.unit;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
-import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
  * 
@@ -28,28 +26,25 @@ import org.hibernate.persister.entity.AbstractEntityPersister;
  */
 public class HibernateEntityCollectionReader extends HibernateEntityReader {
 
-    protected Map<Class<?>, AbstractEntityPersister> persisters;
+    protected Map<Class<?>, HibernateEntityDesc<?>> entityDescs;
 
     protected Class<?> processingClass;
 
-    public HibernateEntityCollectionReader(final EntityManager em,
-            final Collection<?> entities,
-            final Map<Class<?>, AbstractEntityPersister> persisters) {
+    public HibernateEntityCollectionReader(final Collection<?> entities,
+            final Map<Class<?>, HibernateEntityDesc<?>> entityDescs) {
 
-        super(em);
-        this.persisters = persisters;
+        this.entityDescs = entityDescs;
 
         for (final Object entity : entities) {
             processingClass = entity.getClass();
             setupColumns();
             setupRow(entity);
+            processingClass = null;
         }
-        processingClass = null;
     }
 
     @Override
-    protected AbstractEntityPersister getPersister() {
-        return persisters.get(processingClass);
+    protected HibernateEntityDesc<?> getEntityDesc() {
+        return entityDescs.get(processingClass);
     }
-
 }

@@ -16,16 +16,18 @@
 package org.seasar.hibernate.jpa.metadata;
 
 import java.lang.reflect.Field;
+import java.sql.Types;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.impl.SessionFactoryImpl;
 import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.persister.entity.EntityPersister;
+import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.hibernate.persister.entity.SingleTableEntityPersister;
+import org.hibernate.type.Type;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
-import org.seasar.framework.jpa.AttributeDesc;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
@@ -48,30 +50,51 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
 
     protected final SessionFactoryImplementor sessionFactory;
 
-    protected final ClassMetadata metadata;
-
-    protected final EntityPersister persister;
+    protected final AbstractEntityPersister metadata;
 
     protected final String entityName;
 
     protected final String[] attributeNames;
 
-    protected final AttributeDesc[] attributeDescs;
+    protected final HibernateAttributeDesc[] attributeDescs;
 
-    protected final Map<String, AttributeDesc> attributeDescMap = CollectionsUtil
+    protected final Map<String, HibernateAttributeDesc> attributeDescMap = CollectionsUtil
             .newHashMap();
+
+    protected final String primaryTableName;
+
+    protected final String[] tableNames;
+
+    protected final String discriminatorColumnName;
+
+    protected final String discriminatorValue;
+
+    protected final int discriminatorSqlType;
 
     public HibernateEntityDesc(final Class<ENTITY> entityClass,
             final SessionFactoryImplementor sessionFactory) {
         this.entityClass = entityClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(entityClass);
         this.sessionFactory = sessionFactory;
-        this.metadata = sessionFactory.getClassMetadata(entityClass);
-        this.persister = sessionFactory.getEntityPersister(entityClass
-                .getName());
+        final ClassMetadata classMetadata = sessionFactory
+                .getClassMetadata(entityClass);
+        this.metadata = AbstractEntityPersister.class.cast(classMetadata);
         this.entityName = resolveEntityName();
         this.attributeNames = createAttributeNames();
         this.attributeDescs = createAttributeDescs();
+        this.primaryTableName = metadata.getTableName();
+        this.tableNames = createTableNames();
+        if (metadata instanceof SingleTableEntityPersister
+                && metadata.getDiscriminatorColumnName() != null) {
+            this.discriminatorColumnName = metadata
+                    .getDiscriminatorColumnName();
+            this.discriminatorValue = createDiscriminatorValue();
+            this.discriminatorSqlType = createDiscriminatorSqlType();
+        } else {
+            this.discriminatorColumnName = null;
+            this.discriminatorValue = null;
+            this.discriminatorSqlType = Types.OTHER;
+        }
     }
 
     public String getEntityName() {
@@ -86,24 +109,16 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
         return attributeNames;
     }
 
-    public AttributeDesc getIdAttributeDesc() {
+    public HibernateAttributeDesc getIdAttributeDesc() {
         return attributeDescs[0];
     }
 
-    public AttributeDesc getAttributeDesc(final String attributeName) {
+    public HibernateAttributeDesc getAttributeDesc(final String attributeName) {
         return attributeDescMap.get(attributeName);
     }
 
-    public AttributeDesc[] getAttributeDescs() {
+    public HibernateAttributeDesc[] getAttributeDescs() {
         return attributeDescs;
-    }
-
-    public SessionFactoryImplementor getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public EntityPersister getPersister() {
-        return persister;
     }
 
     protected String resolveEntityName() {
@@ -128,11 +143,11 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
         return attributeNames;
     }
 
-    protected AttributeDesc[] createAttributeDescs() {
+    protected HibernateAttributeDesc[] createAttributeDescs() {
         final String idName = metadata.getIdentifierPropertyName();
         final String[] propertyNames = metadata.getPropertyNames();
         final int versionIndex = metadata.getVersionProperty();
-        final AttributeDesc[] attributeDescs = new AttributeDesc[propertyNames.length + 1];
+        final HibernateAttributeDesc[] attributeDescs = new HibernateAttributeDesc[propertyNames.length + 1];
         attributeDescs[0] = new HibernateAttributeDesc(sessionFactory,
                 metadata, idName, true, false);
         for (int i = 0; i < propertyNames.length; ++i) {
@@ -140,6 +155,73 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
                     metadata, propertyNames[i], false, i == versionIndex);
         }
         return attributeDescs;
+    }
+
+    protected String[] createTableNames() {
+        final String[] original = metadata
+                .getConstraintOrderedTableNameClosure();
+        final String[] tableNames = new String[original.length];
+        System.arraycopy(original, 0, tableNames, 0, original.length);
+        return tableNames;
+    }
+
+    protected String createDiscriminatorValue() {
+        final String dValue = metadata.getDiscriminatorSQLValue();
+        if (dValue.length() > 1 && dValue.startsWith("'")
+                && dValue.endsWith("'")) {
+            return dValue.substring(1, dValue.length() - 1);
+        }
+        return dValue;
+    }
+
+    protected int createDiscriminatorSqlType() {
+        final Type dType = metadata.getDiscriminatorType();
+        final int[] sqlTypes = dType.sqlTypes(sessionFactory);
+        if (sqlTypes != null && sqlTypes.length > 0) {
+            return sqlTypes[0];
+        }
+        return Types.OTHER;
+    }
+
+    public String getPrimaryTableName() {
+        return primaryTableName;
+    }
+
+    public boolean hasPrimaryTableName(final String tableName) {
+        return primaryTableName.equalsIgnoreCase(tableName);
+    }
+
+    public int getTableNameSize() {
+        return tableNames.length;
+    }
+
+    public String getTableName(final int index) {
+        return tableNames[index];
+    }
+
+    public boolean hasTableName(final String tableName) {
+        for (int i = 0; i < getTableNameSize(); i++) {
+            if (getTableName(i).equalsIgnoreCase(tableName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasDiscriminatorColumn() {
+        return discriminatorColumnName != null;
+    }
+
+    public String getDiscriminatorColumnName() {
+        return discriminatorColumnName;
+    }
+
+    public String getDiscriminatorValue() {
+        return discriminatorValue;
+    }
+
+    public int getDiscriminatorSqlType() {
+        return discriminatorSqlType;
     }
 
 }
