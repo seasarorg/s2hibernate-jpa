@@ -62,18 +62,6 @@ public class S2HibernateConfiguration {
         annotatedClasses.get(unitName).add(clazz);
     }
 
-    public void addAnnotatedClasses(final Class<?>... classes) {
-        addAnnotatedClasses(null, classes);
-    }
-
-    public void addAnnotatedClasses(final String unitName,
-            final Class<?>... classes) {
-
-        for (final Class<?> clazz : classes) {
-            addAnnotatedClass(unitName, clazz);
-        }
-    }
-
     public void addResourceAutoDetector(final ResourceAutoDetector detector) {
 
         addResourceAutoDetector(null, detector);
