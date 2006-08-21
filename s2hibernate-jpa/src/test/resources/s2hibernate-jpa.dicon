@@ -30,5 +30,4 @@
 		</destroyMethod>
 	</component>
 	
-	<component class="org.seasar.hibernate.jpa.unit.HibernateProxiedObjectResolver"/>
 </components>
