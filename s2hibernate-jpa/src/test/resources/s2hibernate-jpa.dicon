@@ -9,7 +9,9 @@
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"/>
-	
+
+	<component class="org.seasar.hibernate.jpa.S2HibernateDialect"/>
+
 	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider">
 		<initMethod>
 			@org.seasar.framework.jpa.EntityDescFactory@addProvider(#self)
