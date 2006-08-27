@@ -6,7 +6,7 @@
 	version="1.0"
 >
 
-    <entity class="org.seasar.hibernate.jpa.sub.Employee2" metadata-complete="true">
+    <entity class="org.seasar.hibernate.jpa.entity.Employee2" metadata-complete="true">
         <table name="EMP2">
         </table>
         <attributes>

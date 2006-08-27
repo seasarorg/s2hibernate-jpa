@@ -259,9 +259,9 @@ public class HibernateEntityDescTest extends S2TestCase {
 
     public void setUpSingleTableInheritanceTx() throws Exception {
         S2HibernateConfiguration cfg = new S2HibernateConfiguration();
-        cfg.addAnnotatedClass(Fruit.class);
-        cfg.addAnnotatedClass(Apple.class);
-        cfg.addAnnotatedClass(Basket.class);
+        cfg.addPersistenceClass(Fruit.class);
+        cfg.addPersistenceClass(Apple.class);
+        cfg.addPersistenceClass(Basket.class);
         register(cfg);
     }
 
@@ -341,8 +341,8 @@ public class HibernateEntityDescTest extends S2TestCase {
 
     public void setUpJoinedTableInheritanceTx() throws Exception {
         S2HibernateConfiguration cfg = new S2HibernateConfiguration();
-        cfg.addAnnotatedClass(File.class);
-        cfg.addAnnotatedClass(Folder.class);
+        cfg.addPersistenceClass(File.class);
+        cfg.addPersistenceClass(Folder.class);
         register(cfg);
     }
 
@@ -417,8 +417,8 @@ public class HibernateEntityDescTest extends S2TestCase {
 
     public void setUpIndexColumnTx() throws Exception {
         S2HibernateConfiguration cfg = new S2HibernateConfiguration();
-        cfg.addAnnotatedClass(Wardrobe.class);
-        cfg.addAnnotatedClass(Drawer.class);
+        cfg.addPersistenceClass(Wardrobe.class);
+        cfg.addPersistenceClass(Drawer.class);
         register(cfg);
     }
 

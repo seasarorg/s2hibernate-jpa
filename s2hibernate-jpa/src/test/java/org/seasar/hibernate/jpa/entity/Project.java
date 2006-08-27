@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.sub;
+package org.seasar.hibernate.jpa.entity;
 
 import java.io.Serializable;
 
@@ -21,9 +21,9 @@ import java.io.Serializable;
  * 
  * @author taedium
  */
-public class Address implements Serializable {
+public class Project implements Serializable {
 
-    private static final long serialVersionUID = 6528248251581774579L;
+    private static final long serialVersionUID = 1604129561935711656L;
 
     private int id;
 
@@ -34,5 +34,4 @@ public class Address implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 }

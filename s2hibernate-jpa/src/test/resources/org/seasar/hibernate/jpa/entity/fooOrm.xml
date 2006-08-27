@@ -6,8 +6,8 @@
 	version="1.0"
 >
 
-    <entity class="org.seasar.hibernate.jpa.sub.Project" metadata-complete="true">
-        <table name="PROJECT">
+    <entity class="org.seasar.hibernate.jpa.entity.Address" metadata-complete="true">
+        <table name="ADDRESS">
         </table>
         <attributes>
             <id name="id"/>

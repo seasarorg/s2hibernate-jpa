@@ -15,6 +15,7 @@
  */
 package org.seasar.hibernate.jpa;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -30,8 +31,6 @@ import org.hibernate.ejb.Ejb3Configuration;
 import org.hibernate.ejb.HibernatePersistence;
 import org.hibernate.ejb.packaging.PersistenceMetadata;
 import org.hibernate.ejb.packaging.PersistenceXmlLoader;
-import org.seasar.framework.autodetector.ResourceAutoDetector;
-import org.seasar.framework.autodetector.ResourceAutoDetector.Entry;
 import org.seasar.framework.container.S2Container;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
@@ -70,7 +69,7 @@ public class S2HibernatePersistence implements
                             .getProvider())
                             && metadata.getName().equals(unitName)) {
                         return createEntityManagerFactory(unitName, map,
-                                hibernateCfg, url);
+                                hibernateCfg);
                     }
                 }
             }
@@ -94,13 +93,16 @@ public class S2HibernatePersistence implements
     @SuppressWarnings("unchecked")
     protected EntityManagerFactory createEntityManagerFactory(
             final String unitName, final Map map,
-            final Ejb3Configuration hibernateCfg, final URL url) {
+            final Ejb3Configuration hibernateCfg) {
 
         final S2HibernateConfiguration s2HibernateCfg = getS2HibernateConfiguration();
         if (s2HibernateCfg != null) {
             addMappingFiles(unitName, hibernateCfg, s2HibernateCfg);
-            addMappingFilesAsStream(unitName, hibernateCfg, s2HibernateCfg, url);
+            addMappingFileStreams(unitName, hibernateCfg, s2HibernateCfg);
             addAnnotatedClasses(unitName, hibernateCfg, s2HibernateCfg);
+            if (s2HibernateCfg.isAutoDetection()) {
+                map.put(HibernatePersistence.AUTODETECTION, "");
+            }
         }
 
         map.put(HibernatePersistence.PROVIDER, HibernatePersistence.class
@@ -133,39 +135,28 @@ public class S2HibernatePersistence implements
         }
     }
 
-    protected void addMappingFilesAsStream(final String unitName,
+    protected void addMappingFileStreams(final String unitName,
             final Ejb3Configuration hibernateCfg,
-            final S2HibernateConfiguration s2HibernateCfg, final URL url) {
+            final S2HibernateConfiguration s2HibernateCfg) {
 
-        final ResourceAutoDetector detector = s2HibernateCfg
-                .getRsourceAutoDetector();
-        if (detector != null) {
-            for (final Entry entry : detector
-                    .detect(PERSISTENCE_FILE_PATH, url)) {
-                hibernateCfg.addInputStream(entry.getInputStream());
-            }
+        for (final InputStream is : s2HibernateCfg.getMappingFileStreams()) {
+            hibernateCfg.addInputStream(is);
         }
-
-        final ResourceAutoDetector specifiedDetector = s2HibernateCfg
-                .getRsourceAutoDetector(unitName);
-        if (specifiedDetector != null) {
-            for (final Entry entry : specifiedDetector.detect(
-                    PERSISTENCE_FILE_PATH, url)) {
-                hibernateCfg.addInputStream(entry.getInputStream());
-            }
+        for (final InputStream is : s2HibernateCfg
+                .getMappingFileStreams(unitName)) {
+            hibernateCfg.addInputStream(is);
         }
-
     }
 
     protected void addAnnotatedClasses(final String unitName,
             final Ejb3Configuration hibernateCfg,
             final S2HibernateConfiguration s2HibernateCfg) {
 
-        for (final Class<?> clazz : s2HibernateCfg.getAnnotatedClasses()) {
+        for (final Class<?> clazz : s2HibernateCfg.getPersistenceClasses()) {
             hibernateCfg.addAnnotatedClass(clazz);
         }
         for (final Class<?> clazz : s2HibernateCfg
-                .getAnnotatedClasses(unitName)) {
+                .getPersistenceClasses(unitName)) {
             hibernateCfg.addAnnotatedClass(clazz);
         }
     }

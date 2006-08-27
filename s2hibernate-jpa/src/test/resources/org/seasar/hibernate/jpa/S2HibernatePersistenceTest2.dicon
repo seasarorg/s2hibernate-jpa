@@ -4,8 +4,8 @@
 <components>
 
 	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
-		<initMethod name="addAnnotatedClass">
-			<arg>@org.seasar.hibernate.jpa.sub.Department2@class</arg>
+		<initMethod name="addPersistenceClass">
+			<arg>@org.seasar.hibernate.jpa.entity.Department2@class</arg>
 		</initMethod>
 	</component>
 

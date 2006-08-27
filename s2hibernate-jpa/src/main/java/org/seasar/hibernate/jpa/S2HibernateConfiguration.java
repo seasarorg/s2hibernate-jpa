@@ -15,29 +15,32 @@
  */
 package org.seasar.hibernate.jpa;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.seasar.framework.autodetector.ResourceAutoDetector;
-import org.seasar.framework.container.annotation.tiger.Component;
+import org.seasar.framework.jpa.MappingFileAutoDetector;
+import org.seasar.framework.jpa.PersistenceClassAutoDetector;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
  * 
  * @author taedium
  */
-@Component
 public class S2HibernateConfiguration {
 
-    private Map<String, List<String>> mappingFiles = CollectionsUtil
+    protected boolean autoDetection;
+
+    protected Map<String, List<String>> mappingFiles = CollectionsUtil
             .newHashMap();
 
-    private Map<String, List<Class<?>>> annotatedClasses = CollectionsUtil
+    protected Map<String, List<InputStream>> mappingFileStreams = CollectionsUtil
             .newHashMap();
 
-    private Map<String, ResourceAutoDetector> resourceAutoDetectors = CollectionsUtil
+    protected Map<String, List<Class<?>>> persistenceClasses = CollectionsUtil
             .newHashMap();
 
     public void addMappingFile(final String fileName) {
@@ -51,26 +54,60 @@ public class S2HibernateConfiguration {
         mappingFiles.get(unitName).add(fileName);
     }
 
-    public void addAnnotatedClass(final Class<?> clazz) {
-        addAnnotatedClass(null, clazz);
+    public void addMappingFileStream(final InputStream inputStream) {
+        addMappingFileStream(null, inputStream);
     }
 
-    public void addAnnotatedClass(final String unitName, final Class<?> clazz) {
-        if (!annotatedClasses.containsKey(unitName)) {
-            annotatedClasses.put(unitName, new ArrayList<Class<?>>());
+    public void addMappingFileStream(final String unitName,
+            final InputStream inputStream) {
+
+        if (!mappingFileStreams.containsKey(unitName)) {
+            mappingFileStreams.put(unitName, new ArrayList<InputStream>());
         }
-        annotatedClasses.get(unitName).add(clazz);
+        mappingFileStreams.get(unitName).add(inputStream);
     }
 
-    public void addResourceAutoDetector(final ResourceAutoDetector detector) {
-
-        addResourceAutoDetector(null, detector);
+    public void addPersistenceClass(final Class<?> clazz) {
+        addPersistenceClass(null, clazz);
     }
 
-    public void addResourceAutoDetector(final String unitName,
-            final ResourceAutoDetector detector) {
+    public void addPersistenceClass(final String unitName, final Class<?> clazz) {
+        if (!persistenceClasses.containsKey(unitName)) {
+            persistenceClasses.put(unitName, new ArrayList<Class<?>>());
+        }
+        persistenceClasses.get(unitName).add(clazz);
+    }
 
-        resourceAutoDetectors.put(unitName, detector);
+    public void addMappingFileAutoDetector(
+            final MappingFileAutoDetector detector) {
+
+        addMappingFileAutoDetector(null, detector);
+    }
+
+    public void addMappingFileAutoDetector(final String unitName,
+            final MappingFileAutoDetector detector) {
+
+        autoDetection = true;
+
+        for (final ResourceAutoDetector.Entry entry : detector.detect()) {
+            addMappingFileStream(unitName, entry.getInputStream());
+        }
+    }
+
+    public void addPersistenceClassAutoDetector(
+            final PersistenceClassAutoDetector detector) {
+
+        addPersistenceClassAutoDetector(null, detector);
+    }
+
+    public void addPersistenceClassAutoDetector(final String unitName,
+            final PersistenceClassAutoDetector detector) {
+
+        autoDetection = true;
+
+        for (final Class clazz : detector.detect()) {
+            addPersistenceClass(unitName, clazz);
+        }
     }
 
     public List<String> getMappingFiles() {
@@ -84,22 +121,29 @@ public class S2HibernateConfiguration {
         return Collections.emptyList();
     }
 
-    public List<Class<?>> getAnnotatedClasses() {
-        return getAnnotatedClasses(null);
+    public List<InputStream> getMappingFileStreams() {
+        return getMappingFileStreams(null);
     }
 
-    public List<Class<?>> getAnnotatedClasses(final String unitName) {
-        if (annotatedClasses.containsKey(unitName)) {
-            return annotatedClasses.get(unitName);
+    public List<InputStream> getMappingFileStreams(final String unitName) {
+        if (mappingFileStreams.containsKey(unitName)) {
+            return mappingFileStreams.get(unitName);
         }
         return Collections.emptyList();
     }
 
-    public ResourceAutoDetector getRsourceAutoDetector() {
-        return getRsourceAutoDetector(null);
+    public List<Class<?>> getPersistenceClasses() {
+        return getPersistenceClasses(null);
     }
 
-    public ResourceAutoDetector getRsourceAutoDetector(final String unitName) {
-        return resourceAutoDetectors.get(unitName);
+    public List<Class<?>> getPersistenceClasses(final String unitName) {
+        if (persistenceClasses.containsKey(unitName)) {
+            return persistenceClasses.get(unitName);
+        }
+        return Collections.emptyList();
+    }
+
+    public boolean isAutoDetection() {
+        return autoDetection;
     }
 }
