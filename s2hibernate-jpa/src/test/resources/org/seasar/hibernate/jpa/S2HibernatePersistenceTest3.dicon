@@ -5,23 +5,16 @@
 
 	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
 
-	<component name="project" class="org.seasar.framework.container.cooldeploy.impl.CoolProjectImpl">
+	<component class="org.seasar.framework.container.cooldeploy.impl.CoolProjectImpl">
 		<property name="rootPackageName">"org.seasar.hibernate.jpa"</property>
 	</component>
 
-	<component name="detector" class="org.seasar.framework.jpa.MappingFileAutoDetector">
-		<initMethod name="addProject">
-			<arg>project</arg>
-		</initMethod>
+	<component class="org.seasar.framework.jpa.MappingFileAutoDetector">
 		<initMethod name="addIgnoreResourceNamePattern">
 			<arg>"org/seasar/hibernate/jpa/entity/bar.*"</arg>
 		</initMethod>				
 	</component>
 	
-	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
-		<initMethod name="addMappingFileAutoDetector">
-			<arg>detector</arg>
-		</initMethod>
-	</component>
+	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration"/>
 
 </components>

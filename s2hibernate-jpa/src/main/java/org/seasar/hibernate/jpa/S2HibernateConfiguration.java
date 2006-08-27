@@ -21,9 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
-import org.seasar.framework.jpa.MappingFileAutoDetector;
-import org.seasar.framework.jpa.PersistenceClassAutoDetector;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
@@ -60,7 +59,6 @@ public class S2HibernateConfiguration {
 
     public void addMappingFileStream(final String unitName,
             final InputStream inputStream) {
-
         if (!mappingFileStreams.containsKey(unitName)) {
             mappingFileStreams.put(unitName, new ArrayList<InputStream>());
         }
@@ -78,15 +76,19 @@ public class S2HibernateConfiguration {
         persistenceClasses.get(unitName).add(clazz);
     }
 
-    public void addMappingFileAutoDetector(
-            final MappingFileAutoDetector detector) {
+    public void setMappingFileAutoDetector(
+            final ResourceAutoDetector[] detectors) {
+        for (final ResourceAutoDetector detector : detectors) {
+            addMappingFileAutoDetector(detector);
+        }
+    }
 
+    public void addMappingFileAutoDetector(final ResourceAutoDetector detector) {
         addMappingFileAutoDetector(null, detector);
     }
 
     public void addMappingFileAutoDetector(final String unitName,
-            final MappingFileAutoDetector detector) {
-
+            final ResourceAutoDetector detector) {
         autoDetection = true;
 
         for (final ResourceAutoDetector.Entry entry : detector.detect()) {
@@ -94,15 +96,19 @@ public class S2HibernateConfiguration {
         }
     }
 
-    public void addPersistenceClassAutoDetector(
-            final PersistenceClassAutoDetector detector) {
+    public void setPersistenceClassAutoDetector(
+            final ClassAutoDetector[] detectors) {
+        for (final ClassAutoDetector detector : detectors) {
+            addPersistenceClassAutoDetector(detector);
+        }
+    }
 
+    public void addPersistenceClassAutoDetector(final ClassAutoDetector detector) {
         addPersistenceClassAutoDetector(null, detector);
     }
 
     public void addPersistenceClassAutoDetector(final String unitName,
-            final PersistenceClassAutoDetector detector) {
-
+            final ClassAutoDetector detector) {
         autoDetection = true;
 
         for (final Class clazz : detector.detect()) {

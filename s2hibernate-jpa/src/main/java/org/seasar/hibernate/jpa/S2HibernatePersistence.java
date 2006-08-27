@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
+import javax.persistence.spi.PersistenceProvider;
 import javax.persistence.spi.PersistenceUnitInfo;
 
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -38,8 +39,7 @@ import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
  * 
  * @author taedium
  */
-public class S2HibernatePersistence implements
-        javax.persistence.spi.PersistenceProvider {
+public class S2HibernatePersistence implements PersistenceProvider {
 
     private static final String IMPLEMENTATION_NAME = S2HibernatePersistence.class
             .getName();
