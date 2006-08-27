@@ -1,5 +1,5 @@
 <project name="s2hibernate-jpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0-beta-1"/>
+	<property name="ver" value="1.0.0-beta-2-SNAPSHOT"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2Hibernate-JPA-${ver}.zip">
@@ -23,5 +23,12 @@
 				<exclude name=".project"/>
 			</zipfileset>
 		</zip>
+
+		<jar jarfile="target/all-patches.jar">
+			<fileset dir="target/classes">
+				<include name="javassist/**/*.class"/>
+				<include name="org/hibernate/**/*.class"/>
+			</fileset>
+		</jar>
 	</target>
 </project>
