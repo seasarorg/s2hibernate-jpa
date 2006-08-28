@@ -3,10 +3,10 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 
-	<component class="org.seasar.framework.convention.impl.NamingConventionImpl"/>
-
-	<component class="org.seasar.framework.container.cooldeploy.impl.CoolProjectImpl">
-		<property name="rootPackageName">"org.seasar.hibernate.jpa"</property>
+	<component class="org.seasar.framework.convention.impl.NamingConventionImpl">
+		<initMethod name="addRootPackageName">
+			<arg>"org.seasar.hibernate.jpa"</arg>
+		</initMethod>
 	</component>
 
 	<component class="org.seasar.framework.jpa.MappingFileAutoDetector">
