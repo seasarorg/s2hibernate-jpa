@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
+import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
@@ -30,6 +31,9 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
  * @author taedium
  */
 public class S2HibernateConfiguration {
+
+    protected static final Logger logger = Logger
+            .getLogger(S2HibernateConfiguration.class);
 
     protected boolean autoDetection;
 
@@ -92,6 +96,14 @@ public class S2HibernateConfiguration {
         autoDetection = true;
 
         for (final ResourceAutoDetector.Entry entry : detector.detect()) {
+            if (logger.isDebugEnabled()) {
+                if (unitName == null) {
+                    logger.log("DHBN0003", new Object[] { entry.getPath() });
+                } else {
+                    logger.log("DHBN0004", new Object[] { entry.getPath(),
+                            unitName });
+                }
+            }
             addMappingFileStream(unitName, entry.getInputStream());
         }
     }
@@ -112,6 +124,14 @@ public class S2HibernateConfiguration {
         autoDetection = true;
 
         for (final Class clazz : detector.detect()) {
+            if (logger.isDebugEnabled()) {
+                if (unitName == null) {
+                    logger.log("DHBN0001", new Object[] { clazz.getName() });
+                } else {
+                    logger.log("DHBN0002", new Object[] { clazz.getName(),
+                            unitName });
+                }
+            }
             addPersistenceClass(unitName, clazz);
         }
     }
