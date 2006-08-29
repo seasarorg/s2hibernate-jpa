@@ -98,9 +98,9 @@ public class S2HibernateConfiguration {
         for (final ResourceAutoDetector.Entry entry : detector.detect()) {
             if (logger.isDebugEnabled()) {
                 if (unitName == null) {
-                    logger.log("DHBN0003", new Object[] { entry.getPath() });
+                    logger.log("DHBNJPA0003", new Object[] { entry.getPath() });
                 } else {
-                    logger.log("DHBN0004", new Object[] { entry.getPath(),
+                    logger.log("DHBNJPA0004", new Object[] { entry.getPath(),
                             unitName });
                 }
             }
@@ -126,9 +126,9 @@ public class S2HibernateConfiguration {
         for (final Class clazz : detector.detect()) {
             if (logger.isDebugEnabled()) {
                 if (unitName == null) {
-                    logger.log("DHBN0001", new Object[] { clazz.getName() });
+                    logger.log("DHBNJPA0001", new Object[] { clazz.getName() });
                 } else {
-                    logger.log("DHBN0002", new Object[] { clazz.getName(),
+                    logger.log("DHBNJPA0002", new Object[] { clazz.getName(),
                             unitName });
                 }
             }
