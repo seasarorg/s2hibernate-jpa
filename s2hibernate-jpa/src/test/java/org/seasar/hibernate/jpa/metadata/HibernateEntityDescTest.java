@@ -30,11 +30,11 @@ import org.seasar.framework.jpa.EntityDescFactory;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
+import org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl;
 import org.seasar.hibernate.jpa.unit.indexcoll.Drawer;
 import org.seasar.hibernate.jpa.unit.indexcoll.Wardrobe;
 
 /**
- * 
  * @author koichik
  */
 public class HibernateEntityDescTest extends S2TestCase {
@@ -258,11 +258,11 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpSingleTableInheritanceTx() throws Exception {
-        S2HibernateConfiguration cfg = new S2HibernateConfiguration();
+        S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(Fruit.class);
         cfg.addPersistenceClass(Apple.class);
         cfg.addPersistenceClass(Basket.class);
-        register(cfg);
+        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
     }
 
     public void testSingleTableInheritanceTx() throws Exception {
@@ -340,10 +340,10 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpJoinedTableInheritanceTx() throws Exception {
-        S2HibernateConfiguration cfg = new S2HibernateConfiguration();
+        S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(File.class);
         cfg.addPersistenceClass(Folder.class);
-        register(cfg);
+        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
     }
 
     public void testJoinedTableInheritanceTx() throws Exception {
@@ -416,10 +416,10 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpIndexColumnTx() throws Exception {
-        S2HibernateConfiguration cfg = new S2HibernateConfiguration();
+        S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(Wardrobe.class);
         cfg.addPersistenceClass(Drawer.class);
-        register(cfg);
+        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
     }
 
     public void testIndexColumnTx() throws Exception {

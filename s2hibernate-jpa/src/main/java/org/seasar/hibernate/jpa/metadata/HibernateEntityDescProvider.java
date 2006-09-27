@@ -20,11 +20,13 @@ import javax.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.EntityDesc;
+import org.seasar.framework.jpa.EntityDescFactory;
 import org.seasar.framework.jpa.EntityDescProvider;
 
 /**
- * 
  * @author koichik
  */
 public class HibernateEntityDescProvider implements EntityDescProvider {
@@ -37,9 +39,16 @@ public class HibernateEntityDescProvider implements EntityDescProvider {
                 .getSessionFactory());
     }
 
-    /**
-     * @see org.seasar.framework.jpa.EntityDescProvider#createEntityDesc(java.lang.Class)
-     */
+    @InitMethod
+    public void register() {
+        EntityDescFactory.addProvider(this);
+    }
+
+    @DestroyMethod
+    public void unregister() {
+        EntityDescFactory.removeProvider(this);
+    }
+
     @SuppressWarnings("unchecked")
     public <ENTITY> EntityDesc<ENTITY> createEntityDesc(
             final Class<ENTITY> entityClass) {

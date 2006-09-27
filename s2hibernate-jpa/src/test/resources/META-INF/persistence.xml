@@ -2,7 +2,7 @@
 <persistence>
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
 		<jta-data-source>jdbc/DataSource</jta-data-source>
-		<provider>org.seasar.hibernate.jpa.S2HibernatePersistence</provider>
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>org.seasar.hibernate.jpa.Department</class>
 		<class>org.seasar.hibernate.jpa.Employee</class>
 		<properties>

@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa;
+package org.seasar.hibernate.jpa.impl;
 
 import javax.persistence.EntityManager;
 

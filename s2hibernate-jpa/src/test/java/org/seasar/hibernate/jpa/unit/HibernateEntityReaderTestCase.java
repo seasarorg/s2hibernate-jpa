@@ -23,14 +23,14 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
+import org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl;
 
 /**
- * 
  * @author taedium
  */
 public abstract class HibernateEntityReaderTestCase extends S2TestCase {
 
-    protected S2HibernateConfiguration cfg = new S2HibernateConfiguration();
+    protected S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
 
     protected EntityManager em;
 
@@ -40,7 +40,7 @@ public abstract class HibernateEntityReaderTestCase extends S2TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         include("s2hibernate-jpa.dicon");
-        register(cfg);
+        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
     }
 
     protected void addAnnotatedClasses(Class<?>... classes) {

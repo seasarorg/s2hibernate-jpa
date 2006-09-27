@@ -18,18 +18,30 @@ package org.seasar.hibernate.jpa.unit;
 import java.util.Collection;
 import java.util.Map;
 
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.EntityDesc;
 import org.seasar.framework.jpa.EntityDescFactory;
 import org.seasar.framework.jpa.unit.EntityReader;
+import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.framework.jpa.unit.EntityReaderProvider;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
- * 
  * @author taedium
  */
 public class HibernateEntityReaderProvider implements EntityReaderProvider {
+
+    @InitMethod
+    public void register() {
+        EntityReaderFactory.addProvider(this);
+    }
+
+    @DestroyMethod
+    public void unregister() {
+        EntityReaderFactory.removeProvider(this);
+    }
 
     public EntityReader createEntityReader(final Object entity) {
         if (entity == null) {

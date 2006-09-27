@@ -9,8 +9,8 @@
 		</initMethod>
 	</component>
 
-	<component class="org.seasar.framework.jpa.PersistenceClassAutoDetector"/>
+	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector"/>
 	
-	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration"/>
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl"/>
 
 </components>

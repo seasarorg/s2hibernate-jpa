@@ -3,6 +3,15 @@
 	"http://www.seasar.org/dtd/components23.dtd">
 <components namespace="s2hibernateJPA">
 	<include path="javaee5.dicon"/>
+	<include condition="#ENV == 'test1'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest1.dicon"/>
+	<include condition="#ENV == 'test2'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest2.dicon"/>
+	<include condition="#ENV == 'test3'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest3.dicon"/>
+	<include condition="#ENV == 'test4'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest4.dicon"/>
+
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernatePersistenceUnitProvider"/>
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernateDialect"/>
+	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider"/>
+	<component class="org.seasar.hibernate.jpa.unit.HibernateEntityReaderProvider"/>
 
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
@@ -10,24 +19,4 @@
 
 	<component name="entityManager" class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"/>
 
-	<component class="org.seasar.hibernate.jpa.S2HibernateDialect"/>
-
-	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider">
-		<initMethod>
-			@org.seasar.framework.jpa.EntityDescFactory@addProvider(#self)
-		</initMethod>
-		<destroyMethod>
-			@org.seasar.framework.jpa.EntityDescFactory@removeProvider(#self)
-		</destroyMethod>
-	</component>
-
-	<component class="org.seasar.hibernate.jpa.unit.HibernateEntityReaderProvider">
-		<initMethod>
-			@org.seasar.framework.jpa.unit.EntityReaderFactory@addProvider(#self)
-		</initMethod>
-		<destroyMethod>
-			@org.seasar.framework.jpa.unit.EntityReaderFactory@removeProvider(#self)
-		</destroyMethod>
-	</component>
-	
 </components>

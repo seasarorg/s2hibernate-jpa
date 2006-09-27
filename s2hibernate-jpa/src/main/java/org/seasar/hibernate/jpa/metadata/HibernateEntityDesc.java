@@ -34,7 +34,6 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
- * 
  * @author koichik
  */
 public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
@@ -126,8 +125,10 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
         final Map<String, String> imports = ReflectionUtil.getValue(
                 IMPORTS_FIELD, sessionFactory);
         for (final Entry<String, String> entry : imports.entrySet()) {
-            if (entityClassName.equals(entry.getValue())) {
-                return entry.getKey();
+            final String key = entry.getKey();
+            final String value = entry.getValue();
+            if (!entityClassName.equals(key) && entityClassName.equals(value)) {
+                return key;
             }
         }
 

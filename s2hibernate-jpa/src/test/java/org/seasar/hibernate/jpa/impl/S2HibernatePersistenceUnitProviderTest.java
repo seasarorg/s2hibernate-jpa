@@ -13,29 +13,34 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa;
+package org.seasar.hibernate.jpa.impl;
 
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.seasar.extension.unit.S2TestCase;
+import org.seasar.framework.env.Env;
+import org.seasar.hibernate.jpa.Department;
+import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.entity.Address;
 import org.seasar.hibernate.jpa.entity.Customer;
 import org.seasar.hibernate.jpa.entity.Department2;
 import org.seasar.hibernate.jpa.entity.Employee2;
 
 /**
- * 
  * @author taedium
  */
-public class S2HibernatePersistenceTest extends S2TestCase {
+public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
 
     private EntityManager em;
 
     @Override
     protected void setUp() throws Exception {
         include("javaee5.dicon");
+    }
+
+    public void setUpReadPersistenceXmlFile() throws Exception {
         include("s2hibernate-jpa.dicon");
     }
 
@@ -48,7 +53,8 @@ public class S2HibernatePersistenceTest extends S2TestCase {
     }
 
     public void setUpAddMappingFile() throws Exception {
-        include("S2HibernatePersistenceTest.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/test1.txt");
+        include("s2hibernate-jpa.dicon");
     }
 
     public void testAddMappingFile() throws Exception {
@@ -61,7 +67,8 @@ public class S2HibernatePersistenceTest extends S2TestCase {
     }
 
     public void setUpAddPersistenceClass() throws Exception {
-        include("S2HibernatePersistenceTest2.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/test2.txt");
+        include("s2hibernate-jpa.dicon");
     }
 
     public void testAddPersistenceClass() throws Exception {
@@ -74,7 +81,8 @@ public class S2HibernatePersistenceTest extends S2TestCase {
     }
 
     public void setUpMappingFileAutoDetection() throws Exception {
-        include("S2HibernatePersistenceTest3.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/test3.txt");
+        include("s2hibernate-jpa.dicon");
     }
 
     public void testMappingFileAutoDetection() throws Exception {
@@ -88,7 +96,8 @@ public class S2HibernatePersistenceTest extends S2TestCase {
     }
 
     public void setUpPersistenceClassAutoDetection() throws Exception {
-        include("S2HibernatePersistenceTest4.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/test4.txt");
+        include("s2hibernate-jpa.dicon");
     }
 
     public void testPersistenceClassAutoDetection() throws Exception {

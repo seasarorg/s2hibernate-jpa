@@ -9,12 +9,12 @@
 		</initMethod>
 	</component>
 
-	<component class="org.seasar.framework.jpa.MappingFileAutoDetector">
+	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector">
 		<initMethod name="addIgnoreResourceNamePattern">
 			<arg>"org/seasar/hibernate/jpa/entity/bar.*"</arg>
 		</initMethod>				
 	</component>
 	
-	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration"/>
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl"/>
 
 </components>

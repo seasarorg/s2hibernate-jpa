@@ -3,7 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 
-	<component class="org.seasar.hibernate.jpa.S2HibernateConfiguration">
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl">
 		<initMethod name="addMappingFile">
 			<arg>"org/seasar/hibernate/jpa/entity/hogeOrm.xml"</arg>
 		</initMethod>
