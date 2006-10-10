@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN" 
 	"http://www.seasar.org/dtd/components23.dtd">
-<components namespace="s2hibernateJPA">
+<components>
 	<include path="javaee5.dicon"/>
-	<include condition="#ENV == 'test1'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest1.dicon"/>
-	<include condition="#ENV == 'test2'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest2.dicon"/>
-	<include condition="#ENV == 'test3'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest3.dicon"/>
-	<include condition="#ENV == 'test4'" path="org/seasar/hibernate/jpa/S2HibernatePersistenceUnitProviderTest4.dicon"/>
+	<include condition="#ENV == 'test1'" path="org/seasar/hibernate/jpa/impl/S2HibernatePersistenceUnitProviderTest1.dicon"/>
+	<include condition="#ENV == 'test2'" path="org/seasar/hibernate/jpa/impl/S2HibernatePersistenceUnitProviderTest2.dicon"/>
+	<include condition="#ENV == 'test3'" path="org/seasar/hibernate/jpa/impl/S2HibernatePersistenceUnitProviderTest3.dicon"/>
+	<include condition="#ENV == 'test4'" path="org/seasar/hibernate/jpa/impl/S2HibernatePersistenceUnitProviderTest4.dicon"/>
 
 	<component class="org.seasar.hibernate.jpa.impl.S2HibernatePersistenceUnitProvider"/>
 	<component class="org.seasar.hibernate.jpa.impl.S2HibernateDialect"/>
@@ -17,6 +17,5 @@
 		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
 	</component>
 
-	<component name="entityManager" class="org.seasar.framework.jpa.TxScopedEntityManagerProxy"/>
-
+	<component name="entityManager" class="org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy"/>
 </components>

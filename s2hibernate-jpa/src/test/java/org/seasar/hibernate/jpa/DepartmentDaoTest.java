@@ -6,6 +6,7 @@ public class DepartmentDaoTest extends S2TestCase {
 
     DepartmentDaoImpl dao;
 
+    @Override
     protected void setUp() throws Exception {
         include("DepartmentDaoTest.dicon");
     }

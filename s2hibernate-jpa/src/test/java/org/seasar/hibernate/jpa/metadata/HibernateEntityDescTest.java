@@ -24,9 +24,9 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.property.BackrefPropertyAccessor;
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.framework.jpa.AttributeDesc;
-import org.seasar.framework.jpa.EntityDesc;
-import org.seasar.framework.jpa.EntityDescFactory;
+import org.seasar.framework.jpa.metadata.AttributeDesc;
+import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
@@ -44,12 +44,12 @@ public class HibernateEntityDescTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
-        include("s2hibernate-jpa.dicon");
+        include("entityManager.dicon");
     }
 
     public void testDepartment() throws Exception {
         Department dept = new Department();
-        EntityDesc<Department> entityDesc = EntityDescFactory
+        EntityDesc entityDesc = EntityDescFactory
                 .getEntityDesc(Department.class);
         assertNotNull(entityDesc);
         assertEquals("Dept", entityDesc.getEntityName());
@@ -137,8 +137,7 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void testEmployee() throws Exception {
-        EntityDesc<Employee> entityDesc = EntityDescFactory
-                .getEntityDesc(Employee.class);
+        EntityDesc entityDesc = EntityDescFactory.getEntityDesc(Employee.class);
         assertNotNull(entityDesc);
         assertEquals("Emp", entityDesc.getEntityName());
         assertEquals("empno", entityDesc.getIdAttributeDesc().getName());
@@ -262,7 +261,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         cfg.addPersistenceClass(Fruit.class);
         cfg.addPersistenceClass(Apple.class);
         cfg.addPersistenceClass(Basket.class);
-        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
+        getContainer().getDescendant("entityManager.dicon").register(cfg);
     }
 
     public void testSingleTableInheritanceTx() throws Exception {
@@ -343,7 +342,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(File.class);
         cfg.addPersistenceClass(Folder.class);
-        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
+        getContainer().getDescendant("entityManager.dicon").register(cfg);
     }
 
     public void testJoinedTableInheritanceTx() throws Exception {
@@ -419,7 +418,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(Wardrobe.class);
         cfg.addPersistenceClass(Drawer.class);
-        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
+        getContainer().getDescendant("entityManager.dicon").register(cfg);
     }
 
     public void testIndexColumnTx() throws Exception {

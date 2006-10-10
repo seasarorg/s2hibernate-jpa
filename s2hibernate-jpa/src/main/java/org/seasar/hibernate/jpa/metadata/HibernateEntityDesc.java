@@ -28,7 +28,7 @@ import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.hibernate.type.Type;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
-import org.seasar.framework.jpa.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
@@ -36,7 +36,7 @@ import org.seasar.framework.util.tiger.ReflectionUtil;
 /**
  * @author koichik
  */
-public class HibernateEntityDesc<ENTITY> implements EntityDesc<ENTITY> {
+public class HibernateEntityDesc<ENTITY> implements EntityDesc {
     protected static final Field IMPORTS_FIELD = ClassUtil.getDeclaredField(
             SessionFactoryImpl.class, "imports");
     static {

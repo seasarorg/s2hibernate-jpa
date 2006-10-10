@@ -16,8 +16,8 @@
 package org.seasar.hibernate.jpa.metadata;
 
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.framework.jpa.EntityDesc;
-import org.seasar.framework.jpa.EntityDescFactory;
+import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
 
@@ -30,7 +30,7 @@ public class HibernateEntityDescProviderTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
-        include("s2hibernate-jpa.dicon");
+        include("entityManager.dicon");
     }
 
     public void testEntity() throws Exception {

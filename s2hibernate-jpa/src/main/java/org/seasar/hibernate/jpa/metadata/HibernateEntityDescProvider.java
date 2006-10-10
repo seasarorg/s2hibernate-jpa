@@ -22,9 +22,9 @@ import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
-import org.seasar.framework.jpa.EntityDesc;
-import org.seasar.framework.jpa.EntityDescFactory;
-import org.seasar.framework.jpa.EntityDescProvider;
+import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
 /**
  * @author koichik
@@ -50,8 +50,7 @@ public class HibernateEntityDescProvider implements EntityDescProvider {
     }
 
     @SuppressWarnings("unchecked")
-    public <ENTITY> EntityDesc<ENTITY> createEntityDesc(
-            final Class<ENTITY> entityClass) {
+    public EntityDesc createEntityDesc(final Class<?> entityClass) {
         final ClassMetadata metadata = sessionFactory
                 .getClassMetadata(entityClass);
         if (metadata == null) {

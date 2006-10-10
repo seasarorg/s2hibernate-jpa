@@ -20,8 +20,8 @@ import java.util.Map;
 
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
-import org.seasar.framework.jpa.EntityDesc;
-import org.seasar.framework.jpa.EntityDescFactory;
+import org.seasar.framework.jpa.metadata.EntityDesc;
+import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.framework.jpa.unit.EntityReaderProvider;
@@ -97,7 +97,7 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
     }
 
     protected HibernateEntityDesc<?> getEntityDesc(final Class<?> entityClass) {
-        final EntityDesc<?> entityDesc = EntityDescFactory
+        final EntityDesc entityDesc = EntityDescFactory
                 .getEntityDesc(entityClass);
         if (entityDesc == null || !(entityDesc instanceof HibernateEntityDesc)) {
             return null;

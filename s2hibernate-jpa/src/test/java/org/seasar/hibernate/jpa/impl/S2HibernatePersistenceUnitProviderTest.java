@@ -41,7 +41,7 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpReadPersistenceXmlFile() throws Exception {
-        include("s2hibernate-jpa.dicon");
+        include(getClass().getName().replace('.', '/') + ".dicon");
     }
 
     public void testReadPersistenceXmlFile() throws Exception {
@@ -53,8 +53,8 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpAddMappingFile() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/test1.txt");
-        include("s2hibernate-jpa.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test1.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
     }
 
     public void testAddMappingFile() throws Exception {
@@ -67,8 +67,8 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpAddPersistenceClass() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/test2.txt");
-        include("s2hibernate-jpa.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test2.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
     }
 
     public void testAddPersistenceClass() throws Exception {
@@ -81,8 +81,8 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpMappingFileAutoDetection() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/test3.txt");
-        include("s2hibernate-jpa.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test3.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
     }
 
     public void testMappingFileAutoDetection() throws Exception {
@@ -96,8 +96,8 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpPersistenceClassAutoDetection() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/test4.txt");
-        include("s2hibernate-jpa.dicon");
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test4.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
     }
 
     public void testPersistenceClassAutoDetection() throws Exception {

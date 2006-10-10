@@ -2,11 +2,9 @@
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
-
 	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl">
-		<initMethod name="addMappingFile">
-			<arg>"org/seasar/hibernate/jpa/entity/hogeOrm.xml"</arg>
+		<initMethod name="addPersistenceClass">
+			<arg>@org.seasar.hibernate.jpa.entity.Department2@class</arg>
 		</initMethod>
 	</component>
-
 </components>

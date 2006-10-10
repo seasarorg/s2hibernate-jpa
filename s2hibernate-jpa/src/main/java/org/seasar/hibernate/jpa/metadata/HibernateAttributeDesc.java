@@ -34,7 +34,7 @@ import org.hibernate.type.CollectionType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
-import org.seasar.framework.jpa.AttributeDesc;
+import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
@@ -219,16 +219,10 @@ public class HibernateAttributeDesc implements AttributeDesc {
         return selectable[index];
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#getName()
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#getType()
-     */
     public Class<?> getType() {
         return type;
     }
@@ -237,51 +231,30 @@ public class HibernateAttributeDesc implements AttributeDesc {
         return elementType;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#getSqlType()
-     */
     public int getSqlType() {
         return sqlType;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#getTemporalType()
-     */
     public TemporalType getTemporalType() {
         return temporalType;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#isId()
-     */
     public boolean isId() {
         return id;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#isAssociation()
-     */
     public boolean isAssociation() {
         return association;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#isCollection()
-     */
     public boolean isCollection() {
         return collection;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#isCollection()
-     */
     public boolean isComponent() {
         return component;
     }
 
-    /**
-     * @see org.seasar.framework.jpa.AttributeDesc#isVersion()
-     */
     public boolean isVersion() {
         return version;
     }
@@ -450,7 +423,7 @@ public class HibernateAttributeDesc implements AttributeDesc {
                 case Types.FLOAT:
                     return e.ordinal();
                 }
-                return e.name();                
+                return e.name();
             }
         }
         return value;

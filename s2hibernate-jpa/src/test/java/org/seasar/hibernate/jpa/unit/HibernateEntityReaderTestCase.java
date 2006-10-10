@@ -39,8 +39,8 @@ public abstract class HibernateEntityReaderTestCase extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("s2hibernate-jpa.dicon");
-        getContainer().getDescendant("s2hibernate-jpa.dicon").register(cfg);
+        include("entityManager.dicon");
+        getContainer().getDescendant("entityManager.dicon").register(cfg);
     }
 
     protected void addAnnotatedClasses(Class<?>... classes) {

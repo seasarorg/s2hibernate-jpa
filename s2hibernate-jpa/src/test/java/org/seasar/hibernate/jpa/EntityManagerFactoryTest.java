@@ -27,12 +27,10 @@ public class EntityManagerFactoryTest extends S2TestCase {
 
     private EntityManagerFactory emf;
 
-    /*
-     * @see TestCase#setUp()
-     */
+    @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
-        include("s2hibernate-jpa.dicon");
+        include("entityManager.dicon");
     }
 
     public void testLookup() throws Exception {

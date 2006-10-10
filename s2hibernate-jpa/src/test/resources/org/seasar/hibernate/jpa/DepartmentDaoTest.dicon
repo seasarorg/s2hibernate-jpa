@@ -3,7 +3,7 @@
 	"http://www.seasar.org/dtd/components24.dtd">
 <components>
 	<include path="javaee5.dicon"/>
-	<include path="s2hibernate-jpa.dicon"/>
+	<include path="entityManager.dicon"/>
 
 	<component name="dao" class="org.seasar.hibernate.jpa.DepartmentDaoImpl"/>
 </components>

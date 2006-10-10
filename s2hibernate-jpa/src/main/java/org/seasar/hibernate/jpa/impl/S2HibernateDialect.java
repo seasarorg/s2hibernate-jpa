@@ -20,13 +20,31 @@ import java.sql.Connection;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
+import org.seasar.framework.container.annotation.tiger.Binding;
+import org.seasar.framework.container.annotation.tiger.BindingType;
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.Dialect;
+import org.seasar.framework.jpa.DialectManager;
 
 /**
  * 
  * @author koichik
  */
 public class S2HibernateDialect implements Dialect {
+
+    @Binding(bindingType = BindingType.MUST)
+    protected DialectManager dialectManager;
+
+    @InitMethod
+    public void initialize() {
+        dialectManager.addDialect(Session.class, this);
+    }
+
+    @DestroyMethod
+    public void destroy() {
+        dialectManager.removeDialect(Session.class);
+    }
 
     public Connection getConnection(final EntityManager em) {
         final Session session = Session.class.cast(em.getDelegate());
