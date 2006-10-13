@@ -112,8 +112,8 @@
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-annotations</artifactId>
-      <version>3.2.0.cr2</version>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>3.2.0.cr3</version>
       <type>jar</type>
       <exclusions>
         <exclusion>
@@ -137,18 +137,6 @@
             <artifactId>asm-attrs</artifactId> 
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>3.2.0.cr2</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>jboss-archive-browsing</artifactId>
-      <version>5.0.0alpha</version>
-      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>hsqldb</groupId>

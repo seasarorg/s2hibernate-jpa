@@ -13,9 +13,9 @@
 	<classpathentry exported="true" kind="lib" path="lib/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ehcache-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence-3.0.jar"/>
-	<classpathentry exported="true" sourcepath="libsrc/hibernate-3.2.0.cr4-sources.jar" kind="lib" path="lib/hibernate-3.2.0.cr4.jar"/>
-	<classpathentry exported="true" sourcepath="libsrc/hibernate-annotations-3.2.0.cr2-sources.jar" kind="lib" path="lib/hibernate-annotations-3.2.0.cr2.jar"/>
-	<classpathentry exported="true" sourcepath="libsrc/hibernate-entitymanager-3.2.0.cr2-sources.jar" kind="lib" path="lib/hibernate-entitymanager-3.2.0.cr2.jar"/>
+	<classpathentry exported="true" sourcepath="libsrc/hibernate-3.2.0.cr5-sources.jar" kind="lib" path="lib/hibernate-3.2.0.cr5.jar"/>
+	<classpathentry exported="true" sourcepath="libsrc/hibernate-annotations-3.2.0.cr3-sources.jar" kind="lib" path="lib/hibernate-annotations-3.2.0.cr3.jar"/>
+	<classpathentry exported="true" sourcepath="libsrc/hibernate-entitymanager-3.2.0.cr3-sources.jar" kind="lib" path="lib/hibernate-entitymanager-3.2.0.cr3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jboss-archive-browsing-5.0.0alpha.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/lucene-1.4.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
