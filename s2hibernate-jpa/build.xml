@@ -1,5 +1,5 @@
 <project name="s2hibernate-jpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0-beta-2-SNAPSHOT"/>
+	<property name="ver" value="1.0.0-RC1-SNAPSHOT"/>
 
 	<target name="dist">
 		<zip zipfile="target/S2Hibernate-JPA-${ver}.zip">
@@ -12,7 +12,7 @@
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/resources" dir="src/test/resources">
 				<include name="jdbc.dicon"/>
-				<include name="s2hibernate-jpa.dicon"/>
+				<include name="entityManager.dicon"/>
 				<include name="log4j.properties"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/resources/META-INF" dir="src/test/resources/META-INF">

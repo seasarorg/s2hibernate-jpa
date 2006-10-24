@@ -8,7 +8,7 @@
   <artifactId>s2hibernate-jpa</artifactId>
   <packaging>jar</packaging>
   <name>S2Hibernate-JPA Project</name>
-  <version>1.0.0-beta-2-SNAPSHOT</version>
+  <version>1.0.0-rc1-SNAPSHOT</version>
   <description></description>
   <url>http://s2hibernate.seasar.org/</url>
   <issueManagement>
@@ -90,11 +90,6 @@
       <name>The Seasar Foundation Maven2 Repository</name>
       <url>http://maven.seasar.org/maven2</url>
     </repository>
-    <repository>
-      <id>local</id>
-      <name>The Seasar Foundation Maven2 local Repository</name>
-      <url>file:repo</url>
-    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -113,7 +108,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
-      <version>3.2.0.cr3</version>
+      <version>3.2.0.ga</version>
       <type>jar</type>
       <exclusions>
         <exclusion>
