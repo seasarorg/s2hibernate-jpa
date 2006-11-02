@@ -116,6 +116,7 @@ public class IdClassTest extends HibernateEntityReaderTestCase {
 
         DataRow row = table.getRow(0);
         assertEquals(new BigDecimal(50.5d), row.getValue("longitude"));
-        assertEquals(new BigDecimal(40.8d), row.getValue("latitude"));
+        assertEquals(0, new BigDecimal("40.8").compareTo(BigDecimal.class
+                .cast(row.getValue("latitude"))));
     }
 }

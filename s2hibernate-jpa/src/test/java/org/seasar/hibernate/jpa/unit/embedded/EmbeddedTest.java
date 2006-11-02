@@ -111,7 +111,8 @@ public class EmbeddedTest extends HibernateEntityReaderTestCase {
         DataRow row = table.getRow(0);
         assertEquals(new BigDecimal(10), row.getValue("id"));
         assertEquals(new BigDecimal(0), row.getValue("paymentFrequency"));
-        assertEquals(new BigDecimal(5.1d), row.getValue("rate"));
+        assertEquals(0, new BigDecimal("5.1").compareTo(BigDecimal.class
+                .cast(row.getValue("rate"))));
     }
 
     public void testEmbeddedInSecdondaryTable() throws Exception {
