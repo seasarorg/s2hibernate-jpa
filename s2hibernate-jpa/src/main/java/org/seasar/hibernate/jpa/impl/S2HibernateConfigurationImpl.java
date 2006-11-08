@@ -15,15 +15,14 @@
  */
 package org.seasar.hibernate.jpa.impl;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
-import org.seasar.framework.log.Logger;
+import org.seasar.framework.autodetector.ClassAutoDetector.ClassHandler;
+import org.seasar.framework.autodetector.ResourceAutoDetector.ResourceHandler;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
@@ -32,13 +31,7 @@ import org.seasar.hibernate.jpa.S2HibernateConfiguration;
  */
 public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
 
-    protected static final Logger logger = Logger
-            .getLogger(S2HibernateConfigurationImpl.class);
-
     protected Map<String, List<String>> mappingFiles = CollectionsUtil
-            .newHashMap();
-
-    protected Map<String, List<InputStream>> mappingFileStreams = CollectionsUtil
             .newHashMap();
 
     protected Map<String, List<Class<?>>> persistenceClasses = CollectionsUtil
@@ -61,18 +54,6 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
             mappingFiles.put(unitName, new ArrayList<String>());
         }
         mappingFiles.get(unitName).add(fileName);
-    }
-
-    public void addMappingFileStream(final InputStream inputStream) {
-        addMappingFileStream(null, inputStream);
-    }
-
-    public void addMappingFileStream(final String unitName,
-            final InputStream inputStream) {
-        if (!mappingFileStreams.containsKey(unitName)) {
-            mappingFileStreams.put(unitName, new ArrayList<InputStream>());
-        }
-        mappingFileStreams.get(unitName).add(inputStream);
     }
 
     public void addPersistenceClass(final Class<?> clazz) {
@@ -128,89 +109,46 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
         persistenceClassAutoDetectors.get(unitName).add(detector);
     }
 
-    public List<String> getMappingFiles() {
-        return getMappingFiles(null);
+    public void detectMappingFiles(final ResourceHandler visitor) {
+        detectMappingFiles(null, visitor);
     }
 
-    public List<String> getMappingFiles(final String unitName) {
+    public void detectMappingFiles(final String unitName,
+            final ResourceHandler visitor) {
         if (mappingFiles.containsKey(unitName)) {
-            return mappingFiles.get(unitName);
-        }
-        return Collections.emptyList();
-    }
-
-    public List<InputStream> getMappingFileStreams() {
-        return getMappingFileStreams(null);
-    }
-
-    public List<InputStream> getMappingFileStreams(final String unitName) {
-        final List<InputStream> result = CollectionsUtil.newArrayList();
-        if (mappingFileStreams.containsKey(unitName)) {
-            result.addAll(mappingFileStreams.get(unitName));
+            for (final String mappingFile : mappingFiles.get(unitName)) {
+                visitor.processResource(mappingFile, null);
+            }
         }
         if (mappingFileAutoDetectors.containsKey(unitName)) {
-            result.addAll(detectMappingFileStreams(null));
+            for (final ResourceAutoDetector detector : mappingFileAutoDetectors
+                    .get(unitName)) {
+                detector.detect(visitor);
+            }
         }
-        return result;
     }
 
-    public List<Class<?>> getPersistenceClasses() {
-        return getPersistenceClasses(null);
+    public void detectPersistenceClasses(final ClassHandler visitor) {
+        detectPersistenceClasses(null, visitor);
     }
 
-    public List<Class<?>> getPersistenceClasses(final String unitName) {
-        final List<Class<?>> result = CollectionsUtil.newArrayList();
+    public void detectPersistenceClasses(final String unitName,
+            final ClassHandler visitor) {
         if (persistenceClasses.containsKey(unitName)) {
-            result.addAll(persistenceClasses.get(unitName));
+            for (final Class clazz : persistenceClasses.get(unitName)) {
+                visitor.processClass(clazz);
+            }
         }
         if (persistenceClassAutoDetectors.containsKey(unitName)) {
-            result.addAll(detectPersistenceClasses(unitName));
+            for (final ClassAutoDetector detector : persistenceClassAutoDetectors
+                    .get(unitName)) {
+                detector.detect(visitor);
+            }
         }
-        return result;
     }
 
     public boolean isAutoDetection() {
         return autoDetection;
-    }
-
-    protected List<InputStream> detectMappingFileStreams(final String unitName) {
-        final List<InputStream> result = CollectionsUtil.newArrayList();
-        for (final ResourceAutoDetector detector : mappingFileAutoDetectors
-                .get(unitName)) {
-            for (final ResourceAutoDetector.Entry entry : detector.detect()) {
-                if (logger.isDebugEnabled()) {
-                    if (unitName == null) {
-                        logger.log("DHBNJPA0003", new Object[] { entry
-                                .getPath() });
-                    } else {
-                        logger.log("DHBNJPA0004", new Object[] {
-                                entry.getPath(), unitName });
-                    }
-                }
-                result.add(entry.getInputStream());
-            }
-        }
-        return result;
-    }
-
-    protected List<Class<?>> detectPersistenceClasses(final String unitName) {
-        final List<Class<?>> result = CollectionsUtil.newArrayList();
-        for (final ClassAutoDetector detector : persistenceClassAutoDetectors
-                .get(unitName)) {
-            for (final Class clazz : detector.detect()) {
-                if (logger.isDebugEnabled()) {
-                    if (unitName == null) {
-                        logger.log("DHBNJPA0001", new Object[] { clazz
-                                .getName() });
-                    } else {
-                        logger.log("DHBNJPA0002", new Object[] {
-                                clazz.getName(), unitName });
-                    }
-                }
-                result.add(clazz);
-            }
-        }
-        return result;
     }
 
 }

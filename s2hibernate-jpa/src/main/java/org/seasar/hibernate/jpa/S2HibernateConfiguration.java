@@ -15,8 +15,8 @@
  */
 package org.seasar.hibernate.jpa;
 
-import java.io.InputStream;
-import java.util.List;
+import org.seasar.framework.autodetector.ClassAutoDetector.ClassHandler;
+import org.seasar.framework.autodetector.ResourceAutoDetector.ResourceHandler;
 
 /**
  * @author taedium
@@ -27,26 +27,17 @@ public interface S2HibernateConfiguration {
 
     void addMappingFile(final String unitName, final String fileName);
 
-    void addMappingFileStream(final InputStream inputStream);
-
-    void addMappingFileStream(final String unitName,
-            final InputStream inputStream);
-
     void addPersistenceClass(final Class<?> clazz);
 
     void addPersistenceClass(final String unitName, final Class<?> clazz);
 
-    List<String> getMappingFiles();
+    void detectMappingFiles(ResourceHandler visitor);
 
-    List<String> getMappingFiles(final String unitName);
+    void detectMappingFiles(final String unitName, ResourceHandler visitor);
 
-    List<InputStream> getMappingFileStreams();
+    void detectPersistenceClasses(ClassHandler visitor);
 
-    List<InputStream> getMappingFileStreams(final String unitName);
-
-    List<Class<?>> getPersistenceClasses();
-
-    List<Class<?>> getPersistenceClasses(final String unitName);
+    void detectPersistenceClasses(final String unitName, ClassHandler visitor);
 
     boolean isAutoDetection();
 
