@@ -83,10 +83,13 @@ public class S2HibernatePersistenceUnitProvider implements
             final Ejb3Configuration ejb3Cfg) {
         final ResourceHandler visitor = new ResourceHandler() {
             public void processResource(final String path, final InputStream is) {
-                if (unitName == null) {
-                    logger.log("DHBNJPA0003", new Object[] { path });
-                } else {
-                    logger.log("DHBNJPA0004", new Object[] { path, unitName });
+                if (logger.isDebugEnabled()) {
+                    if (unitName == null) {
+                        logger.log("DHBNJPA0003", new Object[] { path });
+                    } else {
+                        logger.log("DHBNJPA0004",
+                                new Object[] { path, unitName });
+                    }
                 }
                 if (is != null) {
                     ejb3Cfg.addInputStream(is);
@@ -96,7 +99,7 @@ public class S2HibernatePersistenceUnitProvider implements
             }
         };
         s2HibernateCfg.detectMappingFiles(visitor);
-        if (StringUtil.isEmpty(unitName)) {
+        if (!StringUtil.isEmpty(unitName)) {
             s2HibernateCfg.detectMappingFiles(unitName, visitor);
         }
     }
@@ -118,7 +121,7 @@ public class S2HibernatePersistenceUnitProvider implements
             }
         };
         s2HibernateCfg.detectPersistenceClasses(visitor);
-        if (StringUtil.isEmpty(unitName)) {
+        if (!StringUtil.isEmpty(unitName)) {
             s2HibernateCfg.detectPersistenceClasses(unitName, visitor);
         }
     }
