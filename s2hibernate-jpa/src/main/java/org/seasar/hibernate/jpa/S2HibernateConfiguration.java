@@ -15,8 +15,8 @@
  */
 package org.seasar.hibernate.jpa;
 
-import org.seasar.framework.autodetector.ClassAutoDetector.ClassHandler;
-import org.seasar.framework.autodetector.ResourceAutoDetector.ResourceHandler;
+import org.seasar.framework.util.ClassTraversal.ClassHandler;
+import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 
 /**
  * @author taedium
@@ -31,11 +31,11 @@ public interface S2HibernateConfiguration {
 
     void addPersistenceClass(final String unitName, final Class<?> clazz);
 
-    void detectMappingFiles(ResourceHandler visitor);
+    void detectMappingFiles(ResourceHandler handler);
 
-    void detectMappingFiles(final String unitName, ResourceHandler visitor);
+    void detectMappingFiles(final String unitName, ResourceHandler handler);
 
-    void detectPersistenceClasses(ClassHandler visitor);
+    void detectPersistenceClasses(ClassHandler handler);
 
     void detectPersistenceClasses(final String unitName, ClassHandler visitor);
 

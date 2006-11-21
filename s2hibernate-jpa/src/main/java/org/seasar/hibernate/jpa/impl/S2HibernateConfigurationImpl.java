@@ -21,8 +21,9 @@ import java.util.Map;
 
 import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
-import org.seasar.framework.autodetector.ClassAutoDetector.ClassHandler;
-import org.seasar.framework.autodetector.ResourceAutoDetector.ResourceHandler;
+import org.seasar.framework.util.ClassUtil;
+import org.seasar.framework.util.ClassTraversal.ClassHandler;
+import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
@@ -109,21 +110,21 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
         persistenceClassAutoDetectors.get(unitName).add(detector);
     }
 
-    public void detectMappingFiles(final ResourceHandler visitor) {
-        detectMappingFiles(null, visitor);
+    public void detectMappingFiles(final ResourceHandler handler) {
+        detectMappingFiles(null, handler);
     }
 
     public void detectMappingFiles(final String unitName,
-            final ResourceHandler visitor) {
+            final ResourceHandler handler) {
         if (mappingFiles.containsKey(unitName)) {
             for (final String mappingFile : mappingFiles.get(unitName)) {
-                visitor.processResource(mappingFile, null);
+                handler.processResource(mappingFile, null);
             }
         }
         if (mappingFileAutoDetectors.containsKey(unitName)) {
             for (final ResourceAutoDetector detector : mappingFileAutoDetectors
                     .get(unitName)) {
-                detector.detect(visitor);
+                detector.detect(handler);
             }
         }
     }
@@ -133,16 +134,17 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
     }
 
     public void detectPersistenceClasses(final String unitName,
-            final ClassHandler visitor) {
+            final ClassHandler handler) {
         if (persistenceClasses.containsKey(unitName)) {
             for (final Class clazz : persistenceClasses.get(unitName)) {
-                visitor.processClass(clazz);
+                handler.processClass(ClassUtil.getPackageName(clazz), ClassUtil
+                        .getShortClassName(clazz));
             }
         }
         if (persistenceClassAutoDetectors.containsKey(unitName)) {
             for (final ClassAutoDetector detector : persistenceClassAutoDetectors
                     .get(unitName)) {
-                detector.detect(visitor);
+                detector.detect(handler);
             }
         }
     }

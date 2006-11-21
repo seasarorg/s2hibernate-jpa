@@ -23,14 +23,16 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.ejb.Ejb3Configuration;
 import org.hibernate.ejb.HibernatePersistence;
-import org.seasar.framework.autodetector.ClassAutoDetector.ClassHandler;
-import org.seasar.framework.autodetector.ResourceAutoDetector.ResourceHandler;
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
 import org.seasar.framework.log.Logger;
+import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.StringUtil;
+import org.seasar.framework.util.ClassTraversal.ClassHandler;
+import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
 /**
@@ -81,7 +83,7 @@ public class S2HibernatePersistenceUnitProvider implements
 
     protected void addMappingFiles(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
-        final ResourceHandler visitor = new ResourceHandler() {
+        final ResourceHandler handler = new ResourceHandler() {
             public void processResource(final String path, final InputStream is) {
                 if (logger.isDebugEnabled()) {
                     if (unitName == null) {
@@ -98,31 +100,34 @@ public class S2HibernatePersistenceUnitProvider implements
                 }
             }
         };
-        s2HibernateCfg.detectMappingFiles(visitor);
+        s2HibernateCfg.detectMappingFiles(handler);
         if (!StringUtil.isEmpty(unitName)) {
-            s2HibernateCfg.detectMappingFiles(unitName, visitor);
+            s2HibernateCfg.detectMappingFiles(unitName, handler);
         }
     }
 
     protected void addAnnotatedClasses(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
-        final ClassHandler visitor = new ClassHandler() {
-            public void processClass(final Class clazz) {
+        final ClassHandler handler = new ClassHandler() {
+            public void processClass(final String packageName,
+                    final String shortClassName) {
+                final String className = ClassUtil.concatName(packageName,
+                        shortClassName);
+                Class clazz = ReflectionUtil.forNameNoException(className);
                 if (logger.isDebugEnabled()) {
                     if (unitName == null) {
-                        logger.log("DHBNJPA0001", new Object[] { clazz
-                                .getName() });
+                        logger.log("DHBNJPA0001", new Object[] { className });
                     } else {
-                        logger.log("DHBNJPA0002", new Object[] {
-                                clazz.getName(), unitName });
+                        logger.log("DHBNJPA0002", new Object[] { className,
+                                unitName });
                     }
                 }
                 ejb3Cfg.addAnnotatedClass(clazz);
             }
         };
-        s2HibernateCfg.detectPersistenceClasses(visitor);
+        s2HibernateCfg.detectPersistenceClasses(handler);
         if (!StringUtil.isEmpty(unitName)) {
-            s2HibernateCfg.detectPersistenceClasses(unitName, visitor);
+            s2HibernateCfg.detectPersistenceClasses(unitName, handler);
         }
     }
 
