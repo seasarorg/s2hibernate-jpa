@@ -39,6 +39,30 @@
       <archive>http://ml.seasar.org/archives/seasar-user-en/</archive>
     </mailingList>
   </mailingLists>
+  <developers>
+    <developer>
+      <id>higa</id>
+      <name>HIGA Yasuo</name>
+      <email>higa_at_isid.co.jp</email>
+      <url>http://d.hatena.ne.jp/higayasuo/</url>
+      <organization></organization>
+      <timezone>+9</timezone>
+    </developer>
+    <developer>
+      <id>koichik</id>
+      <name>KOBAYASHI Koichi</name>
+      <email></email>
+      <url>http://d.hatena.ne.jp/koichik/</url>
+      <timezone>+9</timezone>
+    </developer>
+    <developer>
+      <id>taedium</id>
+      <name>NAKAMURA Toshihiro</name>
+      <email></email>
+      <url>http://d.hatena.ne.jp/taedium/</url>
+      <timezone>+9</timezone>
+    </developer>
+  </developers>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -95,7 +119,7 @@
     <dependency>
       <groupId>org.seasar.container</groupId>
       <artifactId>s2-tiger</artifactId>
-      <version>2.4.4</version>
+      <version>2.4.5-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
