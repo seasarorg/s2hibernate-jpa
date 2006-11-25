@@ -28,6 +28,8 @@ import org.hibernate.annotations.Parent;
 @Embeddable
 public class Summary implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private int size;
 
     private String text;

@@ -32,6 +32,9 @@ import javax.persistence.SecondaryTable;
         @PrimaryKeyJoinColumn(name = "dt_name", referencedColumnName = "name"),
         @PrimaryKeyJoinColumn(name = "dt_ownerName", referencedColumnName = "ownerName") })
 public class Dog implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     private DogPk id;
 

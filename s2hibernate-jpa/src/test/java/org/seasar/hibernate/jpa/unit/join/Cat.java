@@ -27,6 +27,8 @@ import javax.persistence.Id;
 @Entity
 public class Cat implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

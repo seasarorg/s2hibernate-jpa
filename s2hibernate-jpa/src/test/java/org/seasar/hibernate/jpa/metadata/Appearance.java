@@ -26,6 +26,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Appearance implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private int size;
 
     private String color;

@@ -31,6 +31,8 @@ import javax.persistence.OrderBy;
 @Entity
 public class Department implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private int id;
 

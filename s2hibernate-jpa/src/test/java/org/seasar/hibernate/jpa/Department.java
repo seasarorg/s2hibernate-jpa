@@ -35,6 +35,7 @@ public class Department implements Serializable {
 
     private String loc;
 
+    @SuppressWarnings("unused")
     @Version
     private int versionNo;
 
@@ -90,6 +91,7 @@ public class Department implements Serializable {
         this.employees = employees;
     }
 
+    @Override
     public boolean equals(Object other) {
         if (!(other instanceof Department))
             return false;
@@ -97,6 +99,7 @@ public class Department implements Serializable {
         return this.getDeptno() == castOther.getDeptno();
     }
 
+    @Override
     public int hashCode() {
         return this.getDeptno();
     }

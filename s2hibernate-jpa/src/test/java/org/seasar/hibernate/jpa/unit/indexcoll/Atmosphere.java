@@ -31,7 +31,9 @@ import org.hibernate.annotations.MapKey;
  * @author taedium
  */
 @Entity
-public class Atmosphere implements Serializable{
+public class Atmosphere implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     private Integer id;

@@ -26,6 +26,9 @@ import javax.persistence.Id;
  */
 @Entity
 public class Presenter implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     private String name;
 

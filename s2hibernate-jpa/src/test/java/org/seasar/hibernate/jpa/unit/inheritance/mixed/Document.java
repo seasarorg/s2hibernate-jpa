@@ -29,7 +29,9 @@ import javax.persistence.SecondaryTable;
 @SecondaryTable(name = "DocumentMixed")
 public class Document extends File {
 
-    @Column(table="DocumentMixed")
+    private static final long serialVersionUID = 1L;
+
+    @Column(table = "DocumentMixed")
     private int size;
 
     public int getSize() {

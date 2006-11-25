@@ -30,6 +30,8 @@ import org.hibernate.annotations.IndexColumn;
 @Entity
 public class Contest implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private int id;
 

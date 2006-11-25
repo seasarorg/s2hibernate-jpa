@@ -27,6 +27,8 @@ import javax.persistence.ManyToOne;
 @Embeddable
 public class ChildPk implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public int nthChild;
 
     @ManyToOne

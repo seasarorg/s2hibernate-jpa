@@ -26,6 +26,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "clothing_id")
 public class Sweater extends Clothing {
 
+    private static final long serialVersionUID = 1L;
+
     private boolean sweat;
 
     public boolean isSweat() {

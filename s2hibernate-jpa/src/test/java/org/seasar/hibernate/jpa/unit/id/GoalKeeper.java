@@ -26,4 +26,6 @@ import javax.persistence.Entity;
 @Entity
 public class GoalKeeper extends Footballer implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
 }

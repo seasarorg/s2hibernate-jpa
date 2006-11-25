@@ -29,6 +29,8 @@ import javax.persistence.IdClass;
 @IdClass(PaintingPk.class)
 public class Painting implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private String name;
 

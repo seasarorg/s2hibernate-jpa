@@ -29,6 +29,9 @@ import javax.persistence.TemporalType;
  */
 @Entity
 public class TvMagazin implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @EmbeddedId
     private TvMagazinPk id;
 

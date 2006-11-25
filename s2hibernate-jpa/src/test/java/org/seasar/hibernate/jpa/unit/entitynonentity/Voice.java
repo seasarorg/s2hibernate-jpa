@@ -28,6 +28,8 @@ import javax.persistence.InheritanceType;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Voice extends Communication {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

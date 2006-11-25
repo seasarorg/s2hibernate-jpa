@@ -25,6 +25,8 @@ import java.util.Currency;
  */
 public class ManetaryAmount implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private BigDecimal amount;
 
     private Currency currency;

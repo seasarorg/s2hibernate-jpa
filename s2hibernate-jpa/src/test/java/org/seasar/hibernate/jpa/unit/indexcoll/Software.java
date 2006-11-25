@@ -31,6 +31,8 @@ import javax.persistence.OneToMany;
 @Entity
 public class Software implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private String name;
 

@@ -24,6 +24,8 @@ import javax.persistence.Entity;
 @Entity
 public class Document extends File {
 
+    private static final long serialVersionUID = 1L;
+
     private int size;
 
     public int getSize() {

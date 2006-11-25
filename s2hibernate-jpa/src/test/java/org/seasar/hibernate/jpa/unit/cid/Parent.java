@@ -26,6 +26,9 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Parent implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @EmbeddedId
     private ParentPk id;
 

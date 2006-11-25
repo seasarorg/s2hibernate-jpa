@@ -25,4 +25,7 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("4")
 public class PaperTrash extends Trash {
+
+    private static final long serialVersionUID = 1L;
+
 }

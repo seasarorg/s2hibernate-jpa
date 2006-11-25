@@ -32,6 +32,8 @@ import javax.persistence.SecondaryTable;
 @SecondaryTable(name = "BookSummary")
 public class Book implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

@@ -21,6 +21,8 @@ package org.seasar.hibernate.jpa.unit.entitynonentity;
  */
 public class Communication extends Interaction {
 
+    private static final long serialVersionUID = 1L;
+
     private String species;
 
     public String getSpecies() {

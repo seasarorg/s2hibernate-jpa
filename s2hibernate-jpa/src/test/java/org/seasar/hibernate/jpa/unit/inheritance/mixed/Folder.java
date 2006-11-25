@@ -30,6 +30,8 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("F")
 public class Folder extends File {
 
+    private static final long serialVersionUID = 1L;
+
     @OneToMany(mappedBy = "parent")
     private Set<File> children = new HashSet<File>();
 

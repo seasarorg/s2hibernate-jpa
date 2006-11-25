@@ -24,4 +24,6 @@ import javax.persistence.Entity;
 @Entity
 public class Banana extends Fruit {
 
+    private static final long serialVersionUID = 1L;
+
 }

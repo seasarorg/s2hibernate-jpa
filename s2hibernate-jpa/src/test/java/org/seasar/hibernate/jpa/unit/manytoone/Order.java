@@ -30,6 +30,8 @@ import javax.persistence.OneToMany;
 @Entity(name = "Orders")
 public class Order implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 
@@ -52,6 +54,14 @@ public class Order implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public Collection<OrderLine> getOrderLines() {
+        return orderLines;
+    }
+
+    public void setOrderLines(Collection<OrderLine> orderLines) {
+        this.orderLines = orderLines;
     }
 
 }

@@ -30,6 +30,8 @@ import javax.persistence.ManyToMany;
 @Entity
 public class KnownClient implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

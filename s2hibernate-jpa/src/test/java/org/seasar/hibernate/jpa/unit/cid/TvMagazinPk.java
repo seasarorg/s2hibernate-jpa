@@ -26,6 +26,9 @@ import javax.persistence.ManyToOne;
  */
 @Embeddable
 public class TvMagazinPk implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @ManyToOne
     private Channel channel;
 

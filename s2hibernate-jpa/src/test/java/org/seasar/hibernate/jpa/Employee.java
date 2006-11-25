@@ -132,6 +132,7 @@ public class Employee implements Serializable {
         this.tstamp = tstamp;
     }
 
+    @Override
     public boolean equals(Object other) {
         if (!(other instanceof Employee))
             return false;
@@ -139,6 +140,7 @@ public class Employee implements Serializable {
         return this.getEmpno() == castOther.getEmpno();
     }
 
+    @Override
     public int hashCode() {
         return (int) this.getEmpno();
     }

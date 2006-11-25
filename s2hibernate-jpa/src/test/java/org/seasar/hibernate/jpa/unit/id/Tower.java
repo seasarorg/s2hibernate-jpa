@@ -25,4 +25,7 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Tower extends MilitaryBuilding implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
 }

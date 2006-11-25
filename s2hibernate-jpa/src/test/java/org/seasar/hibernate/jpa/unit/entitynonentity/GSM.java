@@ -24,6 +24,8 @@ import javax.persistence.Entity;
 @Entity
 public class GSM extends Cellular {
 
+    private static final long serialVersionUID = 1L;
+
     private int frequency;
 
     public int getFrequency() {

@@ -23,6 +23,8 @@ import java.io.Serializable;
  */
 public class Location implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private double longitude;
 
     private double latitude;

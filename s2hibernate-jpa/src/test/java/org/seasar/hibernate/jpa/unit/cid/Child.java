@@ -27,6 +27,8 @@ import javax.persistence.Entity;
 @Entity
 public class Child implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @EmbeddedId
     private ChildPk id;
 

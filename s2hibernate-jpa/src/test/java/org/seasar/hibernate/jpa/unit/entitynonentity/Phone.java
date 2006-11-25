@@ -24,6 +24,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Phone extends Voice {
 
+    private static final long serialVersionUID = 1L;
+
     private boolean numeric;
 
     public boolean isNumeric() {

@@ -27,6 +27,8 @@ import javax.persistence.Id;
 @Entity
 public class SerialNumber implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private SerialNumberPk id;
 

@@ -31,6 +31,9 @@ import javax.persistence.SecondaryTable;
 @Entity
 @SecondaryTable(name = "ExtendedLife")
 public class Life implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

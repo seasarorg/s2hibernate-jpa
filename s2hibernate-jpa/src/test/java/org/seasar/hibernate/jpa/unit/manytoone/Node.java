@@ -28,6 +28,8 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Node implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

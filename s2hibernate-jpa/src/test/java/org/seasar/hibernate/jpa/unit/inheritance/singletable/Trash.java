@@ -32,6 +32,8 @@ import javax.persistence.Id;
 @DiscriminatorValue("2")
 public class Trash implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

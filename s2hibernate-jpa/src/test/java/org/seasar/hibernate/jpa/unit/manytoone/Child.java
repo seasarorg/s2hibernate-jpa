@@ -30,6 +30,8 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Child implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private Integer id;
 

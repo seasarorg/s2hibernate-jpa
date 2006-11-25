@@ -29,6 +29,8 @@ import javax.persistence.PrimaryKeyJoinColumns;
         @PrimaryKeyJoinColumn(name = "vc_code", referencedColumnName = "code") })
 public class ValuedCustomer extends Customer {
 
+    private static final long serialVersionUID = 1L;
+
     private int rank;
 
     public int getRank() {

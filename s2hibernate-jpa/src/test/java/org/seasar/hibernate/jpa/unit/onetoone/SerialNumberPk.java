@@ -26,6 +26,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class SerialNumberPk implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private String brand;
 
     private String model;

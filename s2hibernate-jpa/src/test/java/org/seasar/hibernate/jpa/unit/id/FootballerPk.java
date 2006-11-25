@@ -27,6 +27,9 @@ import org.seasar.hibernate.jpa.unit.cid.ParentPk;
  */
 @Embeddable
 public class FootballerPk implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String firstName;
 
     private String lastName;

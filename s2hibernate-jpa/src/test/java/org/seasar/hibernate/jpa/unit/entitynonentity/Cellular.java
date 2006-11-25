@@ -21,6 +21,8 @@ package org.seasar.hibernate.jpa.unit.entitynonentity;
  */
 public class Cellular extends Phone {
 
+    private static final long serialVersionUID = 1L;
+
     private String brand;
 
     public String getBrand() {
