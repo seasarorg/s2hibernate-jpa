@@ -47,8 +47,7 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
         if (entity == null) {
             return null;
         }
-        final HibernateEntityDesc<?> entityDesc = getEntityDesc(entity
-                .getClass());
+        final HibernateEntityDesc entityDesc = getEntityDesc(entity.getClass());
         if (entityDesc == null) {
             return null;
         }
@@ -65,14 +64,14 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
             return null;
         }
 
-        final Map<Class<?>, HibernateEntityDesc<?>> entityDescs = CollectionsUtil
+        final Map<Class<?>, HibernateEntityDesc> entityDescs = CollectionsUtil
                 .newHashMap();
         for (final Object entity : newEntities) {
             final Class<?> entityClass = entity.getClass();
             if (entityDescs.containsKey(entityClass)) {
                 continue;
             }
-            final HibernateEntityDesc<?> entityDesc = getEntityDesc(entityClass);
+            final HibernateEntityDesc entityDesc = getEntityDesc(entityClass);
             if (entityDescs == null) {
                 return null;
             }
@@ -96,7 +95,7 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
         return newEntities;
     }
 
-    protected HibernateEntityDesc<?> getEntityDesc(final Class<?> entityClass) {
+    protected HibernateEntityDesc getEntityDesc(final Class<?> entityClass) {
         final EntityDesc entityDesc = EntityDescFactory
                 .getEntityDesc(entityClass);
         if (entityDesc == null || !(entityDesc instanceof HibernateEntityDesc)) {

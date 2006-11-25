@@ -36,14 +36,14 @@ import org.seasar.framework.util.tiger.ReflectionUtil;
 /**
  * @author koichik
  */
-public class HibernateEntityDesc<ENTITY> implements EntityDesc {
+public class HibernateEntityDesc implements EntityDesc {
     protected static final Field IMPORTS_FIELD = ClassUtil.getDeclaredField(
             SessionFactoryImpl.class, "imports");
     static {
         IMPORTS_FIELD.setAccessible(true);
     }
 
-    protected final Class<ENTITY> entityClass;
+    protected final Class<?> entityClass;
 
     protected final BeanDesc beanDesc;
 
@@ -70,7 +70,7 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc {
 
     protected final int discriminatorSqlType;
 
-    public HibernateEntityDesc(final Class<ENTITY> entityClass,
+    public HibernateEntityDesc(final Class<?> entityClass,
             final SessionFactoryImplementor sessionFactory) {
         this.entityClass = entityClass;
         this.beanDesc = BeanDescFactory.getBeanDesc(entityClass);
@@ -100,7 +100,7 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc {
         return entityName;
     }
 
-    public Class<ENTITY> getEntityClass() {
+    public Class<?> getEntityClass() {
         return entityClass;
     }
 
@@ -151,9 +151,11 @@ public class HibernateEntityDesc<ENTITY> implements EntityDesc {
         final HibernateAttributeDesc[] attributeDescs = new HibernateAttributeDesc[propertyNames.length + 1];
         attributeDescs[0] = new HibernateAttributeDesc(sessionFactory,
                 metadata, idName, true, false);
+        attributeDescMap.put(idName, attributeDescs[0]);
         for (int i = 0; i < propertyNames.length; ++i) {
             attributeDescs[i + 1] = new HibernateAttributeDesc(sessionFactory,
                     metadata, propertyNames[i], false, i == versionIndex);
+            attributeDescMap.put(propertyNames[i], attributeDescs[i + 1]);
         }
         return attributeDescs;
     }

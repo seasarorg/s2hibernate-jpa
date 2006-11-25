@@ -26,12 +26,12 @@ import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
  */
 public class HibernateEntityCollectionReader extends HibernateEntityReader {
 
-    protected Map<Class<?>, HibernateEntityDesc<?>> entityDescs;
+    protected Map<Class<?>, HibernateEntityDesc> entityDescs;
 
     protected Class<?> processingClass;
 
     public HibernateEntityCollectionReader(final Collection<?> entities,
-            final Map<Class<?>, HibernateEntityDesc<?>> entityDescs) {
+            final Map<Class<?>, HibernateEntityDesc> entityDescs) {
 
         this.entityDescs = entityDescs;
 
@@ -44,7 +44,7 @@ public class HibernateEntityCollectionReader extends HibernateEntityReader {
     }
 
     @Override
-    protected HibernateEntityDesc<?> getEntityDesc() {
+    protected HibernateEntityDesc getEntityDesc() {
         return entityDescs.get(processingClass);
     }
 }

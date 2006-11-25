@@ -276,7 +276,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         em.persist(basket);
         em.persist(apple);
 
-        HibernateEntityDesc<Apple> entityDesc = (HibernateEntityDesc<Apple>) EntityDescFactory
+        HibernateEntityDesc entityDesc = (HibernateEntityDesc) EntityDescFactory
                 .getEntityDesc(Apple.class);
         assertNotNull(entityDesc);
         assertEquals("Apple", entityDesc.getEntityName());
@@ -354,7 +354,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         em.persist(root);
         em.persist(folder);
 
-        HibernateEntityDesc<Folder> entityDesc = (HibernateEntityDesc<Folder>) EntityDescFactory
+        HibernateEntityDesc entityDesc = (HibernateEntityDesc) EntityDescFactory
                 .getEntityDesc(Folder.class);
         assertNotNull(entityDesc);
         assertEquals("Folder", entityDesc.getEntityName());
@@ -428,7 +428,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         wardrobe.setId(20);
         wardrobe.getDrawers().add(drawer);
 
-        HibernateEntityDesc<Drawer> entityDesc = (HibernateEntityDesc<Drawer>) EntityDescFactory
+        HibernateEntityDesc entityDesc = (HibernateEntityDesc) EntityDescFactory
                 .getEntityDesc(Drawer.class);
         assertNotNull(entityDesc);
         assertEquals("Drawer", entityDesc.getEntityName());

@@ -31,7 +31,7 @@ import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
  */
 public class HibernateEntityReader implements EntityReader {
 
-    private HibernateEntityDesc<?> entityDesc;
+    private HibernateEntityDesc entityDesc;
 
     protected final DataSet dataSet = new DataSetImpl();
 
@@ -39,7 +39,7 @@ public class HibernateEntityReader implements EntityReader {
     }
 
     public HibernateEntityReader(final Object entity,
-            final HibernateEntityDesc<?> entityDesc) {
+            final HibernateEntityDesc entityDesc) {
 
         this.entityDesc = entityDesc;
         setupColumns();
@@ -157,7 +157,7 @@ public class HibernateEntityReader implements EntityReader {
 
     }
 
-    protected HibernateEntityDesc<?> getEntityDesc() {
+    protected HibernateEntityDesc getEntityDesc() {
         return entityDesc;
     }
 
