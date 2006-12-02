@@ -17,81 +17,22 @@ package org.seasar.hibernate.jpa.transaction;
 
 import java.util.Properties;
 
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.InvalidTransactionException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
 import org.hibernate.HibernateException;
 import org.hibernate.transaction.TransactionManagerLookup;
-import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
+import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 
 public class S2TransactionManagerLookupForTest implements
         TransactionManagerLookup {
 
     public TransactionManager getTransactionManager(final Properties props)
             throws HibernateException {
-        return new TransactionManagerImpl();
+        return new SingletonTransactionManagerProxy();
     }
 
     public String getUserTransactionName() {
         return "jta.UserTransaction";
-    }
-
-    public static class TransactionManagerImpl implements TransactionManager {
-
-        protected TransactionManager getTransactionManager()
-                throws HibernateException {
-            return (TransactionManager) SingletonS2ContainerFactory
-                    .getContainer().getComponent(TransactionManager.class);
-        }
-
-        public void begin() throws NotSupportedException, SystemException {
-            getTransactionManager().begin();
-        }
-
-        public void commit() throws HeuristicMixedException,
-                HeuristicRollbackException, IllegalStateException,
-                RollbackException, SecurityException, SystemException {
-            getTransactionManager().commit();
-        }
-
-        public int getStatus() throws SystemException {
-            return getTransactionManager().getStatus();
-        }
-
-        public Transaction getTransaction() throws SystemException {
-            return getTransactionManager().getTransaction();
-        }
-
-        public void resume(final Transaction tx) throws IllegalStateException,
-                InvalidTransactionException, SystemException {
-            getTransactionManager().resume(tx);
-        }
-
-        public void rollback() throws IllegalStateException, SecurityException,
-                SystemException {
-            getTransactionManager().rollback();
-        }
-
-        public void setRollbackOnly() throws IllegalStateException,
-                SystemException {
-            getTransactionManager().setRollbackOnly();
-        }
-
-        public void setTransactionTimeout(final int timeout)
-                throws SystemException {
-            getTransactionManager().setTransactionTimeout(timeout);
-        }
-
-        public Transaction suspend() throws SystemException {
-            return getTransactionManager().suspend();
-        }
-
     }
 
 }

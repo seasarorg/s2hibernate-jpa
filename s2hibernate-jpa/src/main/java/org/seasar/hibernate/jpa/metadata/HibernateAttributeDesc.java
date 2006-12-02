@@ -35,6 +35,7 @@ import org.hibernate.type.CustomType;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
+import org.seasar.framework.jpa.util.TemporalTypeUtil;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
@@ -107,19 +108,7 @@ public class HibernateAttributeDesc implements AttributeDesc {
         sqlTypes = hibernateType.sqlTypes(factory);
 
         if (type == Date.class || type == Calendar.class) {
-            switch (sqlType) {
-            case Types.DATE:
-                temporalType = TemporalType.DATE;
-                break;
-            case Types.TIME:
-                temporalType = TemporalType.TIME;
-                break;
-            case Types.TIMESTAMP:
-                temporalType = TemporalType.TIMESTAMP;
-                break;
-            default:
-                temporalType = null;
-            }
+            temporalType = TemporalTypeUtil.fromSqlTypeToTemporalType(sqlType);
         } else {
             temporalType = null;
         }
