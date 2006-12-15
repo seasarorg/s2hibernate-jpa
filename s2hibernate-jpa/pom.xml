@@ -167,11 +167,13 @@
           <groupId>org.hibernate</groupId>
           <artifactId>hibernate</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>jboss</groupId>
-          <artifactId>javassist</artifactId>
-        </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.4.ga</version>
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
