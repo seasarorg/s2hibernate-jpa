@@ -44,8 +44,6 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
     protected Map<String, List<ClassAutoDetector>> persistenceClassAutoDetectors = CollectionsUtil
             .newHashMap();
 
-    protected boolean autoDetection;
-
     public void addMappingFile(final String fileName) {
         addMappingFile(null, fileName);
     }
@@ -81,7 +79,6 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
 
     public void addMappingFileAutoDetector(final String unitName,
             final ResourceAutoDetector detector) {
-        autoDetection = true;
         if (!mappingFileAutoDetectors.containsKey(unitName)) {
             mappingFileAutoDetectors.put(unitName,
                     new ArrayList<ResourceAutoDetector>());
@@ -102,7 +99,6 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
 
     public void addPersistenceClassAutoDetector(final String unitName,
             final ClassAutoDetector detector) {
-        autoDetection = true;
         if (!persistenceClassAutoDetectors.containsKey(unitName)) {
             persistenceClassAutoDetectors.put(unitName,
                     new ArrayList<ClassAutoDetector>());
@@ -150,7 +146,8 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
     }
 
     public boolean isAutoDetection() {
-        return autoDetection;
+        return persistenceClassAutoDetectors.size() > 0
+                || mappingFileAutoDetectors.size() > 0;
     }
 
 }
