@@ -11,11 +11,12 @@
 				<include name="s2hibernate-jpa-${ver}.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/resources" dir="src/test/resources">
+				<include name="convention.dicon"/>
 				<include name="jdbc.dicon"/>
-				<include name="entityManager.dicon"/>
+				<include name="jpa.dicon"/>
 				<include name="log4j.properties"/>
 			</zipfileset>
-			<zipfileset prefix="s2hibernate-jpa/resources/META-INF" dir="src/test/resources/META-INF">
+			<zipfileset prefix="s2hibernate-jpa/resources/META-INF" dir="src/test/dist/resources/META-INF">
 				<include name="persistence.xml"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/doc" dir="../s2hibernate-www">
