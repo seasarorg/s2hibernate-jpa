@@ -123,15 +123,14 @@
       <type>jar</type>
     </dependency>
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-j2ee_1.4_spec</artifactId>
-      <version>1.0</version>
+      <groupId>jboss</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.4.ga</version>
       <type>jar</type>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate</artifactId>
+      <artifactId>hibernate-entitymanager</artifactId>
       <version>3.2.1.ga</version>
       <type>jar</type>
       <exclusions>
@@ -158,22 +157,11 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>3.2.0.ga</version>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+      <version>1.0</version>
       <type>jar</type>
-      <exclusions>
-        <exclusion>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>javassist</artifactId>
-      <version>3.4.ga</version>
-      <type>jar</type>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
