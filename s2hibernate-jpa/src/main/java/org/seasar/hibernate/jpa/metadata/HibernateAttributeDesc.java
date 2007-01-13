@@ -45,6 +45,7 @@ import org.seasar.framework.util.tiger.ReflectionUtil;
  * @author koichik
  */
 public class HibernateAttributeDesc implements AttributeDesc {
+
     protected static final Field PROPERTY_SELECTABLE_FIELD = ClassUtil
             .getDeclaredField(AbstractEntityPersister.class,
                     "propertySelectable");
@@ -398,7 +399,7 @@ public class HibernateAttributeDesc implements AttributeDesc {
     protected Object convert(final Type type, final Object value) {
         if (type instanceof CustomType) {
             if (type.getReturnedClass().isEnum()) {
-                final Enum e = Enum.class.cast(value);
+                final Enum<?> e = Enum.class.cast(value);
                 final int[] sqlTypeArray = type.sqlTypes(factory);
 
                 switch (sqlTypeArray[0]) {

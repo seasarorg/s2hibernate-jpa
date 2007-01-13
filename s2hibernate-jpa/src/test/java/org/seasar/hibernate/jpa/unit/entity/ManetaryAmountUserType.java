@@ -60,7 +60,7 @@ public class ManetaryAmountUserType implements CompositeUserType {
         return true;
     }
 
-    public Class returnedClass() {
+    public Class<?> returnedClass() {
         return ManetaryAmount.class;
     }
 

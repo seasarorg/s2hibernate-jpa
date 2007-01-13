@@ -44,7 +44,7 @@ public abstract class HibernateEntityReaderTestCase extends S2TestCase {
     }
 
     protected void addAnnotatedClasses(Class<?>... classes) {
-        for (final Class clazz : classes) {
+        for (final Class<?> clazz : classes) {
             cfg.addPersistenceClass(clazz);
         }
     }

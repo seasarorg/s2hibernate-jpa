@@ -40,6 +40,7 @@ import org.seasar.hibernate.jpa.S2HibernateConfiguration;
  */
 public class S2HibernatePersistenceUnitProvider implements
         PersistenceUnitProvider {
+
     private static final Logger logger = Logger
             .getLogger(S2HibernatePersistenceUnitProvider.class);
 
@@ -84,6 +85,7 @@ public class S2HibernatePersistenceUnitProvider implements
     protected void addMappingFiles(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
         final ResourceHandler handler = new ResourceHandler() {
+
             public void processResource(final String path, final InputStream is) {
                 if (logger.isDebugEnabled()) {
                     if (unitName == null) {
@@ -109,11 +111,12 @@ public class S2HibernatePersistenceUnitProvider implements
     protected void addAnnotatedClasses(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
         final ClassHandler handler = new ClassHandler() {
+
             public void processClass(final String packageName,
                     final String shortClassName) {
                 final String className = ClassUtil.concatName(packageName,
                         shortClassName);
-                Class clazz = ReflectionUtil.forNameNoException(className);
+                Class<?> clazz = ReflectionUtil.forNameNoException(className);
                 if (logger.isDebugEnabled()) {
                     if (unitName == null) {
                         logger.log("DHBNJPA0001", new Object[] { className });

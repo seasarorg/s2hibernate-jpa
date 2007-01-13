@@ -132,7 +132,7 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
     public void detectPersistenceClasses(final String unitName,
             final ClassHandler handler) {
         if (persistenceClasses.containsKey(unitName)) {
-            for (final Class clazz : persistenceClasses.get(unitName)) {
+            for (final Class<?> clazz : persistenceClasses.get(unitName)) {
                 handler.processClass(ClassUtil.getPackageName(clazz), ClassUtil
                         .getShortClassName(clazz));
             }
