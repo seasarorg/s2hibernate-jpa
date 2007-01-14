@@ -32,7 +32,7 @@ public class HibernateEntityReaderProviderTest extends S2TestCase {
 
     @Override
     protected void setUp() throws Exception {
-        include("jpa.dicon");
+        include("jpa-test.dicon");
     }
 
     public void testEntity() throws Exception {

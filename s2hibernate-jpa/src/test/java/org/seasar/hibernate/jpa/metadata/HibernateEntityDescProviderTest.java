@@ -30,7 +30,7 @@ public class HibernateEntityDescProviderTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
-        include("jpa.dicon");
+        include("jpa-test.dicon");
     }
 
     public void testEntity() throws Exception {

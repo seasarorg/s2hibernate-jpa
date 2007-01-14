@@ -33,7 +33,7 @@ public class S2HibernateDialectTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("javaee5.dicon");
-        include("jpa.dicon");
+        include("jpa-test.dicon");
     }
 
     public void testGetConnectionTx() throws Exception {

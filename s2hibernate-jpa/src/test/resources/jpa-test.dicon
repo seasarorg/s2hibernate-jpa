@@ -5,10 +5,12 @@
 	<include path="javaee5.dicon"/>
 
 	<!-- SMART deploy を利用しない場合は以下をコメントアウトしてください -->
+	<!--
 	<include path="convention.dicon"/>
 	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl"/>
 	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector"/>
 	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
+	-->
 	<!-- ここまで SMART deploy 用の設定 -->
 
 	<component class="org.seasar.hibernate.jpa.impl.S2HibernatePersistenceUnitProvider"/>

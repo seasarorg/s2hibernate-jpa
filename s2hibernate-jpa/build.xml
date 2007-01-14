@@ -14,9 +14,7 @@
 				<include name="s2hibernate-jpa-${ver}-sources.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/resources" dir="src/test/resources">
-				<include name="jdbc.dicon"/>
 				<include name="jpa.dicon"/>
-				<include name="log4j.properties"/>
 			</zipfileset>
 			<zipfileset prefix="s2hibernate-jpa/resources/META-INF" dir="src/test/dist/resources/META-INF">
 				<include name="persistence.xml"/>

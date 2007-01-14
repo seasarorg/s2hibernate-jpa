@@ -44,7 +44,7 @@ public class HibernateEntityDescTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
-        include("jpa.dicon");
+        include("jpa-test.dicon");
     }
 
     public void testDepartment() throws Exception {
@@ -261,7 +261,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         cfg.addPersistenceClass(Fruit.class);
         cfg.addPersistenceClass(Apple.class);
         cfg.addPersistenceClass(Basket.class);
-        getContainer().getDescendant("jpa.dicon").register(cfg);
+        getContainer().getDescendant("jpa-test.dicon").register(cfg);
     }
 
     public void testSingleTableInheritanceTx() throws Exception {
@@ -342,7 +342,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(File.class);
         cfg.addPersistenceClass(Folder.class);
-        getContainer().getDescendant("jpa.dicon").register(cfg);
+        getContainer().getDescendant("jpa-test.dicon").register(cfg);
     }
 
     public void testJoinedTableInheritanceTx() throws Exception {
@@ -418,7 +418,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
         cfg.addPersistenceClass(Wardrobe.class);
         cfg.addPersistenceClass(Drawer.class);
-        getContainer().getDescendant("jpa.dicon").register(cfg);
+        getContainer().getDescendant("jpa-test.dicon").register(cfg);
     }
 
     public void testIndexColumnTx() throws Exception {
