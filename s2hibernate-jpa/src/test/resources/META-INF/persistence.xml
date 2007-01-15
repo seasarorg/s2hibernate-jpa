@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence>
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>jdbc/DataSource</jta-data-source>
+		<jta-data-source>jdbc/dataSource</jta-data-source>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>org.seasar.hibernate.jpa.Department</class>
 		<class>org.seasar.hibernate.jpa.Employee</class>
