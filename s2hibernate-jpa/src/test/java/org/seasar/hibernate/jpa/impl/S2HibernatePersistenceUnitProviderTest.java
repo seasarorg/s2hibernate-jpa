@@ -35,11 +35,6 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
 
     private EntityManager em;
 
-    @Override
-    protected void setUp() throws Exception {
-        include("javaee5.dicon");
-    }
-
     public void setUpReadPersistenceXmlFile() throws Exception {
         include(getClass().getName().replace('.', '/') + ".dicon");
     }
@@ -109,4 +104,16 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
         assertNotNull(sf.getClassMetadata(Customer.class));
         assertNotNull(sf.getClassMetadata(Department2.class));
     }
+
+    public void setUpPackageInfoAutoDetectionTx() throws Exception {
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test5.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
+        System.out.println(getClass().getName().replace('.', '/') + ".dicon");
+    }
+
+    public void testPackageInfoAutoDetectionTx() throws Exception {
+        final Session session = Session.class.cast(em.getDelegate());
+        session.enableFilter("id_eq");
+    }
+
 }

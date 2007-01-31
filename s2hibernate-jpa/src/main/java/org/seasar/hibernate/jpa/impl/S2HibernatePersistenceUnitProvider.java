@@ -18,11 +18,14 @@ package org.seasar.hibernate.jpa.impl;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.ejb.Ejb3Configuration;
 import org.hibernate.ejb.HibernatePersistence;
+import org.seasar.framework.container.annotation.tiger.Binding;
+import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.PersistenceUnitManager;
@@ -32,6 +35,7 @@ import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.framework.util.ClassTraversal.ClassHandler;
 import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
@@ -53,6 +57,7 @@ public class S2HibernatePersistenceUnitProvider implements
         this.persistenceUnitManager = persistenceUnitManager;
     }
 
+    @Binding(bindingType = BindingType.MAY)
     public void setS2HibernateConfiguration(
             final S2HibernateConfiguration s2HibernateCfg) {
         this.s2HibernateCfg = s2HibernateCfg;
@@ -110,13 +115,18 @@ public class S2HibernatePersistenceUnitProvider implements
 
     protected void addAnnotatedClasses(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
+
+        final Set<String> packageNames = CollectionsUtil.newHashSet();
+
         final ClassHandler handler = new ClassHandler() {
 
             public void processClass(final String packageName,
                     final String shortClassName) {
+
                 final String className = ClassUtil.concatName(packageName,
                         shortClassName);
-                Class<?> clazz = ReflectionUtil.forNameNoException(className);
+                final Class<?> clazz = ReflectionUtil
+                        .forNameNoException(className);
                 if (logger.isDebugEnabled()) {
                     if (unitName == null) {
                         logger.log("DHBNJPA0001", new Object[] { className });
@@ -126,6 +136,26 @@ public class S2HibernatePersistenceUnitProvider implements
                     }
                 }
                 ejb3Cfg.addAnnotatedClass(clazz);
+
+                if (!packageNames.contains(packageName)) {
+                    packageNames.add(packageName);
+                    final String pkgInfoName = ClassUtil.concatName(
+                            packageName, "package-info");
+                    final Class<?> pkgInfoClass = ReflectionUtil
+                            .forNameNoException(pkgInfoName);
+                    if (pkgInfoClass != null) {
+                        if (logger.isDebugEnabled()) {
+                            if (unitName == null) {
+                                logger.log("DHBNJPA0005",
+                                        new Object[] { packageName });
+                            } else {
+                                logger.log("DHBNJPA0006", new Object[] {
+                                        packageName, unitName });
+                            }
+                        }
+                        ejb3Cfg.addPackage(packageName);
+                    }
+                }
             }
         };
         s2HibernateCfg.detectPersistenceClasses(handler);
