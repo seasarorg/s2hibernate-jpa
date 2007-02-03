@@ -17,6 +17,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-entitymanager-3.2.1.ga.jar" sourcepath="libsrc/hibernate-entitymanager-3.2.1.ga-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jboss-archive-browsing-5.0.0alpha-200607201-119.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/lucene-core-2.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/h2-1.0.20061217.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/h2-1.0.20061217.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
