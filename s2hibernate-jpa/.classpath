@@ -12,10 +12,11 @@
 	<classpathentry exported="true" kind="lib" path="lib/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ehcache-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence-3.0.jar"/>
-	<classpathentry exported="true" sourcepath="libsrc/hibernate-3.2.1.ga-sources.jar" kind="lib" path="lib/hibernate-3.2.1.ga.jar"/>
-	<classpathentry exported="true" sourcepath="libsrc/hibernate-annotations-3.2.1.ga-sources.jar" kind="lib" path="lib/hibernate-annotations-3.2.1.ga.jar"/>
-	<classpathentry exported="true" sourcepath="libsrc/hibernate-entitymanager-3.2.1.ga-sources.jar" kind="lib" path="lib/hibernate-entitymanager-3.2.1.ga.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate-3.2.1.ga.jar" sourcepath="libsrc/hibernate-3.2.1.ga-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate-annotations-3.2.1.ga.jar" sourcepath="libsrc/hibernate-annotations-3.2.1.ga-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/hibernate-entitymanager-3.2.1.ga.jar" sourcepath="libsrc/hibernate-entitymanager-3.2.1.ga-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jboss-archive-browsing-5.0.0alpha-200607201-119.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/h2-1.0.20061217.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

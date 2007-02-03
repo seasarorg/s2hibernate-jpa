@@ -5,7 +5,7 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<property name="hibernate.dialect" 
-			    value="org.hibernate.dialect.HSQLDialect"/>
+			    value="org.hibernate.dialect.H2Dialect"/>
 			<property name="hibernate.jndi.class" 
 			    value="org.seasar.extension.j2ee.JndiContextFactory"/>
 			<property name="hibernate.transaction.manager_lookup_class" 
