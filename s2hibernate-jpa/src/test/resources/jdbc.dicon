@@ -42,13 +42,10 @@
 			"org.h2.Driver"
 		</property>
 		<property name="URL">
-			"jdbc:h2:mem:"
+			"jdbc:h2:mem:;DB_CLOSE_ON_EXIT=FALSE"
 		</property>
 		<property name="user">"sa"</property>
 		<property name="password">""</property>
-		<destroyMethod>
-			@org.seasar.framework.util.DriverManagerUtil@deregisterAllDrivers()
-		</destroyMethod>
 	</component>
 
 	<!-- for Derby -->
