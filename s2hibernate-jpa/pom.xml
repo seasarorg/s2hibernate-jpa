@@ -130,8 +130,8 @@
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <version>3.2.1.ga</version>
+      <artifactId>hibernate</artifactId>
+      <version>3.2.2.ga</version>
       <type>jar</type>
       <exclusions>
         <exclusion>
@@ -153,6 +153,18 @@
         <exclusion>
             <groupId>asm</groupId> 
             <artifactId>asm-attrs</artifactId> 
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>3.2.1.ga</version>
+      <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
