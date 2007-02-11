@@ -23,21 +23,17 @@ import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
  */
 public interface S2HibernateConfiguration {
 
-    void addMappingFile(final String fileName);
+    void addMappingFile(String fileName);
 
-    void addMappingFile(final String unitName, final String fileName);
+    void addMappingFile(String unitName, String fileName);
 
-    void addPersistenceClass(final Class<?> clazz);
+    void addPersistenceClass(Class<?> clazz);
 
-    void addPersistenceClass(final String unitName, final Class<?> clazz);
+    void addPersistenceClass(String unitName, Class<?> clazz);
 
-    void detectMappingFiles(ResourceHandler handler);
+    void detectMappingFiles(String unitName, ResourceHandler handler);
 
-    void detectMappingFiles(final String unitName, ResourceHandler handler);
-
-    void detectPersistenceClasses(ClassHandler handler);
-
-    void detectPersistenceClasses(final String unitName, ClassHandler visitor);
+    void detectPersistenceClasses(String unitName, ClassHandler visitor);
 
     boolean isAutoDetection();
 

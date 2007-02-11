@@ -15,22 +15,28 @@
  */
 package org.seasar.hibernate.jpa.impl;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.seasar.framework.autodetector.ClassAutoDetector;
 import org.seasar.framework.autodetector.ResourceAutoDetector;
+import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.ClassTraversal.ClassHandler;
 import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 import org.seasar.framework.util.tiger.CollectionsUtil;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
 /**
  * @author taedium
  */
 public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
+
+    protected PersistenceUnitManager persistenceUnitManager;
 
     protected Map<String, List<String>> mappingFiles = CollectionsUtil
             .newHashMap();
@@ -43,6 +49,11 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
 
     protected Map<String, List<ClassAutoDetector>> persistenceClassAutoDetectors = CollectionsUtil
             .newHashMap();
+
+    public void setPersistenceUnitManager(
+            final PersistenceUnitManager persistenceUnitManager) {
+        this.persistenceUnitManager = persistenceUnitManager;
+    }
 
     public void addMappingFile(final String fileName) {
         addMappingFile(null, fileName);
@@ -106,48 +117,139 @@ public class S2HibernateConfigurationImpl implements S2HibernateConfiguration {
         persistenceClassAutoDetectors.get(unitName).add(detector);
     }
 
-    public void detectMappingFiles(final ResourceHandler handler) {
-        detectMappingFiles(null, handler);
-    }
-
     public void detectMappingFiles(final String unitName,
             final ResourceHandler handler) {
-        if (mappingFiles.containsKey(unitName)) {
-            for (final String mappingFile : mappingFiles.get(unitName)) {
+        for (final String mappingFile : getMappingFileList(unitName)) {
+            handler.processResource(mappingFile, null);
+        }
+        for (final String mappingFile : getMappingFileList(null)) {
+            if (isTarget(unitName, mappingFile)) {
                 handler.processResource(mappingFile, null);
             }
         }
-        if (mappingFileAutoDetectors.containsKey(unitName)) {
-            for (final ResourceAutoDetector detector : mappingFileAutoDetectors
-                    .get(unitName)) {
-                detector.detect(handler);
-            }
+        for (final ResourceAutoDetector detector : getMappingFileAutoDetectorList(unitName)) {
+            detector.detect(handler);
         }
-    }
-
-    public void detectPersistenceClasses(final ClassHandler visitor) {
-        detectPersistenceClasses(null, visitor);
+        for (final ResourceAutoDetector detector : getMappingFileAutoDetectorList(null)) {
+            detector.detect(new UnitNameAwareHandler(unitName, handler));
+        }
     }
 
     public void detectPersistenceClasses(final String unitName,
             final ClassHandler handler) {
-        if (persistenceClasses.containsKey(unitName)) {
-            for (final Class<?> clazz : persistenceClasses.get(unitName)) {
-                handler.processClass(ClassUtil.getPackageName(clazz), ClassUtil
-                        .getShortClassName(clazz));
+        for (final Class<?> clazz : getPersistenceClassList(unitName)) {
+            invokeHandler(handler, clazz);
+        }
+        for (final Class<?> clazz : getPersistenceClassList(null)) {
+            if (isTarget(unitName, clazz)) {
+                invokeHandler(handler, clazz);
             }
         }
-        if (persistenceClassAutoDetectors.containsKey(unitName)) {
-            for (final ClassAutoDetector detector : persistenceClassAutoDetectors
-                    .get(unitName)) {
-                detector.detect(handler);
-            }
+        for (final ClassAutoDetector detector : getPersistenceClassAutoDetectorList(unitName)) {
+            detector.detect(handler);
+        }
+        for (final ClassAutoDetector detector : getPersistenceClassAutoDetectorList(null)) {
+            detector.detect(new UnitNameAwareHandler(unitName, handler));
         }
     }
 
     public boolean isAutoDetection() {
         return persistenceClassAutoDetectors.size() > 0
                 || mappingFileAutoDetectors.size() > 0;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<String> getMappingFileList(final String unitName) {
+        final List<String> result = mappingFiles.get(unitName);
+        if (result != null) {
+            return result;
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<ResourceAutoDetector> getMappingFileAutoDetectorList(
+            final String unitName) {
+        final List<ResourceAutoDetector> result = mappingFileAutoDetectors
+                .get(unitName);
+        if (result != null) {
+            return result;
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<Class<?>> getPersistenceClassList(final String unitName) {
+        final List<Class<?>> result = persistenceClasses.get(unitName);
+        if (result != null) {
+            return result;
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<ClassAutoDetector> getPersistenceClassAutoDetectorList(
+            final String unitName) {
+        final List<ClassAutoDetector> result = persistenceClassAutoDetectors
+                .get(unitName);
+        if (result != null) {
+            return result;
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    protected void invokeHandler(final ClassHandler handler,
+            final Class<?> clazz) {
+        handler.processClass(ClassUtil.getPackageName(clazz), ClassUtil
+                .getShortClassName(clazz));
+    }
+
+    protected boolean isTarget(final String unitName, final String mappingFile) {
+        return unitName.equals(persistenceUnitManager
+                .getPersistenceUnitName(mappingFile));
+    }
+
+    protected boolean isTarget(final String unitName, final Class<?> clazz) {
+        return unitName.equals(persistenceUnitManager
+                .getPersistenceUnitName(clazz));
+    }
+
+    public class UnitNameAwareHandler implements ResourceHandler, ClassHandler {
+
+        protected String unitName;
+
+        protected ResourceHandler delegateResourceHandler;
+
+        protected ClassHandler delegateClassHandler;
+
+        public UnitNameAwareHandler(final String unitName,
+                final ResourceHandler delegateResourceHandler) {
+            this.unitName = unitName;
+            this.delegateResourceHandler = delegateResourceHandler;
+        }
+
+        public UnitNameAwareHandler(final String unitName,
+                final ClassHandler delegateClassHandler) {
+            this.unitName = unitName;
+            this.delegateClassHandler = delegateClassHandler;
+        }
+
+        public void processResource(final String path, final InputStream is) {
+            if (isTarget(unitName, path)) {
+                delegateResourceHandler.processResource(path, is);
+            }
+        }
+
+        public void processClass(final String packageName,
+                final String shortClassName) {
+            final String className = ClassUtil.concatName(packageName,
+                    shortClassName);
+            final Class<?> clazz = ReflectionUtil.forName(className);
+            if (isTarget(unitName, clazz)) {
+                delegateClassHandler.processClass(packageName, shortClassName);
+            }
+        }
+
     }
 
 }

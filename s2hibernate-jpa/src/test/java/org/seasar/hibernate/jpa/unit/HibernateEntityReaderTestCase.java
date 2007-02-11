@@ -23,14 +23,13 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
-import org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl;
 
 /**
  * @author taedium
  */
 public abstract class HibernateEntityReaderTestCase extends S2TestCase {
 
-    protected S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
+    protected S2HibernateConfiguration cfg;
 
     protected EntityManager em;
 
@@ -39,13 +38,14 @@ public abstract class HibernateEntityReaderTestCase extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("jpa-test.dicon");
-        getContainer().getDescendant("jpa-test.dicon").register(cfg);
+        include("jpa.dicon");
+        cfg = S2HibernateConfiguration.class
+                .cast(getComponent(S2HibernateConfiguration.class));
     }
 
     protected void addAnnotatedClasses(Class<?>... classes) {
         for (final Class<?> clazz : classes) {
-            cfg.addPersistenceClass(clazz);
+            cfg.addPersistenceClass("persistenceUnit", clazz);
         }
     }
 

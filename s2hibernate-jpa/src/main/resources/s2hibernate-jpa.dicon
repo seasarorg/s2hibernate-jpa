@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN" 
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+	<include path="javaee5.dicon"/>
+	<include condition="@org.seasar.framework.container.util.SmartDeployUtil@isSmartdeployMode(container)"
+		path="s2hibernate-jpa-smart.dicon"/>
+
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernatePersistenceUnitProvider"/>
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl"/>
+	<component class="org.seasar.hibernate.jpa.impl.S2HibernateDialect"/>
+	<component class="org.seasar.hibernate.jpa.unit.HibernateEntityReaderProvider"/>
+</components>

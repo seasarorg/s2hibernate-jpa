@@ -30,7 +30,6 @@ import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
-import org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl;
 import org.seasar.hibernate.jpa.unit.indexcoll.Drawer;
 import org.seasar.hibernate.jpa.unit.indexcoll.Wardrobe;
 
@@ -44,7 +43,7 @@ public class HibernateEntityDescTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("j2ee.dicon");
-        include("jpa-test.dicon");
+        include("jpa.dicon");
     }
 
     public void testDepartment() throws Exception {
@@ -257,11 +256,11 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpSingleTableInheritanceTx() throws Exception {
-        S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
-        cfg.addPersistenceClass(Fruit.class);
-        cfg.addPersistenceClass(Apple.class);
-        cfg.addPersistenceClass(Basket.class);
-        getContainer().getDescendant("jpa-test.dicon").register(cfg);
+        S2HibernateConfiguration cfg = S2HibernateConfiguration.class
+                .cast(getComponent(S2HibernateConfiguration.class));
+        cfg.addPersistenceClass("persistenceUnit", Fruit.class);
+        cfg.addPersistenceClass("persistenceUnit", Apple.class);
+        cfg.addPersistenceClass("persistenceUnit", Basket.class);
     }
 
     public void testSingleTableInheritanceTx() throws Exception {
@@ -339,10 +338,10 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpJoinedTableInheritanceTx() throws Exception {
-        S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
-        cfg.addPersistenceClass(File.class);
-        cfg.addPersistenceClass(Folder.class);
-        getContainer().getDescendant("jpa-test.dicon").register(cfg);
+        S2HibernateConfiguration cfg = S2HibernateConfiguration.class
+                .cast(getComponent(S2HibernateConfiguration.class));
+        cfg.addPersistenceClass("persistenceUnit", File.class);
+        cfg.addPersistenceClass("persistenceUnit", Folder.class);
     }
 
     public void testJoinedTableInheritanceTx() throws Exception {
@@ -415,10 +414,10 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpIndexColumnTx() throws Exception {
-        S2HibernateConfiguration cfg = new S2HibernateConfigurationImpl();
-        cfg.addPersistenceClass(Wardrobe.class);
-        cfg.addPersistenceClass(Drawer.class);
-        getContainer().getDescendant("jpa-test.dicon").register(cfg);
+        S2HibernateConfiguration cfg = S2HibernateConfiguration.class
+                .cast(getComponent(S2HibernateConfiguration.class));
+        cfg.addPersistenceClass("persistenceUnit", Wardrobe.class);
+        cfg.addPersistenceClass("persistenceUnit", Drawer.class);
     }
 
     public void testIndexColumnTx() throws Exception {

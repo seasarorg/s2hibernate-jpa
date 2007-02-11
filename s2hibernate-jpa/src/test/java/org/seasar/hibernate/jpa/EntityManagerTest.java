@@ -30,7 +30,7 @@ public class EntityManagerTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         include("javaee5.dicon");
-        include("jpa-test.dicon");
+        include("jpa.dicon");
     }
 
     public void testLookup() throws Exception {

@@ -32,7 +32,6 @@ import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.StringUtil;
 import org.seasar.framework.util.ClassTraversal.ClassHandler;
 import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 import org.seasar.framework.util.tiger.CollectionsUtil;
@@ -53,7 +52,7 @@ public class S2HibernatePersistenceUnitProvider implements
     protected S2HibernateConfiguration s2HibernateCfg;
 
     public void setPersistenceUnitManager(
-            PersistenceUnitManager persistenceUnitManager) {
+            final PersistenceUnitManager persistenceUnitManager) {
         this.persistenceUnitManager = persistenceUnitManager;
     }
 
@@ -89,79 +88,84 @@ public class S2HibernatePersistenceUnitProvider implements
 
     protected void addMappingFiles(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
-        final ResourceHandler handler = new ResourceHandler() {
-
-            public void processResource(final String path, final InputStream is) {
-                if (logger.isDebugEnabled()) {
-                    if (unitName == null) {
-                        logger.log("DHBNJPA0003", new Object[] { path });
-                    } else {
-                        logger.log("DHBNJPA0004",
-                                new Object[] { path, unitName });
-                    }
-                }
-                if (is != null) {
-                    ejb3Cfg.addInputStream(is);
-                } else if (!StringUtil.isEmpty(path)) {
-                    ejb3Cfg.addResource(path);
-                }
-            }
-        };
-        s2HibernateCfg.detectMappingFiles(handler);
-        if (!StringUtil.isEmpty(unitName)) {
-            s2HibernateCfg.detectMappingFiles(unitName, handler);
-        }
+        s2HibernateCfg.detectMappingFiles(unitName, new MappingFileHandler(
+                unitName, ejb3Cfg));
     }
 
     protected void addAnnotatedClasses(final String unitName,
             final Ejb3Configuration ejb3Cfg) {
+        s2HibernateCfg.detectPersistenceClasses(unitName,
+                new PersistenceClassHandler(unitName, ejb3Cfg));
+    }
 
-        final Set<String> packageNames = CollectionsUtil.newHashSet();
+    public class MappingFileHandler implements ResourceHandler {
 
-        final ClassHandler handler = new ClassHandler() {
+        protected String unitName;
 
-            public void processClass(final String packageName,
-                    final String shortClassName) {
+        protected Ejb3Configuration ejb3Cfg;
 
-                final String className = ClassUtil.concatName(packageName,
-                        shortClassName);
-                final Class<?> clazz = ReflectionUtil
-                        .forNameNoException(className);
-                if (logger.isDebugEnabled()) {
-                    if (unitName == null) {
-                        logger.log("DHBNJPA0001", new Object[] { className });
-                    } else {
-                        logger.log("DHBNJPA0002", new Object[] { className,
-                                unitName });
-                    }
-                }
-                ejb3Cfg.addAnnotatedClass(clazz);
-
-                if (!packageNames.contains(packageName)) {
-                    packageNames.add(packageName);
-                    final String pkgInfoName = ClassUtil.concatName(
-                            packageName, "package-info");
-                    final Class<?> pkgInfoClass = ReflectionUtil
-                            .forNameNoException(pkgInfoName);
-                    if (pkgInfoClass != null) {
-                        if (logger.isDebugEnabled()) {
-                            if (unitName == null) {
-                                logger.log("DHBNJPA0005",
-                                        new Object[] { packageName });
-                            } else {
-                                logger.log("DHBNJPA0006", new Object[] {
-                                        packageName, unitName });
-                            }
-                        }
-                        ejb3Cfg.addPackage(packageName);
-                    }
-                }
-            }
-        };
-        s2HibernateCfg.detectPersistenceClasses(handler);
-        if (!StringUtil.isEmpty(unitName)) {
-            s2HibernateCfg.detectPersistenceClasses(unitName, handler);
+        public MappingFileHandler(final String unitName,
+                final Ejb3Configuration ejb3Cfg) {
+            this.unitName = unitName;
+            this.ejb3Cfg = ejb3Cfg;
         }
+
+        public void processResource(final String path, final InputStream is) {
+            if (logger.isDebugEnabled()) {
+                logger.log("DHBNJPA0004", new Object[] { path, unitName });
+            }
+            if (is != null) {
+                ejb3Cfg.addInputStream(is);
+            } else {
+                ejb3Cfg.addResource(path);
+            }
+        }
+
+    }
+
+    public class PersistenceClassHandler implements ClassHandler {
+
+        protected String unitName;
+
+        protected Ejb3Configuration ejb3Cfg;
+
+        protected final Set<String> packageNames = CollectionsUtil.newHashSet();
+
+        public PersistenceClassHandler(final String unitName,
+                final Ejb3Configuration ejb3Cfg) {
+            this.unitName = unitName;
+            this.ejb3Cfg = ejb3Cfg;
+        }
+
+        public void processClass(final String packageName,
+                final String shortClassName) {
+            final String className = ClassUtil.concatName(packageName,
+                    shortClassName);
+            final Class<?> clazz = ReflectionUtil.forNameNoException(className);
+            if (logger.isDebugEnabled()) {
+                logger.log("DHBNJPA0002", new Object[] { className, unitName });
+            }
+            ejb3Cfg.addAnnotatedClass(clazz);
+            if (!packageNames.contains(packageName)) {
+                addPackageInfo(packageName);
+            }
+        }
+
+        protected void addPackageInfo(final String packageName) {
+            packageNames.add(packageName);
+            final String pkgInfoName = ClassUtil.concatName(packageName,
+                    "package-info");
+            final Class<?> pkgInfoClass = ReflectionUtil
+                    .forNameNoException(pkgInfoName);
+            if (pkgInfoClass != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.log("DHBNJPA0006", new Object[] { packageName,
+                            unitName });
+                }
+                ejb3Cfg.addPackage(packageName);
+            }
+        }
+
     }
 
 }

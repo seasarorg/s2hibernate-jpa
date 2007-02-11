@@ -16,17 +16,22 @@
 package org.seasar.hibernate.jpa.impl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.env.Env;
+import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
+import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 import org.seasar.hibernate.jpa.entity.Address;
 import org.seasar.hibernate.jpa.entity.Customer;
 import org.seasar.hibernate.jpa.entity.Department2;
 import org.seasar.hibernate.jpa.entity.Employee2;
+import org.seasar.hibernate.jpa.entity.aaa.Dummy;
+import org.seasar.hibernate.jpa.entity.aaa.Dummy2;
 
 /**
  * @author taedium
@@ -78,6 +83,7 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     public void setUpMappingFileAutoDetection() throws Exception {
         Env.setFilePath("org/seasar/hibernate/jpa/impl/test3.txt");
         include(getClass().getName().replace('.', '/') + ".dicon");
+
     }
 
     public void testMappingFileAutoDetection() throws Exception {
@@ -88,6 +94,24 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
         assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Employee2.class));
         assertNotNull(sf.getClassMetadata(Address.class));
+    }
+
+    public void setUpMappingFileAutoDetectionSubPackage() throws Exception {
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test3.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
+
+    }
+
+    public void testMappingFileAutoDetectionSubPackage() throws Exception {
+        final PersistenceUnitManager pum = PersistenceUnitManager.class
+                .cast(getComponent(PersistenceUnitManager.class));
+        final EntityManagerFactory emf = pum
+                .getEntityManagerFactory("aaaPersistenceUnit");
+        final EntityManager em = emf.createEntityManager();
+        final Session session = Session.class.cast(em.getDelegate());
+        final SessionFactory sf = session.getSessionFactory();
+        assertEquals(3, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Dummy2.class));
     }
 
     public void setUpPersistenceClassAutoDetection() throws Exception {
@@ -103,6 +127,26 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
         assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Customer.class));
         assertNotNull(sf.getClassMetadata(Department2.class));
+
+        final S2HibernateConfiguration cfg = S2HibernateConfiguration.class
+                .cast(getComponent(S2HibernateConfiguration.class));
+    }
+
+    public void setUpPersistenceClassAutoDetectionSubPackage() throws Exception {
+        Env.setFilePath("org/seasar/hibernate/jpa/impl/test4.txt");
+        include(getClass().getName().replace('.', '/') + ".dicon");
+    }
+
+    public void testPersistenceClassAutoDetectionSubPackage() throws Exception {
+        final PersistenceUnitManager pum = PersistenceUnitManager.class
+                .cast(getComponent(PersistenceUnitManager.class));
+        final EntityManagerFactory emf = pum
+                .getEntityManagerFactory("aaaPersistenceUnit");
+        final EntityManager em = emf.createEntityManager();
+        final Session session = Session.class.cast(em.getDelegate());
+        final SessionFactory sf = session.getSessionFactory();
+        assertEquals(3, sf.getAllClassMetadata().size());
+        assertNotNull(sf.getClassMetadata(Dummy.class));
     }
 
     public void setUpPackageInfoAutoDetectionTx() throws Exception {
