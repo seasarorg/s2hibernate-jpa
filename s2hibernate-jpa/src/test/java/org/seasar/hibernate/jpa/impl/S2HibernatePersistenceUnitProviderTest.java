@@ -25,7 +25,6 @@ import org.seasar.framework.env.Env;
 import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
-import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 import org.seasar.hibernate.jpa.entity.Address;
 import org.seasar.hibernate.jpa.entity.Customer;
 import org.seasar.hibernate.jpa.entity.Department2;
@@ -127,9 +126,6 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
         assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Customer.class));
         assertNotNull(sf.getClassMetadata(Department2.class));
-
-        final S2HibernateConfiguration cfg = S2HibernateConfiguration.class
-                .cast(getComponent(S2HibernateConfiguration.class));
     }
 
     public void setUpPersistenceClassAutoDetectionSubPackage() throws Exception {
