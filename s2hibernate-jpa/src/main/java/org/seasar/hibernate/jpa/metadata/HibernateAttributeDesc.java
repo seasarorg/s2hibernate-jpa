@@ -18,24 +18,18 @@ package org.seasar.hibernate.jpa.metadata;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.sql.Types;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.TemporalType;
 
 import org.hibernate.EntityMode;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.AbstractComponentType;
-import org.hibernate.type.CollectionType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
-import org.seasar.framework.jpa.util.TemporalTypeUtil;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
@@ -44,7 +38,7 @@ import org.seasar.framework.util.tiger.ReflectionUtil;
  * 
  * @author koichik
  */
-public class HibernateAttributeDesc implements AttributeDesc {
+public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
 
     protected static final Field PROPERTY_SELECTABLE_FIELD = ClassUtil
             .getDeclaredField(AbstractEntityPersister.class,
@@ -53,31 +47,7 @@ public class HibernateAttributeDesc implements AttributeDesc {
         PROPERTY_SELECTABLE_FIELD.setAccessible(true);
     }
 
-    protected final SessionFactoryImplementor factory;
-
     protected final AbstractEntityPersister metadata;
-
-    protected final String name;
-
-    protected final Class<?> type;
-
-    protected final Class<?> elementType;
-
-    protected final int sqlType;
-
-    protected final TemporalType temporalType;
-
-    protected final boolean id;
-
-    protected final boolean association;
-
-    protected final boolean collection;
-
-    protected final boolean component;
-
-    protected final boolean version;
-
-    protected final Type hibernateType;
 
     protected final int[] sqlTypes;
 
@@ -90,41 +60,22 @@ public class HibernateAttributeDesc implements AttributeDesc {
 
     protected final boolean selectable;
 
+    protected AttributeDesc[] subAttributeDescs = new AttributeDesc[] {};
+
+    protected Map<String, AttributeDesc> subAttributeDescMap = CollectionsUtil
+            .newHashMap();
+
     public HibernateAttributeDesc(final SessionFactoryImplementor factory,
             final AbstractEntityPersister metadata, final String name,
             final boolean id, final boolean version) {
-        this.factory = factory;
-        this.metadata = metadata;
-        this.name = name;
-        this.id = id;
-        this.version = version;
+        super(factory, id ? metadata.getIdentifierType() : metadata
+                .getPropertyType(name), name, id, version);
 
-        if (id) {
-            hibernateType = metadata.getIdentifierType();
-        } else {
-            hibernateType = metadata.getPropertyType(name);
-        }
-        type = hibernateType.getReturnedClass();
-        sqlType = getSqlType(hibernateType);
+        this.metadata = metadata;
         sqlTypes = hibernateType.sqlTypes(factory);
 
-        if (type == Date.class || type == Calendar.class) {
-            temporalType = TemporalTypeUtil.fromSqlTypeToTemporalType(sqlType);
-        } else {
-            temporalType = null;
-        }
-
-        association = hibernateType.isAssociationType();
-        collection = hibernateType.isCollectionType();
-        component = hibernateType.isComponentType();
-
-        if (collection) {
-            final CollectionType collectionType = CollectionType.class
-                    .cast(hibernateType);
-            elementType = collectionType.getElementType(factory)
-                    .getReturnedClass();
-        } else {
-            elementType = null;
+        if (isComponent()) {
+            createSubAttributeDescs();
         }
 
         if (id) {
@@ -132,21 +83,25 @@ public class HibernateAttributeDesc implements AttributeDesc {
         } else {
             readTarget = isReadTargetType(hibernateType);
         }
-        selectable = isSelectableAttribute();
 
+        selectable = isSelectableAttribute();
         tableNames = createTableNames();
         setupColumnNameMap();
     }
 
-    protected int getSqlType(final Type hibernateType) {
-        try {
-            final int[] sqlTypes = hibernateType.sqlTypes(null);
-            if (sqlTypes != null && sqlTypes.length > 0) {
-                return sqlTypes[0];
-            }
-        } catch (final Exception ignore) {
+    protected void createSubAttributeDescs() {
+        final AbstractComponentType componentType = AbstractComponentType.class
+                .cast(hibernateType);
+        final Type[] subtypes = componentType.getSubtypes();
+        subAttributeDescs = new AttributeDesc[subtypes.length];
+        for (int i = 0; i < subtypes.length; i++) {
+            final String componentPropName = componentType.getPropertyNames()[i];
+            AttributeDesc attribute = new HibernateChildAttributeDesc(
+                    factory, this, componentType, subtypes[i],
+                    componentPropName, i);
+            subAttributeDescs[i] = attribute;
+            subAttributeDescMap.put(componentPropName, attribute);
         }
-        return Types.OTHER;
     }
 
     protected String[] createTableNames() {
@@ -209,46 +164,6 @@ public class HibernateAttributeDesc implements AttributeDesc {
         return selectable[index];
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Class<?> getType() {
-        return type;
-    }
-
-    public Class<?> getElementType() {
-        return elementType;
-    }
-
-    public int getSqlType() {
-        return sqlType;
-    }
-
-    public TemporalType getTemporalType() {
-        return temporalType;
-    }
-
-    public boolean isId() {
-        return id;
-    }
-
-    public boolean isAssociation() {
-        return association;
-    }
-
-    public boolean isCollection() {
-        return collection;
-    }
-
-    public boolean isComponent() {
-        return component;
-    }
-
-    public boolean isVersion() {
-        return version;
-    }
-
     public Object getValue(final Object entity) {
         if (id) {
             return metadata.getIdentifier(entity, EntityMode.POJO);
@@ -263,6 +178,14 @@ public class HibernateAttributeDesc implements AttributeDesc {
         } else {
             metadata.setPropertyValue(entity, name, value, EntityMode.POJO);
         }
+    }
+
+    public AttributeDesc[] getChildAttributeDescs() {
+        return subAttributeDescs;
+    }
+
+    public AttributeDesc getChildAttributeDesc(final String name) {
+        return subAttributeDescMap.get(name);
     }
 
     public int[] getSqlTypes() {

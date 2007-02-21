@@ -18,6 +18,7 @@ package org.seasar.hibernate.jpa;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -52,6 +53,9 @@ public class Employee implements Serializable {
     @ManyToOne
     @JoinColumn(name = "deptno")
     private Department department;
+
+    @Embedded
+    private Address address;
 
     public Employee() {
     }
@@ -130,6 +134,14 @@ public class Employee implements Serializable {
 
     public void setTstamp(Date tstamp) {
         this.tstamp = tstamp;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override

@@ -27,6 +27,7 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.hibernate.jpa.Address;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.S2HibernateConfiguration;
@@ -142,7 +143,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         assertEquals("empno", entityDesc.getIdAttributeDesc().getName());
         String[] propNames = entityDesc.getAttributeNames();
         assertNotNull(propNames);
-        assertEquals(9, propNames.length);
+        assertEquals(10, propNames.length);
         assertEquals("empno", propNames[0]);
         assertEquals("ename", propNames[1]);
         assertEquals("job", propNames[2]);
@@ -152,6 +153,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         assertEquals("comm", propNames[6]);
         assertEquals("tstamp", propNames[7]);
         assertEquals("department", propNames[8]);
+        assertEquals("address", propNames[9]);
 
         AttributeDesc[] attributes = entityDesc.getAttributeDescs();
 
@@ -250,6 +252,43 @@ public class HibernateEntityDescTest extends S2TestCase {
         assertNull(attribute.getTemporalType());
         assertFalse(attribute.isId());
         assertTrue(attribute.isAssociation());
+        assertFalse(attribute.isCollection());
+        assertFalse(attribute.isComponent());
+        assertFalse(attribute.isVersion());
+
+        attribute = attributes[9];
+        assertEquals("address", attribute.getName());
+        assertEquals(Address.class, attribute.getType());
+        assertEquals(Types.OTHER, attribute.getSqlType());
+        assertNull(attribute.getTemporalType());
+        assertFalse(attribute.isId());
+        assertFalse(attribute.isAssociation());
+        assertFalse(attribute.isCollection());
+        assertTrue(attribute.isComponent());
+        assertFalse(attribute.isVersion());
+
+        AttributeDesc[] children = attribute.getChildAttributeDescs();
+        assertNotNull(children);
+        assertEquals(2, children.length);
+
+        attribute = children[0];
+        assertEquals("city", attribute.getName());
+        assertEquals(String.class, attribute.getType());
+        assertEquals(Types.VARCHAR, attribute.getSqlType());
+        assertNull(attribute.getTemporalType());
+        assertFalse(attribute.isId());
+        assertFalse(attribute.isAssociation());
+        assertFalse(attribute.isCollection());
+        assertFalse(attribute.isComponent());
+        assertFalse(attribute.isVersion());
+
+        attribute = children[1];
+        assertEquals("zip", attribute.getName());
+        assertEquals(String.class, attribute.getType());
+        assertEquals(Types.VARCHAR, attribute.getSqlType());
+        assertNull(attribute.getTemporalType());
+        assertFalse(attribute.isId());
+        assertFalse(attribute.isAssociation());
         assertFalse(attribute.isCollection());
         assertFalse(attribute.isComponent());
         assertFalse(attribute.isVersion());

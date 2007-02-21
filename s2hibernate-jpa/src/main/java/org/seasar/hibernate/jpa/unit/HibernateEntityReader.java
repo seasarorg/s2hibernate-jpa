@@ -131,15 +131,13 @@ public class HibernateEntityReader implements EntityReader {
                 continue;
             }
 
-            final Object[] values = attribute.getAllValues(entity);
             final String[] columnNames = attribute.getColumnNames(tableName);
-
-            assert values.length == columnNames.length : values.length + ", "
-                    + columnNames.length;
+            final Object[] values = attribute.getAllValues(entity);
 
             for (int j = 0; j < columnNames.length; j++) {
                 if (columnNames[j] != null) {
-                    row.setValue(columnNames[j], values[j]);
+                    Object value = (j < values.length) ? values[j] : null;
+                    row.setValue(columnNames[j], value);
                 }
             }
         }
