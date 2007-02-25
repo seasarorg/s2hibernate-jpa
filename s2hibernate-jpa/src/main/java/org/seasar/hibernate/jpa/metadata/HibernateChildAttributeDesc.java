@@ -25,8 +25,7 @@ import org.seasar.framework.jpa.metadata.AttributeDesc;
  * 
  * @author nakamura
  */
-public class HibernateChildAttributeDesc extends
-        AbstractHibernateAttributeDesc {
+public class HibernateChildAttributeDesc extends AbstractHibernateAttributeDesc {
 
     protected final AttributeDesc parentAttributeDesc;
 
@@ -34,34 +33,28 @@ public class HibernateChildAttributeDesc extends
 
     protected final int index;
 
-    public HibernateChildAttributeDesc(
-            final SessionFactoryImplementor factory,
+    public HibernateChildAttributeDesc(final SessionFactoryImplementor factory,
             final AttributeDesc parentAttributeDesc,
             final AbstractComponentType componentType,
-            final Type hibernateType, final String name, int index) {
+            final Type hibernateType, final String name, final int index) {
         super(factory, hibernateType, name, false, false);
         this.parentAttributeDesc = parentAttributeDesc;
         this.componentType = componentType;
         this.index = index;
     }
 
-    public Object getValue(Object entity) {
-        if (parentAttributeDesc.getName() == null) {
-            return null;
-        }
-        Object component = parentAttributeDesc.getValue(entity);
-        return componentType.getPropertyValues(component, EntityMode.POJO)[index];
+    public Object getValue(final Object owner) {
+        return getValues(owner)[index];
     }
 
-    public void setValue(Object entity, Object value) {
-        throw new UnsupportedOperationException("setValue");
+    protected Object[] getValues(final Object owner) {
+        return componentType.getPropertyValues(owner, EntityMode.POJO);
     }
 
-    public AttributeDesc[] getChildAttributeDescs() {
-        return new AttributeDesc[] {};
+    public void setValue(final Object owner, final Object value) {
+        final Object[] values = getValues(owner);
+        values[index] = value;
+        componentType.setPropertyValues(owner, values, EntityMode.POJO);
     }
 
-    public AttributeDesc getChildAttributeDesc(final String name) {
-        return null;
-    }
 }

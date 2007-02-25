@@ -256,6 +256,7 @@ public class HibernateEntityDescTest extends S2TestCase {
         assertFalse(attribute.isComponent());
         assertFalse(attribute.isVersion());
 
+        Address address = new Address();
         attribute = attributes[9];
         assertEquals("address", attribute.getName());
         assertEquals(Address.class, attribute.getType());
@@ -281,6 +282,8 @@ public class HibernateEntityDescTest extends S2TestCase {
         assertFalse(attribute.isCollection());
         assertFalse(attribute.isComponent());
         assertFalse(attribute.isVersion());
+        attribute.setValue(address, "hoge");
+        assertEquals("hoge", address.getCity());
 
         attribute = children[1];
         assertEquals("zip", attribute.getName());
@@ -292,6 +295,8 @@ public class HibernateEntityDescTest extends S2TestCase {
         assertFalse(attribute.isCollection());
         assertFalse(attribute.isComponent());
         assertFalse(attribute.isVersion());
+        attribute.setValue(address, "foo");
+        assertEquals("foo", address.getZip());
     }
 
     public void setUpSingleTableInheritanceTx() throws Exception {

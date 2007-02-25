@@ -29,7 +29,6 @@ import org.hibernate.type.AbstractComponentType;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.EntityType;
 import org.hibernate.type.Type;
-import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
@@ -60,11 +59,6 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
 
     protected final boolean selectable;
 
-    protected AttributeDesc[] subAttributeDescs = new AttributeDesc[] {};
-
-    protected Map<String, AttributeDesc> subAttributeDescMap = CollectionsUtil
-            .newHashMap();
-
     public HibernateAttributeDesc(final SessionFactoryImplementor factory,
             final AbstractEntityPersister metadata, final String name,
             final boolean id, final boolean version) {
@@ -73,10 +67,6 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
 
         this.metadata = metadata;
         sqlTypes = hibernateType.sqlTypes(factory);
-
-        if (isComponent()) {
-            createSubAttributeDescs();
-        }
 
         if (id) {
             readTarget = true;
@@ -87,21 +77,6 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         selectable = isSelectableAttribute();
         tableNames = createTableNames();
         setupColumnNameMap();
-    }
-
-    protected void createSubAttributeDescs() {
-        final AbstractComponentType componentType = AbstractComponentType.class
-                .cast(hibernateType);
-        final Type[] subtypes = componentType.getSubtypes();
-        subAttributeDescs = new AttributeDesc[subtypes.length];
-        for (int i = 0; i < subtypes.length; i++) {
-            final String componentPropName = componentType.getPropertyNames()[i];
-            AttributeDesc attribute = new HibernateChildAttributeDesc(
-                    factory, this, componentType, subtypes[i],
-                    componentPropName, i);
-            subAttributeDescs[i] = attribute;
-            subAttributeDescMap.put(componentPropName, attribute);
-        }
     }
 
     protected String[] createTableNames() {
@@ -178,14 +153,6 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         } else {
             metadata.setPropertyValue(entity, name, value, EntityMode.POJO);
         }
-    }
-
-    public AttributeDesc[] getChildAttributeDescs() {
-        return subAttributeDescs;
-    }
-
-    public AttributeDesc getChildAttributeDesc(final String name) {
-        return subAttributeDescMap.get(name);
     }
 
     public int[] getSqlTypes() {

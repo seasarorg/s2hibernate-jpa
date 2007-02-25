@@ -18,14 +18,17 @@ package org.seasar.hibernate.jpa.metadata;
 import java.sql.Types;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import javax.persistence.TemporalType;
 
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.hibernate.type.AbstractComponentType;
 import org.hibernate.type.CollectionType;
 import org.hibernate.type.Type;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.util.TemporalTypeUtil;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
  * 
@@ -56,6 +59,11 @@ public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
     protected final boolean version;
 
     protected final Type hibernateType;
+
+    protected final AttributeDesc[] childAttributeDescs;
+
+    protected final Map<String, AttributeDesc> childAttributeDescMap = CollectionsUtil
+            .newHashMap();
 
     public AbstractHibernateAttributeDesc(
             final SessionFactoryImplementor factory, final Type hibernateType,
@@ -88,6 +96,12 @@ public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
             elementType = null;
         }
 
+        if (component) {
+            childAttributeDescs = createChildAttributeDescs();
+        } else {
+            childAttributeDescs = new AttributeDesc[] {};
+        }
+
     }
 
     protected int getSqlType(final Type hibernateType) {
@@ -99,6 +113,22 @@ public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
         } catch (final Exception ignore) {
         }
         return Types.OTHER;
+    }
+
+    protected AttributeDesc[] createChildAttributeDescs() {
+        final AbstractComponentType componentType = AbstractComponentType.class
+                .cast(hibernateType);
+        final Type[] subtypes = componentType.getSubtypes();
+        final AttributeDesc[] childAttributeDescs = new AttributeDesc[subtypes.length];
+        for (int i = 0; i < subtypes.length; i++) {
+            final String componentPropName = componentType.getPropertyNames()[i];
+            final AttributeDesc attribute = new HibernateChildAttributeDesc(
+                    factory, this, componentType, subtypes[i],
+                    componentPropName, i);
+            childAttributeDescs[i] = attribute;
+            childAttributeDescMap.put(componentPropName, attribute);
+        }
+        return childAttributeDescs;
     }
 
     public String getName() {
@@ -141,4 +171,11 @@ public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
         return version;
     }
 
+    public AttributeDesc[] getChildAttributeDescs() {
+        return childAttributeDescs;
+    }
+
+    public AttributeDesc getChildAttributeDesc(final String name) {
+        return childAttributeDescMap.get(name);
+    }
 }
