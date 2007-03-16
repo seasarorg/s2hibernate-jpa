@@ -51,6 +51,7 @@ public class S2HibernatePersistenceUnitProvider implements
 
     protected S2HibernateConfiguration s2HibernateCfg;
 
+    @Binding(bindingType = BindingType.MUST)
     public void setPersistenceUnitManager(
             final PersistenceUnitManager persistenceUnitManager) {
         this.persistenceUnitManager = persistenceUnitManager;
