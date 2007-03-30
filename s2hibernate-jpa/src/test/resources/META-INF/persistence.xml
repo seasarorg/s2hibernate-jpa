@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence>
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>jdbc/dataSource</jta-data-source>
+		<jta-data-source>dataSourceProxy</jta-data-source>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>org.seasar.hibernate.jpa.Department</class>
 		<class>org.seasar.hibernate.jpa.Employee</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 			<property name="hibernate.jndi.class" value="org.seasar.extension.j2ee.JndiContextFactory"/>
-			<property name="hibernate.transaction.manager_lookup_class" value="org.seasar.hibernate.jpa.transaction.S2TransactionManagerLookup"/>
+			<property name="hibernate.transaction.manager_lookup_class" value="org.seasar.hibernate.jpa.transaction.SingletonTransactionManagerProxyLookup"/>
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
 			<property name="hibernate.use_sql_comments" value="false"/>
 			<property name="hibernate.archive.autodetection" value=""/>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>			
+			<property name="hibernate.hbm2ddl.auto" value="create"/>			
 		</properties>
 	</persistence-unit>
 
 	<persistence-unit name="aaaPersistenceUnit" transaction-type="JTA">
-		<jta-data-source>jdbc/dataSource</jta-data-source>
+		<jta-data-source>dataSourceProxy</jta-data-source>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>org.seasar.hibernate.jpa.Department</class>
 		<class>org.seasar.hibernate.jpa.Employee</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 			<property name="hibernate.jndi.class" value="org.seasar.extension.j2ee.JndiContextFactory"/>
-			<property name="hibernate.transaction.manager_lookup_class" value="org.seasar.hibernate.jpa.transaction.S2TransactionManagerLookup"/>
+			<property name="hibernate.transaction.manager_lookup_class" value="org.seasar.hibernate.jpa.transaction.SingletonTransactionManagerProxyLookup"/>
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
 			<property name="hibernate.use_sql_comments" value="false"/>
 			<property name="hibernate.archive.autodetection" value=""/>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>			
+			<property name="hibernate.hbm2ddl.auto" value="create"/>			
 		</properties>
 	</persistence-unit>
 </persistence>

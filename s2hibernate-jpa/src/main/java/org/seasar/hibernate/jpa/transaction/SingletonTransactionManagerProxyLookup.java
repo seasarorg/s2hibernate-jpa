@@ -23,7 +23,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.transaction.TransactionManagerLookup;
 import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 
-public class S2TransactionManagerLookupForTest implements
+public class SingletonTransactionManagerProxyLookup implements
         TransactionManagerLookup {
 
     public TransactionManager getTransactionManager(final Properties props)

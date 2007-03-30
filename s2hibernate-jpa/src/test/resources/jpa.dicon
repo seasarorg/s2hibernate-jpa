@@ -12,6 +12,5 @@
 
 	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider"/>
 
-	<!-- for test -->
 	<component name="dataSourceProxy" class="org.seasar.extension.datasource.impl.SingletonDataSourceProxy"/>
 </components>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence>
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>jdbc/dataSource</jta-data-source>
+		<jta-data-source>dataSourceProxy</jta-data-source>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<property name="hibernate.dialect" 
@@ -9,7 +9,7 @@
 			<property name="hibernate.jndi.class" 
 			    value="org.seasar.extension.j2ee.JndiContextFactory"/>
 			<property name="hibernate.transaction.manager_lookup_class" 
-			    value="org.seasar.hibernate.jpa.transaction.S2TransactionManagerLookup"/>
+			    value="org.seasar.hibernate.jpa.transaction.SingletonTransactionManagerProxyLookup"/>
 			<property name="hibernate.show_sql" 
 			    value="false"/>
 			<property name="hibernate.format_sql" 
