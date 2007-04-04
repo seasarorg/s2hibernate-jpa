@@ -74,29 +74,41 @@ public class S2HibernatePersistenceUnitProvider implements
     }
 
     public EntityManagerFactory createEntityManagerFactory(final String unitName) {
+        return createEntityManagerFactory(null, unitName);
+    }
+
+    public EntityManagerFactory createEntityManagerFactory(
+            final String abstractUnitName, final String concreteUnitName) {
         final Ejb3Configuration ejb3Cfg = new Ejb3Configuration();
         final Map<String, String> map = new HashMap<String, String>();
         if (s2HibernateCfg != null) {
-            addMappingFiles(unitName, ejb3Cfg);
-            addAnnotatedClasses(unitName, ejb3Cfg);
+            final String targetUnitName = getTargetUnitName(abstractUnitName,
+                    concreteUnitName);
+            addMappingFiles(targetUnitName, concreteUnitName, ejb3Cfg);
+            addAnnotatedClasses(targetUnitName, concreteUnitName, ejb3Cfg);
             if (s2HibernateCfg.isAutoDetection()) {
                 map.put(HibernatePersistence.AUTODETECTION, "");
             }
         }
-        ejb3Cfg.configure(unitName, map);
+        ejb3Cfg.configure(concreteUnitName, map);
         return ejb3Cfg.buildEntityManagerFactory();
     }
 
+    protected String getTargetUnitName(final String abstractUnitName,
+            final String concreteUnitName) {
+        return abstractUnitName != null ? abstractUnitName : concreteUnitName;
+    }
+
     protected void addMappingFiles(final String unitName,
-            final Ejb3Configuration ejb3Cfg) {
+            final String concreteUnitName, final Ejb3Configuration ejb3Cfg) {
         s2HibernateCfg.detectMappingFiles(unitName, new MappingFileHandler(
-                unitName, ejb3Cfg));
+                concreteUnitName, ejb3Cfg));
     }
 
     protected void addAnnotatedClasses(final String unitName,
-            final Ejb3Configuration ejb3Cfg) {
+            final String concreteUnitName, final Ejb3Configuration ejb3Cfg) {
         s2HibernateCfg.detectPersistenceClasses(unitName,
-                new PersistenceClassHandler(unitName, ejb3Cfg));
+                new PersistenceClassHandler(concreteUnitName, ejb3Cfg));
     }
 
     public class MappingFileHandler implements ResourceHandler {
