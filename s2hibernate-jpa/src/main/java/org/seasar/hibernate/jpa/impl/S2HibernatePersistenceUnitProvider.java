@@ -74,7 +74,7 @@ public class S2HibernatePersistenceUnitProvider implements
     }
 
     public EntityManagerFactory createEntityManagerFactory(final String unitName) {
-        return createEntityManagerFactory(null, unitName);
+        return createEntityManagerFactory(unitName, unitName);
     }
 
     public EntityManagerFactory createEntityManagerFactory(
@@ -82,21 +82,14 @@ public class S2HibernatePersistenceUnitProvider implements
         final Ejb3Configuration ejb3Cfg = new Ejb3Configuration();
         final Map<String, String> map = new HashMap<String, String>();
         if (s2HibernateCfg != null) {
-            final String targetUnitName = getTargetUnitName(abstractUnitName,
-                    concreteUnitName);
-            addMappingFiles(targetUnitName, concreteUnitName, ejb3Cfg);
-            addAnnotatedClasses(targetUnitName, concreteUnitName, ejb3Cfg);
+            addMappingFiles(abstractUnitName, concreteUnitName, ejb3Cfg);
+            addAnnotatedClasses(abstractUnitName, concreteUnitName, ejb3Cfg);
             if (s2HibernateCfg.isAutoDetection()) {
                 map.put(HibernatePersistence.AUTODETECTION, "");
             }
         }
         ejb3Cfg.configure(concreteUnitName, map);
         return ejb3Cfg.buildEntityManagerFactory();
-    }
-
-    protected String getTargetUnitName(final String abstractUnitName,
-            final String concreteUnitName) {
-        return abstractUnitName != null ? abstractUnitName : concreteUnitName;
     }
 
     protected void addMappingFiles(final String unitName,
