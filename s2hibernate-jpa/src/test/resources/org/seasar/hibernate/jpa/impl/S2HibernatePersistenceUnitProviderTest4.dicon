@@ -12,5 +12,5 @@
 
 	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector"/>
 	
-	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl"/>
+	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl"/>
 </components>

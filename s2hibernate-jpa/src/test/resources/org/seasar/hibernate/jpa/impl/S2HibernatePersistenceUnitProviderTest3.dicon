@@ -16,5 +16,5 @@
 		</initMethod>				
 	</component>
 	
-	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl"/>
+	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl"/>
 </components>

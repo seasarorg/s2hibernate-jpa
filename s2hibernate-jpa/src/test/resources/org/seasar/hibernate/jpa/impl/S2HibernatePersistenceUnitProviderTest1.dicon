@@ -4,7 +4,7 @@
 <components>
 	<include path="javaee5.dicon"/>
 
-	<component class="org.seasar.hibernate.jpa.impl.S2HibernateConfigurationImpl">
+	<component class="org.seasar.framework.jpa.impl.PersistenceUnitConfigurationImpl">
 		<initMethod name="addMappingFile">
 			<arg>"org/seasar/hibernate/jpa/entity/hogeOrm.xml"</arg>
 		</initMethod>

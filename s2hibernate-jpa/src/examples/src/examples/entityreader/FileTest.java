@@ -19,9 +19,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.junit.runner.RunWith;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.unit.Seasar2;
 import org.seasar.framework.unit.TestContext;
-import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
 import static org.seasar.framework.unit.S2Assert.*;
 
@@ -38,8 +38,8 @@ public class FileTest {
 
     public void before() throws Exception {
         context.include("jpa.dicon");
-        S2HibernateConfiguration cfg = context
-                .getComponent(S2HibernateConfiguration.class);
+        PersistenceUnitConfiguration cfg = context
+                .getComponent(PersistenceUnitConfiguration.class);
         cfg.addPersistenceClass(File.class);
         cfg.addPersistenceClass(Document.class);
         cfg.addPersistenceClass(Folder.class);

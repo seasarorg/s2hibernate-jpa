@@ -24,13 +24,13 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.property.BackrefPropertyAccessor;
 import org.seasar.extension.unit.S2TestCase;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.hibernate.jpa.Address;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
-import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 import org.seasar.hibernate.jpa.unit.indexcoll.Drawer;
 import org.seasar.hibernate.jpa.unit.indexcoll.Wardrobe;
 
@@ -300,8 +300,8 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpSingleTableInheritanceTx() throws Exception {
-        S2HibernateConfiguration cfg = S2HibernateConfiguration.class
-                .cast(getComponent(S2HibernateConfiguration.class));
+        PersistenceUnitConfiguration cfg = PersistenceUnitConfiguration.class
+                .cast(getComponent(PersistenceUnitConfiguration.class));
         cfg.addPersistenceClass("persistenceUnit", Fruit.class);
         cfg.addPersistenceClass("persistenceUnit", Apple.class);
         cfg.addPersistenceClass("persistenceUnit", Basket.class);
@@ -382,8 +382,8 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpJoinedTableInheritanceTx() throws Exception {
-        S2HibernateConfiguration cfg = S2HibernateConfiguration.class
-                .cast(getComponent(S2HibernateConfiguration.class));
+        PersistenceUnitConfiguration cfg = PersistenceUnitConfiguration.class
+                .cast(getComponent(PersistenceUnitConfiguration.class));
         cfg.addPersistenceClass("persistenceUnit", File.class);
         cfg.addPersistenceClass("persistenceUnit", Folder.class);
     }
@@ -458,8 +458,8 @@ public class HibernateEntityDescTest extends S2TestCase {
     }
 
     public void setUpIndexColumnTx() throws Exception {
-        S2HibernateConfiguration cfg = S2HibernateConfiguration.class
-                .cast(getComponent(S2HibernateConfiguration.class));
+        PersistenceUnitConfiguration cfg = PersistenceUnitConfiguration.class
+                .cast(getComponent(PersistenceUnitConfiguration.class));
         cfg.addPersistenceClass("persistenceUnit", Wardrobe.class);
         cfg.addPersistenceClass("persistenceUnit", Drawer.class);
     }

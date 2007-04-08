@@ -28,6 +28,7 @@ import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
 import org.seasar.framework.log.Logger;
@@ -36,7 +37,6 @@ import org.seasar.framework.util.ClassTraversal.ClassHandler;
 import org.seasar.framework.util.ResourceTraversal.ResourceHandler;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
-import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
 /**
  * @author koichik
@@ -49,7 +49,7 @@ public class S2HibernatePersistenceUnitProvider implements
 
     protected PersistenceUnitManager persistenceUnitManager;
 
-    protected S2HibernateConfiguration s2HibernateCfg;
+    protected PersistenceUnitConfiguration unitCfg;
 
     @Binding(bindingType = BindingType.MUST)
     public void setPersistenceUnitManager(
@@ -58,9 +58,9 @@ public class S2HibernatePersistenceUnitProvider implements
     }
 
     @Binding(bindingType = BindingType.MAY)
-    public void setS2HibernateConfiguration(
-            final S2HibernateConfiguration s2HibernateCfg) {
-        this.s2HibernateCfg = s2HibernateCfg;
+    public void setPersistenceUnitConfiguration(
+            final PersistenceUnitConfiguration unitCfg) {
+        this.unitCfg = unitCfg;
     }
 
     @InitMethod
@@ -81,10 +81,10 @@ public class S2HibernatePersistenceUnitProvider implements
             final String abstractUnitName, final String concreteUnitName) {
         final Ejb3Configuration ejb3Cfg = new Ejb3Configuration();
         final Map<String, String> map = new HashMap<String, String>();
-        if (s2HibernateCfg != null) {
+        if (unitCfg != null) {
             addMappingFiles(abstractUnitName, concreteUnitName, ejb3Cfg);
             addAnnotatedClasses(abstractUnitName, concreteUnitName, ejb3Cfg);
-            if (s2HibernateCfg.isAutoDetection()) {
+            if (unitCfg.isAutoDetection()) {
                 map.put(HibernatePersistence.AUTODETECTION, "");
             }
         }
@@ -94,14 +94,14 @@ public class S2HibernatePersistenceUnitProvider implements
 
     protected void addMappingFiles(final String unitName,
             final String concreteUnitName, final Ejb3Configuration ejb3Cfg) {
-        s2HibernateCfg.detectMappingFiles(unitName, new MappingFileHandler(
+        unitCfg.detectMappingFiles(unitName, new MappingFileHandler(
                 concreteUnitName, ejb3Cfg));
     }
 
     protected void addAnnotatedClasses(final String unitName,
             final String concreteUnitName, final Ejb3Configuration ejb3Cfg) {
-        s2HibernateCfg.detectPersistenceClasses(unitName,
-                new PersistenceClassHandler(concreteUnitName, ejb3Cfg));
+        unitCfg.detectPersistenceClasses(unitName, new PersistenceClassHandler(
+                concreteUnitName, ejb3Cfg));
     }
 
     public class MappingFileHandler implements ResourceHandler {

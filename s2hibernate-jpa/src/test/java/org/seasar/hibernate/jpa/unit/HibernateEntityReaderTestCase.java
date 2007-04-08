@@ -20,16 +20,16 @@ import javax.transaction.UserTransaction;
 
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.unit.S2TestCase;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderFactory;
-import org.seasar.hibernate.jpa.S2HibernateConfiguration;
 
 /**
  * @author taedium
  */
 public abstract class HibernateEntityReaderTestCase extends S2TestCase {
 
-    protected S2HibernateConfiguration cfg;
+    protected PersistenceUnitConfiguration cfg;
 
     protected EntityManager em;
 
@@ -39,8 +39,8 @@ public abstract class HibernateEntityReaderTestCase extends S2TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         include("jpa.dicon");
-        cfg = S2HibernateConfiguration.class
-                .cast(getComponent(S2HibernateConfiguration.class));
+        cfg = PersistenceUnitConfiguration.class
+                .cast(getComponent(PersistenceUnitConfiguration.class));
     }
 
     protected void addAnnotatedClasses(Class<?>... classes) {
