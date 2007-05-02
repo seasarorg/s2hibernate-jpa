@@ -4,13 +4,16 @@
 <components>
 	<include path="s2hibernate-jpa.dicon"/>
 
+	<component name="persistenceUnitProvider" class="org.seasar.framework.jpa.impl.ContainerPersistenceUnitProvider">
+		<property name="unitName">"persistenceUnit"</property>
+	</component>
+
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
-		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
+		persistenceUnitProvider.entityManagerFactory
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy"/>
 
 	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider"/>
 
-	<component name="dataSourceProxy" class="org.seasar.extension.datasource.impl.SingletonDataSourceProxy"/>
 </components>

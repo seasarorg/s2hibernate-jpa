@@ -21,26 +21,39 @@ import javax.persistence.EntityManagerFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.framework.env.Env;
+import org.seasar.framework.convention.impl.NamingConventionImpl;
+import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.jpa.PersistenceUnitManager;
+import org.seasar.framework.jpa.autodetector.MappingFileAutoDetector;
+import org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector;
 import org.seasar.hibernate.jpa.Department;
 import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.entity.Address;
 import org.seasar.hibernate.jpa.entity.Customer;
 import org.seasar.hibernate.jpa.entity.Department2;
 import org.seasar.hibernate.jpa.entity.Employee2;
+import org.seasar.hibernate.jpa.entity.Project;
 import org.seasar.hibernate.jpa.entity.aaa.Dummy;
 import org.seasar.hibernate.jpa.entity.aaa.Dummy2;
 
 /**
  * @author taedium
  */
-public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
+public class PersistenceUnitConfigurationTest extends S2TestCase {
 
     private EntityManager em;
 
-    public void setUpReadPersistenceXmlFile() throws Exception {
-        include(getClass().getName().replace('.', '/') + ".dicon");
+    private PersistenceUnitConfiguration configuration;
+
+    private NamingConventionImpl convention;
+
+    @Override
+    protected void setUp() throws Exception {
+        include("jpa.dicon");
+        configuration = PersistenceUnitConfiguration.class
+                .cast(getComponent(PersistenceUnitConfiguration.class));
+        convention = new NamingConventionImpl();
+        convention.addRootPackageName("org.seasar.hibernate.jpa");
     }
 
     public void testReadPersistenceXmlFile() throws Exception {
@@ -52,8 +65,8 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpAddMappingFile() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test1.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
+        configuration
+                .addMappingFile("org/seasar/hibernate/jpa/entity/hogeOrm.xml");
     }
 
     public void testAddMappingFile() throws Exception {
@@ -66,8 +79,7 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpAddPersistenceClass() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test2.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
+        configuration.addPersistenceClass(Department2.class);
     }
 
     public void testAddPersistenceClass() throws Exception {
@@ -80,25 +92,28 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpMappingFileAutoDetection() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test3.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
-
+        MappingFileAutoDetector detector = new MappingFileAutoDetector();
+        detector.setNamingConvention(convention);
+        detector.init();
+        configuration.addMappingFileAutoDetector(detector);
     }
 
     public void testMappingFileAutoDetection() throws Exception {
         final Session session = Session.class.cast(em.getDelegate());
         final SessionFactory sf = session.getSessionFactory();
-        assertEquals(4, sf.getAllClassMetadata().size());
+        assertEquals(5, sf.getAllClassMetadata().size());
         assertNotNull(sf.getClassMetadata(Employee.class));
         assertNotNull(sf.getClassMetadata(Department.class));
         assertNotNull(sf.getClassMetadata(Employee2.class));
         assertNotNull(sf.getClassMetadata(Address.class));
+        assertNotNull(sf.getClassMetadata(Project.class));
     }
 
     public void setUpMappingFileAutoDetectionSubPackage() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test3.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
-
+        MappingFileAutoDetector detector = new MappingFileAutoDetector();
+        detector.setNamingConvention(convention);
+        detector.init();
+        configuration.addMappingFileAutoDetector(detector);
     }
 
     public void testMappingFileAutoDetectionSubPackage() throws Exception {
@@ -114,8 +129,10 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpPersistenceClassAutoDetection() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test4.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
+        PersistenceClassAutoDetector detector = new PersistenceClassAutoDetector();
+        detector.setNamingConvention(convention);
+        detector.init();
+        configuration.addPersistenceClassAutoDetector(detector);
     }
 
     public void testPersistenceClassAutoDetection() throws Exception {
@@ -129,8 +146,10 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpPersistenceClassAutoDetectionSubPackage() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test4.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
+        PersistenceClassAutoDetector detector = new PersistenceClassAutoDetector();
+        detector.setNamingConvention(convention);
+        detector.init();
+        configuration.addPersistenceClassAutoDetector(detector);
     }
 
     public void testPersistenceClassAutoDetectionSubPackage() throws Exception {
@@ -146,9 +165,10 @@ public class S2HibernatePersistenceUnitProviderTest extends S2TestCase {
     }
 
     public void setUpPackageInfoAutoDetectionTx() throws Exception {
-        Env.setFilePath("org/seasar/hibernate/jpa/impl/test5.txt");
-        include(getClass().getName().replace('.', '/') + ".dicon");
-        System.out.println(getClass().getName().replace('.', '/') + ".dicon");
+        PersistenceClassAutoDetector detector = new PersistenceClassAutoDetector();
+        detector.setNamingConvention(convention);
+        detector.init();
+        configuration.addPersistenceClassAutoDetector(detector);
     }
 
     public void testPackageInfoAutoDetectionTx() throws Exception {
