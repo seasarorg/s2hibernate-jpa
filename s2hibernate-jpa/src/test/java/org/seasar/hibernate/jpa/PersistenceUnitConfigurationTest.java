@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.hibernate.jpa.impl;
+package org.seasar.hibernate.jpa;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,8 +26,6 @@ import org.seasar.framework.jpa.PersistenceUnitConfiguration;
 import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.autodetector.MappingFileAutoDetector;
 import org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector;
-import org.seasar.hibernate.jpa.Department;
-import org.seasar.hibernate.jpa.Employee;
 import org.seasar.hibernate.jpa.entity.Address;
 import org.seasar.hibernate.jpa.entity.Customer;
 import org.seasar.hibernate.jpa.entity.Department2;
@@ -110,6 +108,7 @@ public class PersistenceUnitConfigurationTest extends S2TestCase {
     }
 
     public void setUpMappingFileAutoDetectionSubPackage() throws Exception {
+        include("jpa-aaa.dicon");
         MappingFileAutoDetector detector = new MappingFileAutoDetector();
         detector.setNamingConvention(convention);
         detector.init();
@@ -146,6 +145,7 @@ public class PersistenceUnitConfigurationTest extends S2TestCase {
     }
 
     public void setUpPersistenceClassAutoDetectionSubPackage() throws Exception {
+        include("jpa-aaa.dicon");
         PersistenceClassAutoDetector detector = new PersistenceClassAutoDetector();
         detector.setNamingConvention(convention);
         detector.init();
