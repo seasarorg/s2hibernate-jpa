@@ -47,6 +47,7 @@ public class PersistenceUnitConfigurationTest extends S2TestCase {
 
     @Override
     protected void setUp() throws Exception {
+        include("javaee5.dicon");
         include("jpa.dicon");
         configuration = PersistenceUnitConfiguration.class
                 .cast(getComponent(PersistenceUnitConfiguration.class));

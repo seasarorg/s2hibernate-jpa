@@ -5,5 +5,6 @@
 	<include path="javaee5.dicon"/>
 
 	<component class="org.seasar.hibernate.jpa.impl.S2HibernateDialect"/>
+	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider"/>
 	<component class="org.seasar.hibernate.jpa.unit.HibernateEntityReaderProvider"/>
 </components>

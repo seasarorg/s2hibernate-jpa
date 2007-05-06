@@ -13,7 +13,4 @@
 	</component>
 
 	<component name="entityManager" class="org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy"/>
-
-	<component class="org.seasar.hibernate.jpa.metadata.HibernateEntityDescProvider"/>
-
 </components>

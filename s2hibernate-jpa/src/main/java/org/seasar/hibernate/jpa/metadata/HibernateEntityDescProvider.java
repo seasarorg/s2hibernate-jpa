@@ -15,42 +15,34 @@
  */
 package org.seasar.hibernate.jpa.metadata;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
-import org.hibernate.Session;
+import org.hibernate.ejb.HibernateEntityManagerFactory;
 import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.metadata.ClassMetadata;
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.metadata.EntityDesc;
-import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
 /**
+ * Hibernate用の{@link EntityDesc}を提供するコンポーネントの実装クラスです。
+ * 
  * @author koichik
  */
 public class HibernateEntityDescProvider implements EntityDescProvider {
 
-    protected SessionFactoryImplementor sessionFactory;
-
-    public HibernateEntityDescProvider(final EntityManager em) {
-        final Session session = Session.class.cast(em.getDelegate());
-        sessionFactory = SessionFactoryImplementor.class.cast(session
-                .getSessionFactory());
-    }
-
-    @InitMethod
-    public void register() {
-        EntityDescFactory.addProvider(this);
-    }
-
-    @DestroyMethod
-    public void unregister() {
-        EntityDescFactory.removeProvider(this);
+    /**
+     * インスタンスを構築します。
+     */
+    public HibernateEntityDescProvider() {
     }
 
     @SuppressWarnings("unchecked")
-    public EntityDesc createEntityDesc(final Class<?> entityClass) {
+    public HibernateEntityDesc createEntityDesc(final EntityManagerFactory emf,
+            final Class<?> entityClass) {
+        final HibernateEntityManagerFactory hemf = HibernateEntityManagerFactory.class
+                .cast(emf);
+        final SessionFactoryImplementor sessionFactory = SessionFactoryImplementor.class
+                .cast(hemf.getSessionFactory());
         final ClassMetadata metadata = sessionFactory
                 .getClassMetadata(entityClass);
         if (metadata == null) {
