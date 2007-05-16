@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence>
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>dataSourceProxy</jta-data-source>
+		<jta-data-source>jdbc/dataSource</jta-data-source>
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<property name="hibernate.dialect" 
