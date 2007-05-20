@@ -8,7 +8,7 @@
   <artifactId>s2hibernate-jpa</artifactId>
   <packaging>jar</packaging>
   <name>S2Hibernate-JPA Project</name>
-  <version>1.0.0-rc2</version>
+  <version>1.0.0-rc3-SNAPSHOT</version>
   <description></description>
   <url>http://s2hibernate.seasar.org/</url>
   <issueManagement>
