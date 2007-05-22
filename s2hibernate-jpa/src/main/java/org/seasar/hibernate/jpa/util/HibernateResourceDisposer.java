@@ -23,11 +23,18 @@ import org.hibernate.validator.ClassValidator;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
+ * Hibernateのリソースを破棄するクラスです。
  * 
  * @author koichik
  */
 public class HibernateResourceDisposer {
 
+    /**
+     * Hibernateのリソースを破棄します。
+     * <p>
+     * このメソッドは{@link JavaXFactory#reset()}を呼び出します。}
+     * </p>
+     */
     public static void dispose() {
         final Field field = ReflectionUtil.getDeclaredField(
                 ClassValidator.class, "reflectionManager");

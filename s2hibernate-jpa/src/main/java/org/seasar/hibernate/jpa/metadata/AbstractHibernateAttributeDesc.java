@@ -31,40 +31,69 @@ import org.seasar.framework.jpa.util.TemporalTypeUtil;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 
 /**
+ * Hibernateの永続オブジェクトの属性定義を表す抽象クラスです。
  * 
  * @author nakamura
  */
 public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
 
+    /** セッションファクトリ */
     protected final SessionFactoryImplementor factory;
 
+    /** 属性の名前 */
     protected final String name;
 
+    /** 型 */
     protected final Class<?> type;
 
+    /** このオブジェクトがコレクションを表す場合の要素の型 */
     protected final Class<?> elementType;
 
+    /** {@link Types SQL型}を表す値 */
     protected final int sqlType;
 
+    /** 時制の種類 */
     protected final TemporalType temporalType;
 
+    /** このオブジェクトがIDを表すかどうかのフラグ */
     protected final boolean id;
 
+    /** このオブジェクトが関連を表すかどうかのフラグ */
     protected final boolean association;
 
+    /** このオブジェクトがコレクションを表すかどうかのフラグ */
     protected final boolean collection;
 
+    /** このオブジェクトがコンポーネントを表すかどうかのフラグ */
     protected final boolean component;
 
+    /** このオブジェクトがバージョン番号を表すかどうかのフラグ */
     protected final boolean version;
 
+    /** Hibernateの型 */
     protected final Type hibernateType;
 
+    /** このオブジェクトがコンポーネントを表す場合、コンポーネントの属性の配列 */
     protected final AttributeDesc[] childAttributeDescs;
 
+    /** このオブジェクトがコンポーネントを表す場合、コンポーネントの属性名をキー、コンポーネントの属性を値とするマップ */
     protected final Map<String, AttributeDesc> childAttributeDescMap = CollectionsUtil
             .newHashMap();
 
+    /**
+     * インスタンスを構築します。
+     * 
+     * @param factory
+     *            セッションファクトリ
+     * @param hibernateType
+     *            Hibernateの型
+     * @param name
+     *            属性の名前
+     * @param id
+     *            このオブジェクトがIDを表すかどうかのフラグ
+     * @param version
+     *            このオブジェクトがバージョン番号を表すかどうかのフラグ
+     */
     public AbstractHibernateAttributeDesc(
             final SessionFactoryImplementor factory, final Type hibernateType,
             final String name, final boolean id, final boolean version) {
@@ -104,6 +133,13 @@ public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
 
     }
 
+    /**
+     * Hibernateの型に対応する{@link Types SQL型}の値を返します。
+     * 
+     * @param hibernateType
+     *            Hibernateの型
+     * @return SQL型の値
+     */
     protected int getSqlType(final Type hibernateType) {
         try {
             final int[] sqlTypes = hibernateType.sqlTypes(null);
@@ -115,6 +151,11 @@ public abstract class AbstractHibernateAttributeDesc implements AttributeDesc {
         return Types.OTHER;
     }
 
+    /**
+     * このオブジェクトがコンポーネントを表す場合コンポーネントの属性の配列を返します。
+     * 
+     * @return このオブジェクトがコンポーネントを表す場合コンポーネントの属性の配列、表さない場合空の配列
+     */
     protected AttributeDesc[] createChildAttributeDescs() {
         final AbstractComponentType componentType = AbstractComponentType.class
                 .cast(hibernateType);

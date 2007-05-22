@@ -34,11 +34,13 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
+ * Hibernateのエンティティの属性定義です。
  * 
  * @author koichik
  */
 public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
 
+    /** {@link AbstractEntityPersister}の<code>propertySelectable</code>フィールド */
     protected static final Field PROPERTY_SELECTABLE_FIELD = ClassUtil
             .getDeclaredField(AbstractEntityPersister.class,
                     "propertySelectable");
@@ -46,19 +48,39 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         PROPERTY_SELECTABLE_FIELD.setAccessible(true);
     }
 
+    /** エンティティのメタデータ */
     protected final AbstractEntityPersister metadata;
 
+    /** {@link Types SQL型}の値の配列 */
     protected final int[] sqlTypes;
 
+    /** テーブル名の配列 */
     protected final String[] tableNames;
 
+    /** テーブル名をキー、カラム名の配列を値とするマップ */
     protected final Map<String, String[]> columnNamesMap = CollectionsUtil
             .newHashMap();
 
+    /** このオブジェクトが読まれる対象かどうかを表すフラグ */
     protected final boolean readTarget;
 
+    /** このオブジェクトの値が取得可能かどうかを表すフラグ */
     protected final boolean selectable;
 
+    /**
+     * インスタンスを構築します。
+     * 
+     * @param factory
+     *            セッションファクトリ
+     * @param metadata
+     *            エンティティのメタデータ
+     * @param name
+     *            属性名
+     * @param id
+     *            このオブジェクトがIDであるかどうかを表すフラグ
+     * @param version
+     *            このオブジェクトがバージョン番号であるかどうかを表すフラグ
+     */
     public HibernateAttributeDesc(final SessionFactoryImplementor factory,
             final AbstractEntityPersister metadata, final String name,
             final boolean id, final boolean version) {
@@ -79,6 +101,11 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         setupColumnNameMap();
     }
 
+    /**
+     * テーブル名の配列を作成します。
+     * 
+     * @return テーブル名の配列
+     */
     protected String[] createTableNames() {
         if (id) {
             final String[] original = metadata
@@ -90,6 +117,9 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         return new String[] { metadata.getPropertyTableName(name) };
     }
 
+    /**
+     * テーブル名をキー、カラム名の配列を値とするマップを設定します。
+     */
     protected void setupColumnNameMap() {
         if (id) {
             for (int i = 0; i < getTableNameSize(); i++) {
@@ -112,6 +142,13 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         }
     }
 
+    /**
+     * 指定された<code>type</code>が読まれる対象の場合<code>true</code>を返します。
+     * 
+     * @param type
+     *            Hibernateの型
+     * @return 指定された<code>type</code>が読まれる対象の場合<code>true</code>、そうでない場合<code>false</code>
+     */
     protected boolean isReadTargetType(final Type type) {
         if (type.isCollectionType()) {
             return false;
@@ -129,6 +166,11 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         return true;
     }
 
+    /**
+     * このオブジェクトの値が取得可能な場合<code>true</code>を返します。
+     * 
+     * @return このオブジェクトの値が取得可能な場合<code>true</code>、そうでない場合<code>false</code>
+     */
     protected boolean isSelectableAttribute() {
         if (id) {
             return true;
@@ -155,26 +197,60 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         }
     }
 
+    /**
+     * {@link Types SQL型}の値の配列を返します。
+     * 
+     * @return {@link Types SQL型}の値の配列
+     */
     public int[] getSqlTypes() {
         return sqlTypes;
     }
 
+    /**
+     * このオブジェクトの値が取得可能な場合<code>true</code>を返します。
+     * 
+     * @return このオブジェクトの値が取得可能な場合<code>true</code>、そうでない場合<code>false</code>
+     */
     public boolean isSelectable() {
         return selectable;
     }
 
+    /**
+     * Hibernateの型を返します。
+     * 
+     * @return Hibernateの型
+     */
     public Type getHibernateType() {
         return hibernateType;
     }
 
+    /**
+     * テーブル名の数を返します。
+     * 
+     * @return テーブル名の数
+     */
     public int getTableNameSize() {
         return tableNames.length;
     }
 
+    /**
+     * 指定されたインデックスに対応するテーブル名を返します。
+     * 
+     * @param index
+     *            インデックス
+     * @return テーブル名
+     */
     public String getTableName(final int index) {
         return tableNames[index];
     }
 
+    /**
+     * 指定したテーブル名を持つ場合<code>true</code>を返します。
+     * 
+     * @param tableName
+     *            テーブル名
+     * @return 指定したテーブル名を持つ場合<code>true</code>、そうでない場合<code>false</code>
+     */
     public boolean hasTableName(final String tableName) {
         for (int i = 0; i < getTableNameSize(); i++) {
             if (getTableName(i).equalsIgnoreCase(tableName)) {
@@ -184,14 +260,35 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         return false;
     }
 
+    /**
+     * 指定されたテーブルに属するカラムの数を返します。
+     * 
+     * @param tableName
+     *            テーブル名
+     * @return 指定されたテーブルに属するカラムの数
+     */
     public int getColumnNameSize(final String tableName) {
         return getColumnNames(tableName).length;
     }
 
+    /**
+     * 指定されたインデックスに対応するカラムの数を返します。
+     * 
+     * @param index
+     *            インデックス
+     * @return カラムの数
+     */
     public int getColumnNameSize(final int index) {
         return getColumnNames(index).length;
     }
 
+    /**
+     * 指定したテーブルに属するカラムの配列を返します。
+     * 
+     * @param tableName
+     *            テーブル名
+     * @return カラム名の配列
+     */
     public String[] getColumnNames(final String tableName) {
         if (tableName == null) {
             return null;
@@ -199,14 +296,33 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         return columnNamesMap.get(tableName.toLowerCase());
     }
 
+    /**
+     * 指定されたインデックスに対応するテーブルのカラム名の配列を返します。
+     * 
+     * @param index
+     *            インデックス
+     * @return カラム名の配列
+     */
     public String[] getColumnNames(final int index) {
         return getColumnNames(getTableName(index));
     }
 
+    /**
+     * このオブジェクトが読まれる対象の場合<code>true</code>を返します。
+     * 
+     * @return このオブジェクトが読まれる対象の場合<code>true</code>、そうでない場合<code>false</code>
+     */
     public boolean isReadTarget() {
         return readTarget;
     }
 
+    /**
+     * エンティティからこのオブジェクトに対応するすべての値を抽出して返します。
+     * 
+     * @param entity
+     *            エンティティ
+     * @return このオブジェクトに対応するすべての値
+     */
     public Object[] getAllValues(final Object entity) {
         final List<Object> allValues = CollectionsUtil.newArrayList();
         final Object value = getValue(entity);
@@ -218,6 +334,16 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         return allValues.toArray();
     }
 
+    /**
+     * <code>value</code>からIDの値を集め、<code>allValues</code>に格納します。
+     * 
+     * @param allValues
+     *            IDの値のリスト
+     * @param type
+     *            Hibernateの型
+     * @param value
+     *            エンティティ、IDを表すコンポーネント、またはIDの値
+     */
     protected void gatherIdAttributeValues(final List<Object> allValues,
             final Type type, final Object value) {
 
@@ -244,6 +370,16 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         }
     }
 
+    /**
+     * <code>value</code>からプロパティの値を集め、<code>allValues</code>に格納します。
+     * 
+     * @param allValues
+     *            プロパティの値のリスト
+     * @param type
+     *            Hibernateの型
+     * @param value
+     *            エンティティ、コンポーネント、またはプロパティの値
+     */
     protected void gatherAttributeValues(final List<Object> allValues,
             final Type type, final Object value) {
 
@@ -286,6 +422,15 @@ public class HibernateAttributeDesc extends AbstractHibernateAttributeDesc {
         }
     }
 
+    /**
+     * Hibernateの型に基づき値を変換します。
+     * 
+     * @param type
+     *            Hibernateの型
+     * @param value
+     *            値
+     * @return 変換された値
+     */
     protected Object convert(final Type type, final Object value) {
         if (type instanceof CustomType) {
             if (type.getReturnedClass().isEnum()) {

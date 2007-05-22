@@ -23,6 +23,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.transaction.TransactionManagerLookup;
 import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 
+/**
+ * {@link SingletonTransactionManagerProxy}を取得するクラスです。
+ * 
+ * @author taedium
+ */
 public class SingletonTransactionManagerProxyLookup implements
         TransactionManagerLookup {
 

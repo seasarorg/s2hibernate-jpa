@@ -21,15 +21,26 @@ import java.util.Map;
 import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
+ * エンティティのコレクションをデータセットとして読み取るクラスです。
  * 
  * @author taedium
  */
 public class HibernateEntityCollectionReader extends HibernateEntityReader {
 
+    /** エンティティのクラスをキー、エンティティ定義を値としたマップ */
     protected Map<Class<?>, HibernateEntityDesc> entityDescs;
 
+    /** 処理中のエンティティのクラス */
     protected Class<?> processingClass;
 
+    /**
+     * インスタンスを構築します。
+     * 
+     * @param entities
+     *            エンティティのコレクション
+     * @param entityDescs
+     *            エンティティのクラスをキー、エンティティ定義をバリューとしたマップ
+     */
     public HibernateEntityCollectionReader(final Collection<?> entities,
             final Map<Class<?>, HibernateEntityDesc> entityDescs) {
 

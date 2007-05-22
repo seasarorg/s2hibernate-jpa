@@ -23,6 +23,11 @@ import org.hibernate.HibernateException;
 import org.hibernate.transaction.TransactionManagerLookup;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
+/**
+ * Seasar2の{@link TransactionManager}を取得するクラスです。
+ * 
+ * @author taedium
+ */
 public class S2TransactionManagerLookup implements TransactionManagerLookup {
 
     public TransactionManager getTransactionManager(Properties props)

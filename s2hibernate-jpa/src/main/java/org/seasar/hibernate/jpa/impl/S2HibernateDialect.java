@@ -33,14 +33,21 @@ import org.seasar.framework.jpa.DialectManager;
  */
 public class S2HibernateDialect implements Dialect {
 
+    /** {@link Dialect}のマネージャー */
     @Binding(bindingType = BindingType.MUST)
     protected DialectManager dialectManager;
 
+    /**
+     * {@link DialectManager}に自身を登録します。
+     */
     @InitMethod
     public void initialize() {
         dialectManager.addDialect(Session.class, this);
     }
 
+    /**
+     * {@link DialectManager}から自身を除去します。
+     */
     @DestroyMethod
     public void destroy() {
         dialectManager.removeDialect(Session.class);

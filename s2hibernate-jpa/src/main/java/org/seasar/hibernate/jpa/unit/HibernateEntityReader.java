@@ -26,6 +26,7 @@ import org.seasar.hibernate.jpa.metadata.HibernateAttributeDesc;
 import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
+ * エンティティをデータセットとして読み取るクラスです。
  * 
  * @author taedium
  */
@@ -33,11 +34,23 @@ public class HibernateEntityReader implements EntityReader {
 
     private HibernateEntityDesc entityDesc;
 
+    /** データセット */
     protected final DataSet dataSet = new DataSetImpl();
 
+    /**
+     * インスタンスを構築します。
+     */
     protected HibernateEntityReader() {
     }
 
+    /**
+     * インスタンスを構築します。
+     * 
+     * @param entity
+     *            エンティティ
+     * @param entityDesc
+     *            <code>entity</code>のエンティティ定義
+     */
     public HibernateEntityReader(final Object entity,
             final HibernateEntityDesc entityDesc) {
 
@@ -46,6 +59,9 @@ public class HibernateEntityReader implements EntityReader {
         setupRow(entity);
     }
 
+    /**
+     * カラムを設定します。
+     */
     protected void setupColumns() {
         for (int i = 0; i < getEntityDesc().getTableNameSize(); i++) {
             final String tableName = getEntityDesc().getTableName(i);
@@ -57,6 +73,9 @@ public class HibernateEntityReader implements EntityReader {
         setupDiscriminatorColumn();
     }
 
+    /**
+     * エンティティの属性に対応するカラムを設定します。
+     */
     protected void setupAttributeColumns() {
         final HibernateAttributeDesc[] attributes = getEntityDesc()
                 .getAttributeDescs();
@@ -91,6 +110,9 @@ public class HibernateEntityReader implements EntityReader {
         }
     }
 
+    /**
+     * 識別カラムを設定します。
+     */
     protected void setupDiscriminatorColumn() {
         if (!getEntityDesc().hasDiscriminatorColumn()) {
             return;
@@ -104,6 +126,12 @@ public class HibernateEntityReader implements EntityReader {
         }
     }
 
+    /**
+     * 行を設定します。
+     * 
+     * @param entity
+     *            エンティティ
+     */
     protected void setupRow(final Object entity) {
         for (int i = 0; i < getEntityDesc().getTableNameSize(); i++) {
             final String tableName = getEntityDesc().getTableName(i);
@@ -115,6 +143,16 @@ public class HibernateEntityReader implements EntityReader {
         }
     }
 
+    /**
+     * エンティティの属性値を行に設定します。
+     * 
+     * @param entity
+     *            エンティティ
+     * @param row
+     *            行
+     * @param tableName
+     *            テーブル名
+     */
     protected void setupAttributeValues(final Object entity, final DataRow row,
             final String tableName) {
 
@@ -143,6 +181,14 @@ public class HibernateEntityReader implements EntityReader {
         }
     }
 
+    /**
+     * 識別値を行に設定します。
+     * 
+     * @param row
+     *            行
+     * @param tableName
+     *            テーブル名
+     */
     protected void setupDiscriminatorValue(final DataRow row,
             final String tableName) {
 
@@ -155,6 +201,11 @@ public class HibernateEntityReader implements EntityReader {
 
     }
 
+    /**
+     * エンティティ定義を返します。
+     * 
+     * @return エンティティ定義
+     */
     protected HibernateEntityDesc getEntityDesc() {
         return entityDesc;
     }

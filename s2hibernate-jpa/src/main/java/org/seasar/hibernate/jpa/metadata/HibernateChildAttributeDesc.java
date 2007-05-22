@@ -22,17 +22,37 @@ import org.hibernate.type.Type;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 
 /**
+ * Hibernateのコンポーネントの属性定義です。
  * 
  * @author nakamura
  */
 public class HibernateChildAttributeDesc extends AbstractHibernateAttributeDesc {
 
+    /** このオブジェクトの親であるコンポーネント自身の定義 */
     protected final AttributeDesc parentAttributeDesc;
 
+    /** このオブジェクトの親であるコンポーネントの種類 */
     protected final AbstractComponentType componentType;
 
+    /** 親のコンポーネント内におけるこの属性のインデックス */
     protected final int index;
 
+    /**
+     * インスタンスを構築します。
+     * 
+     * @param factory
+     *            セッションファクトリ
+     * @param parentAttributeDesc
+     *            このオブジェクトの親自身の定義
+     * @param componentType
+     *            このオブジェクトの親であるコンポーネントの種類
+     * @param hibernateType
+     *            Hibernateの型
+     * @param name
+     *            属性の名前
+     * @param index
+     *            親のコンポーネント内におけるこの属性のインデックス
+     */
     public HibernateChildAttributeDesc(final SessionFactoryImplementor factory,
             final AttributeDesc parentAttributeDesc,
             final AbstractComponentType componentType,
@@ -47,6 +67,13 @@ public class HibernateChildAttributeDesc extends AbstractHibernateAttributeDesc 
         return getValues(owner)[index];
     }
 
+    /**
+     * このオブジェクトの親であるコンポーネント内のすべての属性の値を配列で返します。
+     * 
+     * @param owner
+     *            このオブジェクトの親であるコンポーネント
+     * @return コンポーネント内のすべての属性の値
+     */
     protected Object[] getValues(final Object owner) {
         return componentType.getPropertyValues(owner, EntityMode.POJO);
     }

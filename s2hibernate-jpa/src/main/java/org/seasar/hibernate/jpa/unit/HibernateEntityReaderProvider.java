@@ -26,6 +26,8 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.hibernate.jpa.metadata.HibernateEntityDesc;
 
 /**
+ * Hibernate用の{@link HibernateEntityReader}を提供するコンポーネントの実装クラスです。
+ * 
  * @author taedium
  */
 public class HibernateEntityReaderProvider implements EntityReaderProvider {
@@ -67,6 +69,17 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
         return new HibernateEntityCollectionReader(newEntities, entityDescs);
     }
 
+    /**
+     * <code>entities</code>に要素として含まれるオブジェクト配列を平坦化し、新しいコレクションに詰めて返します。
+     * <p>
+     * <code>entities</code>の要素がオブジェクト配列の場合、その配列の要素を新しいコレクションに詰めます。
+     * <code>entities</code>の要素がオブジェクト配列でない場合はその要素を新しいコレクションに詰めます。
+     * </p>
+     * 
+     * @param entities
+     *            エンティティもしくはエンティティのオブジェクト配列のコレクション
+     * @return 要素のオブジェクト配列が平坦化されている新しいコレクション
+     */
     protected Collection<Object> flatten(final Collection<?> entities) {
         Collection<Object> newEntities = CollectionsUtil.newArrayList(entities
                 .size());
@@ -82,6 +95,13 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
         return newEntities;
     }
 
+    /**
+     * エンティティのクラスに対応するエンティティ定義を返します。
+     * 
+     * @param entityClass
+     *            エンティティのクラス
+     * @return エンティティ定義
+     */
     protected HibernateEntityDesc getEntityDesc(final Class<?> entityClass) {
         final EntityDesc entityDesc = EntityDescFactory
                 .getEntityDesc(entityClass);
