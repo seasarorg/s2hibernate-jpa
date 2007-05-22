@@ -118,6 +118,9 @@
             <link>http://s2container.seasar.org/ja/s2-framework/apidocs/</link>
             <link>http://s2container.seasar.org/ja/s2-extension/apidocs/</link>
             <link>http://s2container.seasar.org/ja/s2-tiger/apidocs/</link>
+            <link>http://www.hibernate.org/hib_docs/v3/api/</link>
+　　　　　　　　　　　<link>http://www.hibernate.org/hib_docs/annotations/api/</link>
+　　　　　　　　　　　<link>http://www.hibernate.org/hib_docs/entitymanager/api/</link>
           </links>
         </configuration>
         <!--
