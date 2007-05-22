@@ -24,7 +24,7 @@ import org.hibernate.transaction.TransactionManagerLookup;
 import org.seasar.framework.container.factory.SingletonS2ContainerFactory;
 
 /**
- * Seasar2の{@link TransactionManager}を取得するクラスです。
+ * Seasar2で管理する{@link TransactionManager}を取得するクラスです。
  * 
  * @author taedium
  */

@@ -28,6 +28,7 @@ import org.seasar.framework.jpa.Dialect;
 import org.seasar.framework.jpa.DialectManager;
 
 /**
+ * Hibernate用の{@link Dialect}です。
  * 
  * @author koichik
  */
