@@ -61,7 +61,7 @@ public class HibernateEntityReaderProvider implements EntityReaderProvider {
                 continue;
             }
             final HibernateEntityDesc entityDesc = getEntityDesc(entityClass);
-            if (entityDescs == null) {
+            if (entityDesc == null) {
                 return null;
             }
             entityDescs.put(entityClass, entityDesc);
