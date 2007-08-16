@@ -59,4 +59,9 @@ public class S2HibernateDialect implements Dialect {
         return session.connection();
     }
 
+    public void detach(final EntityManager em, final Object managedEntity) {
+        final Session session = Session.class.cast(em.getDelegate());
+        session.evict(managedEntity);
+    }
+
 }

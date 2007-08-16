@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.Dialect;
+import org.seasar.hibernate.jpa.Department;
 
 /**
  * 
@@ -39,4 +40,13 @@ public class S2HibernateDialectTest extends S2TestCase {
     public void testGetConnectionTx() throws Exception {
         assertNotNull(dialect.getConnection(em));
     }
+
+    public void testDetachTx() throws Exception {
+        Department dept1 = em.find(Department.class, 10);
+        dialect.detach(em, dept1);
+        assertFalse(em.contains(dept1));
+        Department dept2 = em.find(Department.class, 10);
+        assertNotSame(dept1, dept2);
+    }
+
 }
