@@ -13,6 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+@FilterDefs( { @FilterDef(name = "id_eq", defaultCondition = "id = :id", parameters = { @ParamDef(name = "id", type = "integer") }) })
 package org.seasar.hibernate.jpa.entity;
 
 import org.hibernate.annotations.FilterDef;
